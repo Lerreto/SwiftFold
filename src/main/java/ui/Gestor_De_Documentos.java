@@ -28,21 +28,478 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Backgraund = new javax.swing.JPanel();
+        BarraSuperior = new javax.swing.JPanel();
+        TextSwiftFold = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        BarraVertical01 = new javax.swing.JPanel();
+        BarraVertical02 = new javax.swing.JPanel();
+        JScrollDocumentos = new javax.swing.JScrollPane();
+        TablaDocumentos = new javax.swing.JTable();
+        TituloGrande = new javax.swing.JLabel();
+        DescripcionMain = new javax.swing.JLabel();
+        PanelOpcionesDocumentos = new javax.swing.JPanel();
+        JTextBusquedad = new javax.swing.JTextField();
+        JButtonBuscar = new javax.swing.JButton();
+        JButtomEditar = new javax.swing.JButton();
+        JButtonEliminar = new javax.swing.JButton();
+        JButtonExportar = new javax.swing.JButton();
+        PanelEstadisticas = new javax.swing.JPanel();
+        PanelNotificaciones = new javax.swing.JPanel();
+        LineaHorizontal01 = new javax.swing.JPanel();
+        LineaHorizontal02 = new javax.swing.JPanel();
+        TItuloDependencia = new javax.swing.JLabel();
+        JScrollDependencias = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        JPanelAjustes = new javax.swing.JPanel();
+        TextAjustes = new javax.swing.JLabel();
+        ImgAjustes = new javax.swing.JLabel();
+        JPanelMisDocumentos = new javax.swing.JPanel();
+        TextDocumentos = new javax.swing.JLabel();
+        ImgMisDocumentos = new javax.swing.JLabel();
+        JPanelCargarDocumento = new javax.swing.JPanel();
+        TextCargar = new javax.swing.JLabel();
+        ImgCargar = new javax.swing.JLabel();
+        JPanelUsuarios = new javax.swing.JPanel();
+        TextUsuarios = new javax.swing.JLabel();
+        ImgUsuarios = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Backgraund.setBackground(new java.awt.Color(255, 251, 248));
+        Backgraund.setPreferredSize(new java.awt.Dimension(1400, 700));
+        Backgraund.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        BarraSuperior.setBackground(new java.awt.Color(53, 91, 62));
+
+        TextSwiftFold.setBackground(new java.awt.Color(255, 255, 255));
+        TextSwiftFold.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
+        TextSwiftFold.setForeground(new java.awt.Color(255, 255, 255));
+        TextSwiftFold.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TextSwiftFold.setText("SwiftFold");
+
+        jPanel1.setBackground(new java.awt.Color(180, 176, 194));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1, 40));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        jPanel2.setBackground(new java.awt.Color(180, 176, 194));
+        jPanel2.setPreferredSize(new java.awt.Dimension(20, 1));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Anonimo.png"))); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("[Usuarios del actual con el cual trabaja]");
+
+        jLabel3.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("[Rol - Cargo del usuario]");
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Logo_pequeño.png"))); // NOI18N
+
+        javax.swing.GroupLayout BarraSuperiorLayout = new javax.swing.GroupLayout(BarraSuperior);
+        BarraSuperior.setLayout(BarraSuperiorLayout);
+        BarraSuperiorLayout.setHorizontalGroup(
+            BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BarraSuperiorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TextSwiftFold, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 790, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addGroup(BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addGroup(BarraSuperiorLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
+        );
+        BarraSuperiorLayout.setVerticalGroup(
+            BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BarraSuperiorLayout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BarraSuperiorLayout.createSequentialGroup()
+                .addGroup(BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(TextSwiftFold, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(BarraSuperiorLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(BarraSuperiorLayout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                            .addGroup(BarraSuperiorLayout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
+        );
+
+        Backgraund.add(BarraSuperior, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1400, 60));
+
+        BarraVertical01.setBackground(new java.awt.Color(219, 219, 219));
+        BarraVertical01.setPreferredSize(new java.awt.Dimension(3, 610));
+
+        javax.swing.GroupLayout BarraVertical01Layout = new javax.swing.GroupLayout(BarraVertical01);
+        BarraVertical01.setLayout(BarraVertical01Layout);
+        BarraVertical01Layout.setHorizontalGroup(
+            BarraVertical01Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 2, Short.MAX_VALUE)
+        );
+        BarraVertical01Layout.setVerticalGroup(
+            BarraVertical01Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 610, Short.MAX_VALUE)
+        );
+
+        Backgraund.add(BarraVertical01, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 80, 2, 610));
+
+        BarraVertical02.setBackground(new java.awt.Color(219, 219, 219));
+        BarraVertical02.setPreferredSize(new java.awt.Dimension(2, 610));
+
+        javax.swing.GroupLayout BarraVertical02Layout = new javax.swing.GroupLayout(BarraVertical02);
+        BarraVertical02.setLayout(BarraVertical02Layout);
+        BarraVertical02Layout.setHorizontalGroup(
+            BarraVertical02Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 2, Short.MAX_VALUE)
+        );
+        BarraVertical02Layout.setVerticalGroup(
+            BarraVertical02Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 610, Short.MAX_VALUE)
+        );
+
+        Backgraund.add(BarraVertical02, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 80, -1, -1));
+
+        TablaDocumentos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        JScrollDocumentos.setViewportView(TablaDocumentos);
+
+        Backgraund.add(JScrollDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, 740, 430));
+
+        TituloGrande.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
+        TituloGrande.setForeground(new java.awt.Color(13, 6, 45));
+        TituloGrande.setText("Gestor de Documentos");
+        Backgraund.add(TituloGrande, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, 440, 30));
+
+        DescripcionMain.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        DescripcionMain.setText("Administre los documentos de la Secretaria General");
+        Backgraund.add(DescripcionMain, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 130, 490, -1));
+
+        PanelOpcionesDocumentos.setBackground(new java.awt.Color(245, 245, 245));
+
+        JTextBusquedad.setText("jTextField1");
+
+        JButtonBuscar.setText("Buscar");
+        JButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JButtonBuscarActionPerformed(evt);
+            }
+        });
+
+        JButtomEditar.setText("Editar");
+        JButtomEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JButtomEditarActionPerformed(evt);
+            }
+        });
+
+        JButtonEliminar.setText("Eliminar");
+        JButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JButtonEliminarActionPerformed(evt);
+            }
+        });
+
+        JButtonExportar.setText("Exportar");
+
+        javax.swing.GroupLayout PanelOpcionesDocumentosLayout = new javax.swing.GroupLayout(PanelOpcionesDocumentos);
+        PanelOpcionesDocumentos.setLayout(PanelOpcionesDocumentosLayout);
+        PanelOpcionesDocumentosLayout.setHorizontalGroup(
+            PanelOpcionesDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelOpcionesDocumentosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(JTextBusquedad, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(JButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                .addComponent(JButtomEditar)
+                .addGap(12, 12, 12)
+                .addComponent(JButtonEliminar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(JButtonExportar)
+                .addGap(28, 28, 28))
+        );
+        PanelOpcionesDocumentosLayout.setVerticalGroup(
+            PanelOpcionesDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesDocumentosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PanelOpcionesDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(JTextBusquedad, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JButtonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                    .addComponent(JButtonExportar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JButtonEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JButtomEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        Backgraund.add(PanelOpcionesDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, 740, 60));
+
+        PanelEstadisticas.setBackground(new java.awt.Color(245, 245, 245));
+
+        javax.swing.GroupLayout PanelEstadisticasLayout = new javax.swing.GroupLayout(PanelEstadisticas);
+        PanelEstadisticas.setLayout(PanelEstadisticasLayout);
+        PanelEstadisticasLayout.setHorizontalGroup(
+            PanelEstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 310, Short.MAX_VALUE)
+        );
+        PanelEstadisticasLayout.setVerticalGroup(
+            PanelEstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        Backgraund.add(PanelEstadisticas, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 380, 310, 300));
+
+        PanelNotificaciones.setBackground(new java.awt.Color(245, 245, 245));
+
+        javax.swing.GroupLayout PanelNotificacionesLayout = new javax.swing.GroupLayout(PanelNotificaciones);
+        PanelNotificaciones.setLayout(PanelNotificacionesLayout);
+        PanelNotificacionesLayout.setHorizontalGroup(
+            PanelNotificacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 310, Short.MAX_VALUE)
+        );
+        PanelNotificacionesLayout.setVerticalGroup(
+            PanelNotificacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 260, Short.MAX_VALUE)
+        );
+
+        Backgraund.add(PanelNotificaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 90, -1, 260));
+
+        LineaHorizontal01.setBackground(new java.awt.Color(219, 219, 219));
+        LineaHorizontal01.setPreferredSize(new java.awt.Dimension(740, 2));
+
+        javax.swing.GroupLayout LineaHorizontal01Layout = new javax.swing.GroupLayout(LineaHorizontal01);
+        LineaHorizontal01.setLayout(LineaHorizontal01Layout);
+        LineaHorizontal01Layout.setHorizontalGroup(
+            LineaHorizontal01Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 740, Short.MAX_VALUE)
+        );
+        LineaHorizontal01Layout.setVerticalGroup(
+            LineaHorizontal01Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 2, Short.MAX_VALUE)
+        );
+
+        Backgraund.add(LineaHorizontal01, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 740, 2));
+
+        LineaHorizontal02.setBackground(new java.awt.Color(219, 219, 219));
+        LineaHorizontal02.setPreferredSize(new java.awt.Dimension(220, 2));
+
+        javax.swing.GroupLayout LineaHorizontal02Layout = new javax.swing.GroupLayout(LineaHorizontal02);
+        LineaHorizontal02.setLayout(LineaHorizontal02Layout);
+        LineaHorizontal02Layout.setHorizontalGroup(
+            LineaHorizontal02Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 220, Short.MAX_VALUE)
+        );
+        LineaHorizontal02Layout.setVerticalGroup(
+            LineaHorizontal02Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 2, Short.MAX_VALUE)
+        );
+
+        Backgraund.add(LineaHorizontal02, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 220, 2));
+
+        TItuloDependencia.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        TItuloDependencia.setText("POR DEPENDENCIA");
+        Backgraund.add(TItuloDependencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        JScrollDependencias.setViewportView(jTable2);
+
+        Backgraund.add(JScrollDependencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 220, 340));
+
+        JPanelAjustes.setBackground(new java.awt.Color(255, 251, 248));
+        JPanelAjustes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TextAjustes.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        TextAjustes.setForeground(new java.awt.Color(120, 116, 134));
+        TextAjustes.setText("Ajustes");
+        JPanelAjustes.add(TextAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+
+        ImgAjustes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ImgAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ajustes.png"))); // NOI18N
+        JPanelAjustes.add(ImgAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 40));
+
+        Backgraund.add(JPanelAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 230, 40));
+
+        JPanelMisDocumentos.setBackground(new java.awt.Color(255, 251, 248));
+        JPanelMisDocumentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JPanelMisDocumentosMouseClicked(evt);
+            }
+        });
+        JPanelMisDocumentos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TextDocumentos.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        TextDocumentos.setForeground(new java.awt.Color(120, 116, 134));
+        TextDocumentos.setText("Mis Documentos");
+        JPanelMisDocumentos.add(TextDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+
+        ImgMisDocumentos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ImgMisDocumentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Mis_documentos.png"))); // NOI18N
+        JPanelMisDocumentos.add(ImgMisDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 40));
+
+        Backgraund.add(JPanelMisDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 220, 40));
+
+        JPanelCargarDocumento.setBackground(new java.awt.Color(255, 251, 248));
+        JPanelCargarDocumento.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JPanelCargarDocumentoMouseClicked(evt);
+            }
+        });
+        JPanelCargarDocumento.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TextCargar.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        TextCargar.setForeground(new java.awt.Color(120, 116, 134));
+        TextCargar.setText("Cargar Documento");
+        JPanelCargarDocumento.add(TextCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+
+        ImgCargar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ImgCargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Subir_documento.png"))); // NOI18N
+        JPanelCargarDocumento.add(ImgCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 40));
+
+        Backgraund.add(JPanelCargarDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 230, 40));
+
+        JPanelUsuarios.setBackground(new java.awt.Color(255, 251, 248));
+        JPanelUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JPanelUsuariosMouseClicked(evt);
+            }
+        });
+        JPanelUsuarios.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TextUsuarios.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        TextUsuarios.setForeground(new java.awt.Color(120, 116, 134));
+        TextUsuarios.setText("Usuarios");
+        JPanelUsuarios.add(TextUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+
+        ImgUsuarios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ImgUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Usuarios.png"))); // NOI18N
+        JPanelUsuarios.add(ImgUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 40));
+
+        Backgraund.add(JPanelUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 230, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Backgraund, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Backgraund, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void JButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtonBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JButtonBuscarActionPerformed
+
+    private void JButtomEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtomEditarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JButtomEditarActionPerformed
+
+    private void JButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtonEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JButtonEliminarActionPerformed
+
+    private void JPanelCargarDocumentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelCargarDocumentoMouseClicked
+        this.dispose();
+
+        // Abrir la ventana de gestor de documentos
+        Cargar_Documento ventanaCargarDocumento= new Cargar_Documento();
+        ventanaCargarDocumento.setLocationRelativeTo(null);
+        ventanaCargarDocumento.setVisible(true);
+    }//GEN-LAST:event_JPanelCargarDocumentoMouseClicked
+
+    private void JPanelUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelUsuariosMouseClicked
+        // Cerrar login
+        this.dispose();
+
+        // Abrir la ventana de gestor de documentos
+        Ajustes_Usuario ventanaGestorDeUsuario = new Ajustes_Usuario();
+        ventanaGestorDeUsuario.setLocationRelativeTo(null);
+        ventanaGestorDeUsuario.setVisible(true);
+    }//GEN-LAST:event_JPanelUsuariosMouseClicked
+
+    private void JPanelMisDocumentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelMisDocumentosMouseClicked
+        // Cerrar login
+        this.dispose();
+
+        // Abrir la ventana de gestor de documentos
+        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos();
+        ventanaGestorDeDocumentos.setLocationRelativeTo(null);
+        ventanaGestorDeDocumentos.setVisible(true);
+    }//GEN-LAST:event_JPanelMisDocumentosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -70,5 +527,45 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Backgraund;
+    private javax.swing.JPanel BarraSuperior;
+    private javax.swing.JPanel BarraVertical01;
+    private javax.swing.JPanel BarraVertical02;
+    private javax.swing.JLabel DescripcionMain;
+    private javax.swing.JLabel ImgAjustes;
+    private javax.swing.JLabel ImgCargar;
+    private javax.swing.JLabel ImgMisDocumentos;
+    private javax.swing.JLabel ImgUsuarios;
+    private javax.swing.JButton JButtomEditar;
+    private javax.swing.JButton JButtonBuscar;
+    private javax.swing.JButton JButtonEliminar;
+    private javax.swing.JButton JButtonExportar;
+    private javax.swing.JPanel JPanelAjustes;
+    private javax.swing.JPanel JPanelCargarDocumento;
+    private javax.swing.JPanel JPanelMisDocumentos;
+    private javax.swing.JPanel JPanelUsuarios;
+    private javax.swing.JScrollPane JScrollDependencias;
+    private javax.swing.JScrollPane JScrollDocumentos;
+    private javax.swing.JTextField JTextBusquedad;
+    private javax.swing.JPanel LineaHorizontal01;
+    private javax.swing.JPanel LineaHorizontal02;
+    private javax.swing.JPanel PanelEstadisticas;
+    private javax.swing.JPanel PanelNotificaciones;
+    private javax.swing.JPanel PanelOpcionesDocumentos;
+    private javax.swing.JLabel TItuloDependencia;
+    private javax.swing.JTable TablaDocumentos;
+    private javax.swing.JLabel TextAjustes;
+    private javax.swing.JLabel TextCargar;
+    private javax.swing.JLabel TextDocumentos;
+    private javax.swing.JLabel TextSwiftFold;
+    private javax.swing.JLabel TextUsuarios;
+    private javax.swing.JLabel TituloGrande;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }

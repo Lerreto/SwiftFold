@@ -57,9 +57,11 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        exitBtn.setBackground(new java.awt.Color(255, 255, 255));
+        exitBtn.setBackground(new java.awt.Color(150, 150, 150));
 
+        exitTxt.setBackground(new java.awt.Color(150, 150, 150));
         exitTxt.setFont(new java.awt.Font("Roboto Light", 0, 24)); // NOI18N
+        exitTxt.setForeground(new java.awt.Color(255, 255, 255));
         exitTxt.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         exitTxt.setText("X");
         exitTxt.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -80,11 +82,15 @@ public class Login extends javax.swing.JFrame {
         exitBtn.setLayout(exitBtnLayout);
         exitBtnLayout.setHorizontalGroup(
             exitBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(exitTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exitBtnLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(exitTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         exitBtnLayout.setVerticalGroup(
             exitBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(exitTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exitBtnLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(exitTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
@@ -234,8 +240,8 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_exitTxtMouseEntered
 
     private void exitTxtMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitTxtMouseExited
-        exitBtn.setBackground(Color.white);
-        exitTxt.setForeground(Color.black);
+        exitBtn.setBackground(new Color(150, 150, 150));
+        exitTxt.setForeground(Color.white);
     }//GEN-LAST:event_exitTxtMouseExited
 
     private void loginBtnTxtMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnTxtMouseEntered
@@ -243,7 +249,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_loginBtnTxtMouseEntered
 
     private void loginBtnTxtMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnTxtMouseExited
-        loginBtn.setBackground(new Color(120,46,21));
+        loginBtn.setBackground(new Color(0,150,0));
     }//GEN-LAST:event_loginBtnTxtMouseExited
 
     private void userTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTxtMousePressed
@@ -269,7 +275,13 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_passTxtMousePressed
 
     private void loginBtnTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnTxtMouseClicked
-        javax.swing.JOptionPane.showMessageDialog(this, "Intento de login con los datos:\nUsuario: " + userTxt.getText() + "\nContraseña: " + String.valueOf(passTxt.getPassword()), "LOGIN", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        // Cerrar login
+        this.dispose();
+
+        // Abrir la ventana de gestor de documentos
+        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos();
+        ventanaGestorDeDocumentos.setLocationRelativeTo(null);
+        ventanaGestorDeDocumentos.setVisible(true);
     }//GEN-LAST:event_loginBtnTxtMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

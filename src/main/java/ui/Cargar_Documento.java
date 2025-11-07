@@ -28,21 +28,140 @@ public class Cargar_Documento extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        TituloCargarDocumento = new javax.swing.JLabel();
+        DescripcionCargar = new javax.swing.JLabel();
+        JTextArchivo = new javax.swing.JTextField();
+        JTextTituloDocumento = new javax.swing.JTextField();
+        JFechaDisposicionFinal = new javax.swing.JComboBox<>();
+        JComboBoxCategorias = new javax.swing.JComboBox<>();
+        JComboBoxTipoAcceso = new javax.swing.JComboBox<>();
+        JTextCodigo = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        JTextDescripcion = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        JBotonLimpiar = new javax.swing.JButton();
+        JBottomCancelar = new javax.swing.JButton();
+        JBotonGuardar = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(255, 251, 248));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        TituloCargarDocumento.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
+        TituloCargarDocumento.setForeground(new java.awt.Color(13, 6, 45));
+        TituloCargarDocumento.setText("Cargar Documento");
+        jPanel1.add(TituloCargarDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        DescripcionCargar.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        DescripcionCargar.setForeground(new java.awt.Color(120, 116, 134));
+        DescripcionCargar.setText("Guarda y crea un nuevo documento para guardarlo en el archivador");
+        jPanel1.add(DescripcionCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 490, -1));
+
+        JTextArchivo.setText("jTextField1");
+        jPanel1.add(JTextArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 230, 370, 40));
+
+        JTextTituloDocumento.setText("jTextField1");
+        jPanel1.add(JTextTituloDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 370, 40));
+
+        JFechaDisposicionFinal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(JFechaDisposicionFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 300, 370, 40));
+
+        JComboBoxCategorias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(JComboBoxCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 160, 370, 40));
+
+        JComboBoxTipoAcceso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(JComboBoxTipoAcceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 370, 40));
+
+        JTextCodigo.setText("jTextField1");
+        jPanel1.add(JTextCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 370, 40));
+
+        JTextDescripcion.setColumns(20);
+        JTextDescripcion.setRows(5);
+        jScrollPane1.setViewportView(JTextDescripcion);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 780, -1));
+
+        jLabel3.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        jLabel3.setText("Categorias:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 140, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        jLabel4.setText("Tipo de Acceso:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        jLabel5.setText("Nombre de Documento:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        jLabel7.setText("Descripcion:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        jLabel8.setText("Archivo:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 210, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        jLabel10.setText("Codigo:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
+
+        jLabel11.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        jLabel11.setText("Disposicion Final:");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 280, -1, -1));
+
+        JBotonLimpiar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonLimpiar.setText("Limpiar Documento");
+        JBotonLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBotonLimpiarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(JBotonLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 500, -1, 40));
+
+        JBottomCancelar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBottomCancelar.setText("Cancelar");
+        JBottomCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBottomCancelarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(JBottomCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 490, -1, 40));
+
+        JBotonGuardar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonGuardar.setText("Guardar Documento");
+        jPanel1.add(JBotonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 500, -1, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void JBotonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBotonLimpiarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JBotonLimpiarActionPerformed
+
+    private void JBottomCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBottomCancelarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JBottomCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +189,26 @@ public class Cargar_Documento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel DescripcionCargar;
+    private javax.swing.JButton JBotonGuardar;
+    private javax.swing.JButton JBotonLimpiar;
+    private javax.swing.JButton JBottomCancelar;
+    private javax.swing.JComboBox<String> JComboBoxCategorias;
+    private javax.swing.JComboBox<String> JComboBoxTipoAcceso;
+    private javax.swing.JComboBox<String> JFechaDisposicionFinal;
+    private javax.swing.JTextField JTextArchivo;
+    private javax.swing.JTextField JTextCodigo;
+    private javax.swing.JTextArea JTextDescripcion;
+    private javax.swing.JTextField JTextTituloDocumento;
+    private javax.swing.JLabel TituloCargarDocumento;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

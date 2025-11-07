@@ -1,6 +1,8 @@
 package ui;
 
 import java.awt.Color;
+import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.UIManager;
 
 public class Registrarse extends javax.swing.JFrame {
     
@@ -11,6 +13,8 @@ public class Registrarse extends javax.swing.JFrame {
     public Registrarse() {
         initComponents();
     }
+    
+
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -88,7 +92,7 @@ public class Registrarse extends javax.swing.JFrame {
         citybg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ciudad_verde.png"))); // NOI18N
         bg.add(citybg, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 0, 330, 540));
 
-        header.setBackground(new java.awt.Color(255, 255, 255));
+        header.setBackground(new java.awt.Color(150, 150, 150));
         header.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 headerMouseDragged(evt);
@@ -100,9 +104,10 @@ public class Registrarse extends javax.swing.JFrame {
             }
         });
 
-        exitBtn.setBackground(new java.awt.Color(255, 255, 255));
+        exitBtn.setBackground(new java.awt.Color(150, 150, 150));
 
         exitTxt.setFont(new java.awt.Font("Roboto Light", 0, 24)); // NOI18N
+        exitTxt.setForeground(new java.awt.Color(255, 255, 255));
         exitTxt.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         exitTxt.setText("X");
         exitTxt.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -123,11 +128,15 @@ public class Registrarse extends javax.swing.JFrame {
         exitBtn.setLayout(exitBtnLayout);
         exitBtnLayout.setHorizontalGroup(
             exitBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(exitTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exitBtnLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(exitTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         exitBtnLayout.setVerticalGroup(
             exitBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(exitTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(exitBtnLayout.createSequentialGroup()
+                .addComponent(exitTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
@@ -136,7 +145,7 @@ public class Registrarse extends javax.swing.JFrame {
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(headerLayout.createSequentialGroup()
                 .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 800, Short.MAX_VALUE))
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,16 +156,21 @@ public class Registrarse extends javax.swing.JFrame {
 
         texto_1.setFont(new java.awt.Font("Roboto Black", 1, 30)); // NOI18N
         texto_1.setText("REGÍSTRATE AQUÍ");
-        bg.add(texto_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 350, -1));
+        bg.add(texto_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 350, -1));
 
         texto_2.setFont(new java.awt.Font("Roboto Black", 1, 30)); // NOI18N
         texto_2.setForeground(new java.awt.Color(0, 102, 0));
         texto_2.setText("LLENA TODOS LOS CAMPOS");
-        bg.add(texto_2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+        bg.add(texto_2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
         CasillaCargo.setFont(new java.awt.Font("Roboto SemiCondensed", 0, 14)); // NOI18N
         CasillaCargo.setForeground(new java.awt.Color(102, 102, 102));
         CasillaCargo.setText("Ingrese el cargo");
+        CasillaCargo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                CasillaCargoMousePressed(evt);
+            }
+        });
         CasillaCargo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CasillaCargoActionPerformed(evt);
@@ -186,7 +200,11 @@ public class Registrarse extends javax.swing.JFrame {
 
         ConfirmPassword.setFont(new java.awt.Font("Roboto Condensed", 2, 12)); // NOI18N
         ConfirmPassword.setForeground(new java.awt.Color(102, 102, 102));
-        ConfirmPassword.setText("jPasswordField1");
+        ConfirmPassword.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                ConfirmPasswordMousePressed(evt);
+            }
+        });
         ConfirmPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ConfirmPasswordActionPerformed(evt);
@@ -197,6 +215,11 @@ public class Registrarse extends javax.swing.JFrame {
         CasillaApellido.setFont(new java.awt.Font("Roboto SemiCondensed", 0, 14)); // NOI18N
         CasillaApellido.setForeground(new java.awt.Color(102, 102, 102));
         CasillaApellido.setText("Ingrese su apellido");
+        CasillaApellido.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                CasillaApellidoMousePressed(evt);
+            }
+        });
         CasillaApellido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CasillaApellidoActionPerformed(evt);
@@ -222,6 +245,11 @@ public class Registrarse extends javax.swing.JFrame {
         CasillaEmail.setFont(new java.awt.Font("Roboto SemiCondensed", 0, 14)); // NOI18N
         CasillaEmail.setForeground(new java.awt.Color(102, 102, 102));
         CasillaEmail.setText("correo@gmail.com");
+        CasillaEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                CasillaEmailMousePressed(evt);
+            }
+        });
         CasillaEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CasillaEmailActionPerformed(evt);
@@ -242,6 +270,11 @@ public class Registrarse extends javax.swing.JFrame {
         CasillaNumero.setFont(new java.awt.Font("Roboto SemiCondensed", 0, 14)); // NOI18N
         CasillaNumero.setForeground(new java.awt.Color(102, 102, 102));
         CasillaNumero.setText("+57 --- ----- ----");
+        CasillaNumero.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                CasillaNumeroMousePressed(evt);
+            }
+        });
         CasillaNumero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CasillaNumeroActionPerformed(evt);
@@ -251,7 +284,11 @@ public class Registrarse extends javax.swing.JFrame {
 
         Password.setFont(new java.awt.Font("Roboto Condensed", 2, 12)); // NOI18N
         Password.setForeground(new java.awt.Color(102, 102, 102));
-        Password.setText("jPasswordField1");
+        Password.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                PasswordMousePressed(evt);
+            }
+        });
         Password.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PasswordActionPerformed(evt);
@@ -334,8 +371,8 @@ public class Registrarse extends javax.swing.JFrame {
     }//GEN-LAST:event_exitTxtMouseEntered
 
     private void exitTxtMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitTxtMouseExited
-        exitBtn.setBackground(Color.white);
-        exitTxt.setForeground(Color.black);
+        exitBtn.setBackground(new Color(150, 150, 150));
+        exitTxt.setForeground(Color.white);
     }//GEN-LAST:event_exitTxtMouseExited
 
     private void CasillaCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CasillaCargoActionPerformed
@@ -387,47 +424,258 @@ public class Registrarse extends javax.swing.JFrame {
             CasillaNombre.setText("");
             CasillaNombre.setForeground(Color.black);
         }
+        // Restaurar placeholders en los demás si están vacíos
+        if (CasillaApellido.getText().isEmpty()) {
+            CasillaApellido.setText("Ingrese su apellido");
+            CasillaApellido.setForeground(Color.gray);
+        }
+        if (CasillaEmail.getText().isEmpty()) {
+            CasillaEmail.setText("correo@gmail.com");
+            CasillaEmail.setForeground(Color.gray);
+        }
+        if (CasillaNumero.getText().isEmpty()) {
+            CasillaNumero.setText("+57 --- ----- ----");
+            CasillaNumero.setForeground(Color.gray);
+        }
+        if (CasillaCargo.getText().isEmpty()) {
+            CasillaCargo.setText("Ingrese el cargo");
+            CasillaCargo.setForeground(Color.gray);
+        }
+        if (Password.getPassword().length == 0) {
+            Password.setText("********");
+            Password.setForeground(Color.gray);
+            Password.setEchoChar((char)0);
+        }
+        if (ConfirmPassword.getPassword().length == 0) {
+            ConfirmPassword.setText("********");
+            ConfirmPassword.setForeground(Color.gray);
+            ConfirmPassword.setEchoChar((char)0);
+        }
     }//GEN-LAST:event_CasillaNombreMousePressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void CasillaApellidoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CasillaApellidoMousePressed
+        if (CasillaApellido.getText().equals("Ingrese su apellido")) {
+            CasillaApellido.setText("");
+            CasillaApellido.setForeground(Color.black);
+        }
+        if (CasillaNombre.getText().isEmpty()) {
+            CasillaNombre.setText("Ingrese su nombre");
+            CasillaNombre.setForeground(Color.gray);
+        }
+        if (CasillaEmail.getText().isEmpty()) {
+            CasillaEmail.setText("correo@gmail.com");
+            CasillaEmail.setForeground(Color.gray);
+        }
+        if (CasillaNumero.getText().isEmpty()) {
+            CasillaNumero.setText("+57 --- ----- ----");
+            CasillaNumero.setForeground(Color.gray);
+        }
+        if (CasillaCargo.getText().isEmpty()) {
+            CasillaCargo.setText("Ingrese el cargo");
+            CasillaCargo.setForeground(Color.gray);
+        }
+        if (Password.getPassword().length == 0) {
+            Password.setText("********");
+            Password.setForeground(Color.gray);
+            Password.setEchoChar((char)0);
+        }
+        if (ConfirmPassword.getPassword().length == 0) {
+            ConfirmPassword.setText("********");
+            ConfirmPassword.setForeground(Color.gray);
+            ConfirmPassword.setEchoChar((char)0);
+        }
+    }//GEN-LAST:event_CasillaApellidoMousePressed
+
+    private void CasillaEmailMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CasillaEmailMousePressed
+        if (CasillaEmail.getText().equals("correo@gmail.com")) {
+            CasillaEmail.setText("");
+            CasillaEmail.setForeground(Color.black);
+        }
+        if (CasillaNombre.getText().isEmpty()) {
+            CasillaNombre.setText("Ingrese su nombre");
+            CasillaNombre.setForeground(Color.gray);
+        }
+        if (CasillaApellido.getText().isEmpty()) {
+            CasillaApellido.setText("Ingrese su apellido");
+            CasillaApellido.setForeground(Color.gray);
+        }
+        if (CasillaNumero.getText().isEmpty()) {
+            CasillaNumero.setText("+57 --- ----- ----");
+            CasillaNumero.setForeground(Color.gray);
+        }
+        if (CasillaCargo.getText().isEmpty()) {
+            CasillaCargo.setText("Ingrese el cargo");
+            CasillaCargo.setForeground(Color.gray);
+        }
+        if (Password.getPassword().length == 0) {
+            Password.setText("********");
+            Password.setForeground(Color.gray);
+            Password.setEchoChar((char)0);
+        }
+        if (ConfirmPassword.getPassword().length == 0) {
+            ConfirmPassword.setText("********");
+            ConfirmPassword.setForeground(Color.gray);
+            ConfirmPassword.setEchoChar((char)0);
+        }
+    }//GEN-LAST:event_CasillaEmailMousePressed
+
+    private void CasillaNumeroMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CasillaNumeroMousePressed
+        if (CasillaNumero.getText().equals("+57 --- ----- ----")) {
+            CasillaNumero.setText("");
+            CasillaNumero.setForeground(Color.black);
+        }
+        if (CasillaNombre.getText().isEmpty()) {
+            CasillaNombre.setText("Ingrese su nombre");
+            CasillaNombre.setForeground(Color.gray);
+        }
+        if (CasillaApellido.getText().isEmpty()) {
+            CasillaApellido.setText("Ingrese su apellido");
+            CasillaApellido.setForeground(Color.gray);
+        }
+        if (CasillaEmail.getText().isEmpty()) {
+            CasillaEmail.setText("correo@gmail.com");
+            CasillaEmail.setForeground(Color.gray);
+        }
+        if (CasillaCargo.getText().isEmpty()) {
+            CasillaCargo.setText("Ingrese el cargo");
+            CasillaCargo.setForeground(Color.gray);
+        }
+        if (Password.getPassword().length == 0) {
+            Password.setText("********");
+            Password.setForeground(Color.gray);
+            Password.setEchoChar((char)0);
+        }
+        if (ConfirmPassword.getPassword().length == 0) {
+            ConfirmPassword.setText("********");
+            ConfirmPassword.setForeground(Color.gray);
+            ConfirmPassword.setEchoChar((char)0);
+        }
+    }//GEN-LAST:event_CasillaNumeroMousePressed
+
+    private void CasillaCargoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CasillaCargoMousePressed
+        if (CasillaCargo.getText().equals("Ingrese el cargo")) {
+            CasillaCargo.setText("");
+            CasillaCargo.setForeground(Color.black);
+        }
+        if (CasillaNombre.getText().isEmpty()) {
+            CasillaNombre.setText("Ingrese su nombre");
+            CasillaNombre.setForeground(Color.gray);
+        }
+        if (CasillaApellido.getText().isEmpty()) {
+            CasillaApellido.setText("Ingrese su apellido");
+            CasillaApellido.setForeground(Color.gray);
+        }
+        if (CasillaEmail.getText().isEmpty()) {
+            CasillaEmail.setText("correo@gmail.com");
+            CasillaEmail.setForeground(Color.gray);
+        }
+        if (CasillaNumero.getText().isEmpty()) {
+            CasillaNumero.setText("+57 --- ----- ----");
+            CasillaNumero.setForeground(Color.gray);
+        }
+        if (Password.getPassword().length == 0) {
+            Password.setText("********");
+            Password.setForeground(Color.gray);
+            Password.setEchoChar((char)0);
+        }
+        if (ConfirmPassword.getPassword().length == 0) {
+            ConfirmPassword.setText("********");
+            ConfirmPassword.setForeground(Color.gray);
+            ConfirmPassword.setEchoChar((char)0);
+        }
+    }//GEN-LAST:event_CasillaCargoMousePressed
+
+    private void PasswordMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PasswordMousePressed
+        String pwd = new String(Password.getPassword());
+        if (pwd.equals("********")) {
+            Password.setText("");
+            Password.setForeground(Color.black);
+            Password.setEchoChar('\u2022'); // vuelve a ocultar
+        }
+        // Placeholders en los demás
+        if (CasillaNombre.getText().isEmpty()) {
+            CasillaNombre.setText("Ingrese su nombre");
+            CasillaNombre.setForeground(Color.gray);
+        }
+        if (CasillaApellido.getText().isEmpty()) {
+            CasillaApellido.setText("Ingrese su apellido");
+            CasillaApellido.setForeground(Color.gray);
+        }
+        if (CasillaEmail.getText().isEmpty()) {
+            CasillaEmail.setText("correo@gmail.com");
+            CasillaEmail.setForeground(Color.gray);
+        }
+        if (CasillaNumero.getText().isEmpty()) {
+            CasillaNumero.setText("+57 --- ----- ----");
+            CasillaNumero.setForeground(Color.gray);
+        }
+        if (CasillaCargo.getText().isEmpty()) {
+            CasillaCargo.setText("Ingrese el cargo");
+            CasillaCargo.setForeground(Color.gray);
+        }
+        if (ConfirmPassword.getPassword().length == 0) {
+            ConfirmPassword.setText("********");
+            ConfirmPassword.setForeground(Color.gray);
+            ConfirmPassword.setEchoChar((char)0);
+        }
+    }//GEN-LAST:event_PasswordMousePressed
+
+    private void ConfirmPasswordMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ConfirmPasswordMousePressed
+        String pwd = new String(ConfirmPassword.getPassword());
+        if (pwd.equals("********")) {
+            ConfirmPassword.setText("");
+            ConfirmPassword.setForeground(Color.black);
+            ConfirmPassword.setEchoChar('\u2022');
+        }
+        if (CasillaNombre.getText().isEmpty()) {
+            CasillaNombre.setText("Ingrese su nombre");
+            CasillaNombre.setForeground(Color.gray);
+        }
+        if (CasillaApellido.getText().isEmpty()) {
+            CasillaApellido.setText("Ingrese su apellido");
+            CasillaApellido.setForeground(Color.gray);
+        }
+        if (CasillaEmail.getText().isEmpty()) {
+            CasillaEmail.setText("correo@gmail.com");
+            CasillaEmail.setForeground(Color.gray);
+        }
+        if (CasillaNumero.getText().isEmpty()) {
+            CasillaNumero.setText("+57 --- ----- ----");
+            CasillaNumero.setForeground(Color.gray);
+        }
+        if (CasillaCargo.getText().isEmpty()) {
+            CasillaCargo.setText("Ingrese el cargo");
+            CasillaCargo.setForeground(Color.gray);
+        }
+        if (Password.getPassword().length == 0) {
+            Password.setText("********");
+            Password.setForeground(Color.gray);
+            Password.setEchoChar((char)0);
+        }
+    }//GEN-LAST:event_ConfirmPasswordMousePressed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Registrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Registrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Registrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Registrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Registrarse().setVisible(true);
-            }
+        // Activa FlatLaf (claro)
+        FlatLightLaf.setup();
+
+        // Bordes suaves (ajusta el radio si quieres)
+        UIManager.put("Component.arc", 3);
+        UIManager.put("TextComponent.arc", 3);
+        UIManager.put("Button.arc", 3);
+        UIManager.put("ProgressBar.arc", 3);
+        UIManager.put("ScrollBar.thumbArc", 3);
+
+        // Lanza la ventana
+        java.awt.EventQueue.invokeLater(() -> {
+            new Registrarse().setVisible(true);
         });
     }
 
