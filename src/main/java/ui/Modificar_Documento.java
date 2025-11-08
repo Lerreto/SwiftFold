@@ -4,6 +4,12 @@
  */
 package ui;
 
+import core.Documento;
+import data.CategoriaDao;
+import data.DocumentoDao;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Juan Pablo
@@ -11,12 +17,37 @@ package ui;
 public class Modificar_Documento extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Modificar_Documento.class.getName());
-
+    private String idDocumento;
+    
+    
     /**
      * Creates new form Modificar_Documento
      */
-    public Modificar_Documento() {
+    public Modificar_Documento(String idDocumento) {
+        this.idDocumento = idDocumento;
         initComponents();
+        cargarDatosDocumento(idDocumento);
+    }
+    
+    // Método para cargar los datos del documento desde la base de datos
+    private void cargarDatosDocumento(String idDocumento) {
+        try {
+            // Obtener el documento desde la base de datos usando el id_documento
+            Documento documento = new DocumentoDao().obtenerDocumentoPorId(idDocumento);
+            
+            if (documento != null) {
+                // Cargar los datos en los campos
+                JTextNombreDocumento.setText(documento.getNombre());
+                JTextCodigo.setText(documento.getCodigo());
+                AreaDescripcion.setText(documento.getDescripcion());
+                JComboCategorias.setSelectedItem(new CategoriaDao().idPorNombre(String.valueOf(documento.getIdCategoria())));
+                JComboTipoAcceso.setSelectedItem(documento.getTipoAcceso());
+                JComboDisposicionFinal.setSelectedItem(documento.getDisposicionFinal());
+                JLabelNombreOriginal.setText(documento.getFileName());
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar el documento: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -29,25 +60,15 @@ public class Modificar_Documento extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
+        TextVisualizacion = new javax.swing.JLabel();
+        TextAcuerdo = new javax.swing.JLabel();
+        BarraHorizontal = new javax.swing.JPanel();
+        JTextNombreDocumento = new javax.swing.JTextField();
+        JTextCodigo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jTextField10 = new javax.swing.JTextField();
-        jTextField11 = new javax.swing.JTextField();
-        jTextField12 = new javax.swing.JTextField();
-        jTextField13 = new javax.swing.JTextField();
-        jTextField14 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        AreaDescripcion = new javax.swing.JTextArea();
+        JBotonSalir = new javax.swing.JButton();
+        JBotonModificar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -61,109 +82,99 @@ public class Modificar_Documento extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        JComboDisposicionFinal = new javax.swing.JComboBox<>();
+        JComboCategorias = new javax.swing.JComboBox<>();
+        JComboTipoAcceso = new javax.swing.JComboBox<>();
+        JPanelNameCreador = new javax.swing.JPanel();
+        TextNombreCreador = new javax.swing.JLabel();
+        JPanelNombreArchivoOriginal = new javax.swing.JPanel();
+        JLabelNombreOriginal = new javax.swing.JLabel();
+        JPanelFechaCreacion = new javax.swing.JPanel();
+        JLabelFechaCreacion = new javax.swing.JLabel();
+        JPanelMunicipio = new javax.swing.JPanel();
+        JLabelMunicipio = new javax.swing.JLabel();
+        JPanelCorreo = new javax.swing.JPanel();
+        TextCorreo = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        JPanelSize = new javax.swing.JPanel();
+        TextSize = new javax.swing.JLabel();
+        JPanelUltimaActualizacion = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        JPanelDepartamento = new javax.swing.JPanel();
+        JLabelDepartamento = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 251, 248));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
-        jLabel1.setText("Visualización Documento");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        TextVisualizacion.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
+        TextVisualizacion.setText("Visualización Documento");
+        jPanel1.add(TextVisualizacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(53, 91, 62));
-        jLabel2.setText("Del Acuerdo Municipal 001 de 2025");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
+        TextAcuerdo.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
+        TextAcuerdo.setForeground(new java.awt.Color(53, 91, 62));
+        TextAcuerdo.setText("Del Acuerdo Municipal 001 de 2025");
+        jPanel1.add(TextAcuerdo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
 
-        jPanel2.setBackground(new java.awt.Color(219, 219, 219));
+        BarraHorizontal.setBackground(new java.awt.Color(219, 219, 219));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout BarraHorizontalLayout = new javax.swing.GroupLayout(BarraHorizontal);
+        BarraHorizontal.setLayout(BarraHorizontalLayout);
+        BarraHorizontalLayout.setHorizontalGroup(
+            BarraHorizontalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        BarraHorizontalLayout.setVerticalGroup(
+            BarraHorizontalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 1000, 4));
+        jPanel1.add(BarraHorizontal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 1000, 4));
 
-        jTextField3.setText("jTextField1");
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 500, 40));
+        JTextNombreDocumento.setText("Nombre del documento");
+        jPanel1.add(JTextNombreDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 500, 40));
 
-        jTextField4.setText("jTextField1");
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 170, 230, 40));
+        JTextCodigo.setText("jTextField1");
+        jPanel1.add(JTextCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 170, 230, 40));
 
-        jTextField5.setText("jTextField1");
-        jPanel1.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 170, 230, 40));
-
-        jTextField6.setText("jTextField1");
-        jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 550, 520, 40));
-
-        jTextField7.setText("jTextField1");
-        jPanel1.add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 250, 280, 40));
-
-        jTextField8.setText("jTextField1");
-        jPanel1.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 250, 180, 40));
-
-        jTextField9.setText("jTextField1");
-        jPanel1.add(jTextField9, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 250, 180, 40));
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        AreaDescripcion.setColumns(20);
+        AreaDescripcion.setRows(5);
+        jScrollPane1.setViewportView(AreaDescripcion);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 1000, -1));
 
-        jTextField10.setText("jTextField1");
-        jPanel1.add(jTextField10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 280, 40));
+        JBotonSalir.setText("Salir");
+        jPanel1.add(JBotonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 640, 120, 40));
 
-        jTextField11.setText("jTextField1");
-        jPanel1.add(jTextField11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, 320, 40));
-
-        jTextField12.setText("jTextField1");
-        jPanel1.add(jTextField12, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 460, 320, 40));
-
-        jTextField13.setText("jTextField1");
-        jPanel1.add(jTextField13, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 460, 320, 40));
-
-        jTextField14.setText("jTextField1");
-        jTextField14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField14ActionPerformed(evt);
+        JBotonModificar.setText("Modificar");
+        JBotonModificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JBotonModificarMouseClicked(evt);
             }
         });
-        jPanel1.add(jTextField14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, 450, 40));
-
-        jButton1.setText("Salir");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 620, 120, 40));
-
-        jButton2.setText("Modificar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        JBotonModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                JBotonModificarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 620, 120, 40));
+        jPanel1.add(JBotonModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 640, 120, 40));
 
         jLabel3.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel3.setText("Archivo:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 230, 100, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 230, 100, -1));
 
         jLabel4.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel4.setText("Nombre de Documento:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 170, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 170, -1));
 
         jLabel6.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel6.setText("Categorias:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 150, 100, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 140, 100, -1));
 
         jLabel5.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel5.setText("Codigo:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 150, 100, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 140, 100, -1));
 
         jLabel7.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel7.setText("Fecha de Disposicion Final:");
@@ -171,11 +182,11 @@ public class Modificar_Documento extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel8.setText("Departamento:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 230, 150, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 230, 150, -1));
 
         jLabel9.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel9.setText("Tipo de Acceso:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 230, 120, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 230, 120, -1));
 
         jLabel10.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel10.setText("Municipio:");
@@ -189,8 +200,8 @@ public class Modificar_Documento extends javax.swing.JFrame {
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 180, -1));
 
         jLabel13.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
-        jLabel13.setText("Correo del Creador:");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 530, 180, -1));
+        jLabel13.setText("Tamaño en MB:");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 540, 180, -1));
 
         jLabel14.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel14.setText("Fecha de Ultima Actualizacion:");
@@ -199,6 +210,177 @@ public class Modificar_Documento extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel15.setText("Nombre de Creador:");
         jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 530, 180, -1));
+
+        JComboDisposicionFinal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(JComboDisposicionFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 470, 320, 40));
+
+        JComboCategorias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(JComboCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 170, 210, 40));
+
+        JComboTipoAcceso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(JComboTipoAcceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 260, 170, 40));
+
+        TextNombreCreador.setText("Nombre del creador");
+
+        javax.swing.GroupLayout JPanelNameCreadorLayout = new javax.swing.GroupLayout(JPanelNameCreador);
+        JPanelNameCreador.setLayout(JPanelNameCreadorLayout);
+        JPanelNameCreadorLayout.setHorizontalGroup(
+            JPanelNameCreadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelNameCreadorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(TextNombreCreador, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        JPanelNameCreadorLayout.setVerticalGroup(
+            JPanelNameCreadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelNameCreadorLayout.createSequentialGroup()
+                .addComponent(TextNombreCreador, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(JPanelNameCreador, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 570, 310, 40));
+
+        JLabelNombreOriginal.setText("Nombre del archivo");
+
+        javax.swing.GroupLayout JPanelNombreArchivoOriginalLayout = new javax.swing.GroupLayout(JPanelNombreArchivoOriginal);
+        JPanelNombreArchivoOriginal.setLayout(JPanelNombreArchivoOriginalLayout);
+        JPanelNombreArchivoOriginalLayout.setHorizontalGroup(
+            JPanelNombreArchivoOriginalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelNombreArchivoOriginalLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(JLabelNombreOriginal, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        JPanelNombreArchivoOriginalLayout.setVerticalGroup(
+            JPanelNombreArchivoOriginalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(JLabelNombreOriginal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(JPanelNombreArchivoOriginal, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 260, 240, 40));
+
+        JLabelFechaCreacion.setText("Fecha de creacion");
+
+        javax.swing.GroupLayout JPanelFechaCreacionLayout = new javax.swing.GroupLayout(JPanelFechaCreacion);
+        JPanelFechaCreacion.setLayout(JPanelFechaCreacionLayout);
+        JPanelFechaCreacionLayout.setHorizontalGroup(
+            JPanelFechaCreacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelFechaCreacionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(JLabelFechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+        JPanelFechaCreacionLayout.setVerticalGroup(
+            JPanelFechaCreacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelFechaCreacionLayout.createSequentialGroup()
+                .addComponent(JLabelFechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(JPanelFechaCreacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 470, 310, 40));
+
+        JLabelMunicipio.setText("Municipio");
+
+        javax.swing.GroupLayout JPanelMunicipioLayout = new javax.swing.GroupLayout(JPanelMunicipio);
+        JPanelMunicipio.setLayout(JPanelMunicipioLayout);
+        JPanelMunicipioLayout.setHorizontalGroup(
+            JPanelMunicipioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelMunicipioLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(JLabelMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+        JPanelMunicipioLayout.setVerticalGroup(
+            JPanelMunicipioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelMunicipioLayout.createSequentialGroup()
+                .addComponent(JLabelMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(JPanelMunicipio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 240, 40));
+
+        TextCorreo.setText("Correo del creador");
+
+        javax.swing.GroupLayout JPanelCorreoLayout = new javax.swing.GroupLayout(JPanelCorreo);
+        JPanelCorreo.setLayout(JPanelCorreoLayout);
+        JPanelCorreoLayout.setHorizontalGroup(
+            JPanelCorreoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelCorreoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(TextCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        JPanelCorreoLayout.setVerticalGroup(
+            JPanelCorreoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelCorreoLayout.createSequentialGroup()
+                .addComponent(TextCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(JPanelCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 570, 310, 40));
+
+        jLabel21.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        jLabel21.setText("Correo del Creador:");
+        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 540, 180, -1));
+
+        TextSize.setText("Tamaño del archivo");
+
+        javax.swing.GroupLayout JPanelSizeLayout = new javax.swing.GroupLayout(JPanelSize);
+        JPanelSize.setLayout(JPanelSizeLayout);
+        JPanelSizeLayout.setHorizontalGroup(
+            JPanelSizeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelSizeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(TextSize, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+        JPanelSizeLayout.setVerticalGroup(
+            JPanelSizeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelSizeLayout.createSequentialGroup()
+                .addComponent(TextSize, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(JPanelSize, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 570, 320, -1));
+
+        jLabel23.setText("Fecha de ultima actualizacion");
+
+        javax.swing.GroupLayout JPanelUltimaActualizacionLayout = new javax.swing.GroupLayout(JPanelUltimaActualizacion);
+        JPanelUltimaActualizacion.setLayout(JPanelUltimaActualizacionLayout);
+        JPanelUltimaActualizacionLayout.setHorizontalGroup(
+            JPanelUltimaActualizacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelUltimaActualizacionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+        JPanelUltimaActualizacionLayout.setVerticalGroup(
+            JPanelUltimaActualizacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelUltimaActualizacionLayout.createSequentialGroup()
+                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(JPanelUltimaActualizacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 470, 310, 40));
+
+        JLabelDepartamento.setText("Departamento");
+
+        javax.swing.GroupLayout JPanelDepartamentoLayout = new javax.swing.GroupLayout(JPanelDepartamento);
+        JPanelDepartamento.setLayout(JPanelDepartamentoLayout);
+        JPanelDepartamentoLayout.setHorizontalGroup(
+            JPanelDepartamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelDepartamentoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(JLabelDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+        JPanelDepartamentoLayout.setVerticalGroup(
+            JPanelDepartamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelDepartamentoLayout.createSequentialGroup()
+                .addComponent(JLabelDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(JPanelDepartamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -209,20 +391,20 @@ public class Modificar_Documento extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField14ActionPerformed
+    private void JBotonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBotonModificarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField14ActionPerformed
+    }//GEN-LAST:event_JBotonModificarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void JBotonModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JBotonModificarMouseClicked
+
+    }//GEN-LAST:event_JBotonModificarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -250,16 +432,40 @@ public class Modificar_Documento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextArea AreaDescripcion;
+    private javax.swing.JPanel BarraHorizontal;
+    private javax.swing.JButton JBotonModificar;
+    private javax.swing.JButton JBotonSalir;
+    private javax.swing.JComboBox<String> JComboCategorias;
+    private javax.swing.JComboBox<String> JComboDisposicionFinal;
+    private javax.swing.JComboBox<String> JComboTipoAcceso;
+    private javax.swing.JLabel JLabelDepartamento;
+    private javax.swing.JLabel JLabelFechaCreacion;
+    private javax.swing.JLabel JLabelMunicipio;
+    private javax.swing.JLabel JLabelNombreOriginal;
+    private javax.swing.JPanel JPanelCorreo;
+    private javax.swing.JPanel JPanelDepartamento;
+    private javax.swing.JPanel JPanelFechaCreacion;
+    private javax.swing.JPanel JPanelMunicipio;
+    private javax.swing.JPanel JPanelNameCreador;
+    private javax.swing.JPanel JPanelNombreArchivoOriginal;
+    private javax.swing.JPanel JPanelSize;
+    private javax.swing.JPanel JPanelUltimaActualizacion;
+    private javax.swing.JTextField JTextCodigo;
+    private javax.swing.JTextField JTextNombreDocumento;
+    private javax.swing.JLabel TextAcuerdo;
+    private javax.swing.JLabel TextCorreo;
+    private javax.swing.JLabel TextNombreCreador;
+    private javax.swing.JLabel TextSize;
+    private javax.swing.JLabel TextVisualizacion;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -268,20 +474,6 @@ public class Modificar_Documento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }

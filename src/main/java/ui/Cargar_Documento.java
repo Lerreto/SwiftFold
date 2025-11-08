@@ -4,6 +4,7 @@
  */
 package ui;
 
+// LIBRERIAS UTILIZADAS
 
 import data.CategoriaDao;
 import java.awt.Color;
@@ -11,14 +12,12 @@ import java.nio.file.Path;
 import javax.swing.JFileChooser;
 
 import java.io.File;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
+// CLASE PRINCIPAL
 
-/**
- *
- * @author Juan Pablo
- */
 public class Cargar_Documento extends javax.swing.JFrame {
     
     private Path rutaSeleccionada;
@@ -26,14 +25,13 @@ public class Cargar_Documento extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cargar_Documento.class.getName());
 
-    /**
-     * Creates new form Cargar_Documento
-     */
+    
+    // METODO DE DEFAULT POR PARTE DE SWING
     public Cargar_Documento() {
         initComponents();
         cargarCombos();
         
-        // AGREGAR TEXTO BASE PARA REPRESENTAR
+        // ======= ME PERMITE TENER UN TEXTO BASE EN LOS JFIELDS =======
         
         JTextTituloDocumento1.setText("Ingrese el título del documento");
         JTextTituloDocumento1.setForeground(Color.GRAY);
@@ -46,7 +44,57 @@ public class Cargar_Documento extends javax.swing.JFrame {
         
     }
     
+  
+    
+    // ======= PARA VALIDACIONES DE CAMPO DE TEXTO =======
+    
+    private boolean validarCampos() {
+        // Verificar si los campos no tienen los valores por defecto
+        if (JTextTituloDocumento1.getText().equals("Ingrese el título del documento") || JTextTituloDocumento1.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre del documento es obligatorio", "Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (JTextCodigo.getText().equals("Ingrese el código") || JTextCodigo.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El código es obligatorio", "Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (JTextDescripcion.getText().equals("Agrega una pequeña descripción del documento") || JTextDescripcion.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La descripción es obligatoria", "Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // Validar que se haya seleccionado una categoría
+        if (JComboBoxCategorias.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione una categoría", "Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // Validar tipo de acceso
+        if (JComboBoxTipoAcceso.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione un tipo de acceso", "Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // Validar disposición final
+        if (JFechaDisposicionFinal.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione una disposición final", "Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // Validar si el archivo ha sido seleccionado
+        if (rutaSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un archivo", "Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    
     // ======= CARGAR COMBOS PARA QUE SE VEAN =======
+    
     private void cargarCombos() {
         // Tipo de acceso
         JComboBoxTipoAcceso.removeAllItems();
@@ -66,6 +114,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         JComboBoxCategorias.removeAllItems();
         JComboBoxCategorias.addItem("Seleccione una categoría…");
         
+        // Me lee la bases de datos y aparte los agrega al combobox
         try {
             for (String nombre : new CategoriaDao().listarNombres()) {
                 JComboBoxCategorias.addItem(nombre);
@@ -111,6 +160,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         JTextTituloDocumento1 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         JLabelArchivoRuta = new javax.swing.JLabel();
+        BarraHorizontal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -120,28 +170,33 @@ public class Cargar_Documento extends javax.swing.JFrame {
         TituloCargarDocumento.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
         TituloCargarDocumento.setForeground(new java.awt.Color(13, 6, 45));
         TituloCargarDocumento.setText("Cargar Documento");
-        jPanel1.add(TituloCargarDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        jPanel1.add(TituloCargarDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
         DescripcionCargar.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         DescripcionCargar.setForeground(new java.awt.Color(120, 116, 134));
         DescripcionCargar.setText("Guarda y crea un nuevo documento para guardarlo en el archivador");
-        jPanel1.add(DescripcionCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 490, -1));
+        jPanel1.add(DescripcionCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 490, -1));
 
-        jPanel1.add(JFechaDisposicionFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 300, 370, 40));
+        JFechaDisposicionFinal.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        jPanel1.add(JFechaDisposicionFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, 370, 40));
 
-        jPanel1.add(JComboBoxCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 160, 370, 40));
+        JComboBoxCategorias.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        jPanel1.add(JComboBoxCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 370, 40));
 
-        jPanel1.add(JComboBoxTipoAcceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 370, 40));
+        JComboBoxTipoAcceso.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        jPanel1.add(JComboBoxTipoAcceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 370, 40));
 
+        JTextCodigo.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         JTextCodigo.setText("jTextField1");
         JTextCodigo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 JTextCodigoMousePressed(evt);
             }
         });
-        jPanel1.add(JTextCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 370, 40));
+        jPanel1.add(JTextCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 370, 40));
 
         JTextDescripcion.setColumns(20);
+        JTextDescripcion.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         JTextDescripcion.setRows(5);
         JTextDescripcion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -150,46 +205,51 @@ public class Cargar_Documento extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(JTextDescripcion);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 780, -1));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 780, -1));
 
         jLabel3.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         jLabel3.setText("Categorias:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 140, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 150, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         jLabel4.setText("Tipo de Acceso:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         jLabel5.setText("Nombre de Documento:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         jLabel7.setText("Descripcion:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         jLabel8.setText("Archivo:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 210, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 220, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         jLabel10.setText("Codigo:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         jLabel11.setText("Disposicion Final:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 280, -1, -1));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 290, -1, -1));
 
-        JBotonLimpiar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonLimpiar.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
         JBotonLimpiar.setText("Limpiar Documento");
+        JBotonLimpiar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JBotonLimpiarMouseClicked(evt);
+            }
+        });
         JBotonLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBotonLimpiarActionPerformed(evt);
             }
         });
-        jPanel1.add(JBotonLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 500, -1, 40));
+        jPanel1.add(JBotonLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 500, -1, 40));
 
-        JBottomCancelar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBottomCancelar.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
         JBottomCancelar.setText("Cancelar");
         JBottomCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -201,25 +261,32 @@ public class Cargar_Documento extends javax.swing.JFrame {
                 JBottomCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(JBottomCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 490, -1, 40));
+        jPanel1.add(JBottomCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 500, -1, 40));
 
-        JBotonGuardar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonGuardar.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
         JBotonGuardar.setText("Guardar Documento");
         JBotonGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JBotonGuardarMouseClicked(evt);
             }
         });
-        jPanel1.add(JBotonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 500, -1, 40));
+        JBotonGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBotonGuardarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(JBotonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 500, -1, 40));
 
+        JTextTituloDocumento1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         JTextTituloDocumento1.setText("jTextField1");
         JTextTituloDocumento1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 JTextTituloDocumento1MousePressed(evt);
             }
         });
-        jPanel1.add(JTextTituloDocumento1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 370, 40));
+        jPanel1.add(JTextTituloDocumento1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 370, 40));
 
+        JLabelArchivoRuta.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         JLabelArchivoRuta.setText("Ingrese el archivo");
         JLabelArchivoRuta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -234,26 +301,42 @@ public class Cargar_Documento extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(JLabelArchivoRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(JLabelArchivoRuta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 230, 370, 40));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 240, 370, 40));
+
+        BarraHorizontal.setBackground(new java.awt.Color(219, 219, 219));
+
+        javax.swing.GroupLayout BarraHorizontalLayout = new javax.swing.GroupLayout(BarraHorizontal);
+        BarraHorizontal.setLayout(BarraHorizontalLayout);
+        BarraHorizontalLayout.setHorizontalGroup(
+            BarraHorizontalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        BarraHorizontalLayout.setVerticalGroup(
+            BarraHorizontalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(BarraHorizontal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 790, 4));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 861, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
         );
 
         pack();
@@ -267,6 +350,10 @@ public class Cargar_Documento extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_JBottomCancelarActionPerformed
 
+    
+    // ======= ACCIONES DE LOS CAMPOS PRINCIPALMENTE ======= //
+    
+    
     private void JLabelArchivoRutaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelArchivoRutaMouseClicked
        
         JFileChooser fc = new JFileChooser();
@@ -353,28 +440,37 @@ public class Cargar_Documento extends javax.swing.JFrame {
     }//GEN-LAST:event_JTextDescripcionMousePressed
 
     private void JBotonGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JBotonGuardarMouseClicked
-         try {
+        try {
+            // Validar campos
+            if (!validarCampos()) {
+                return; // Si no se pasa la validación, no continuar
+            }
+
+            // Si los campos son válidos, proceder a guardar los datos
             core.Documento d = new core.Documento();
             d.setNombre(JTextTituloDocumento1.getText().trim());
-            d.setCodigo(JTextCodigo.getText().trim().equals("Ingrese el código") ? "" : JTextCodigo.getText().trim());
-            d.setDescripcion(JTextDescripcion.getText().trim().startsWith("Agrega") ? "" : JTextDescripcion.getText().trim());
+            d.setCodigo(JTextCodigo.getText().trim());
+            d.setDescripcion(JTextDescripcion.getText().trim());
             d.setIdCategoria(new data.CategoriaDao().idPorNombre((String) JComboBoxCategorias.getSelectedItem()));
             d.setTipoAcceso((String) JComboBoxTipoAcceso.getSelectedItem());
             d.setDisposicionFinal((String) JFechaDisposicionFinal.getSelectedItem());
 
+            // Metadatos del archivo
             d.setFileName(metaSeleccionada.originalName());
             d.setFileType(metaSeleccionada.tipo());
             d.setFileSizeBytes(metaSeleccionada.sizeBytes());
 
+            // Datos adicionales fijos por el momento (pueden ser obtenidos de usuario más tarde)
             d.setUsuario_Demo("Usuario Demo");
             d.setCorreo_demo("usuario.demo@correo.com");
             d.setDepartamento("Santander");
             d.setMunicipio("Bucaramanga");
 
+            // Guardar documento
             long id = new data.DocumentoDao().guardarDocumento(d, rutaSeleccionada);
             javax.swing.JOptionPane.showMessageDialog(this, "Guardado. ID: " + id);
-            
-            // Cerrar login
+
+            // Cerrar la ventana de carga de documento
             this.dispose();
 
             // Abrir la ventana de gestor de documentos
@@ -387,7 +483,9 @@ public class Cargar_Documento extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
         }
     }//GEN-LAST:event_JBotonGuardarMouseClicked
-
+    
+    // En dado caso se cancele se lleva a la principal
+    
     private void JBottomCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JBottomCancelarMouseClicked
         // Cerrar login
         this.dispose();
@@ -397,6 +495,34 @@ public class Cargar_Documento extends javax.swing.JFrame {
         ventanaGestorDeDocumentos.setLocationRelativeTo(null);
         ventanaGestorDeDocumentos.setVisible(true);
     }//GEN-LAST:event_JBottomCancelarMouseClicked
+
+    private void JBotonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBotonGuardarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JBotonGuardarActionPerformed
+
+    private void JBotonLimpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JBotonLimpiarMouseClicked
+        // Limpiar los campos de texto
+        JTextTituloDocumento1.setText("Ingrese el título del documento");
+        JTextTituloDocumento1.setForeground(Color.GRAY);
+
+        JTextCodigo.setText("Ingrese el código");
+        JTextCodigo.setForeground(Color.GRAY);
+
+        JTextDescripcion.setText("Agrega una pequeña descripción del documento");
+        JTextDescripcion.setForeground(Color.GRAY);
+
+        // Limpiar los JComboBox y restablecer valores predeterminados
+        JComboBoxCategorias.setSelectedIndex(0); // Valor por defecto (Primera opción)
+        JComboBoxTipoAcceso.setSelectedIndex(0); // Valor por defecto (Primera opción)
+        JFechaDisposicionFinal.setSelectedIndex(0); // Valor por defecto (Primera opción)
+
+        // Limpiar la ruta del archivo seleccionada
+        JLabelArchivoRuta.setText("Ingrese el archivo");
+        rutaSeleccionada = null; // Restablecer el archivo seleccionado
+
+        // Mostrar un mensaje de confirmación
+        JOptionPane.showMessageDialog(this, "Los campos han sido limpiados.");
+    }//GEN-LAST:event_JBotonLimpiarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -424,6 +550,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel BarraHorizontal;
     private javax.swing.JLabel DescripcionCargar;
     private javax.swing.JButton JBotonGuardar;
     private javax.swing.JButton JBotonLimpiar;

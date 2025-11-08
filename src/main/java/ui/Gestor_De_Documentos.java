@@ -5,6 +5,7 @@
 package ui;
 
 import data.DocumentoDao;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +22,38 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         initComponents();
         new DocumentoDao().listar5Cols(this.TablaDocumentos); 
     }
+    
+    
+    private void eliminarDocumento(String idDocumento) {
+        try {
+
+            boolean eliminado = new data.DocumentoDao().eliminarDocumento(idDocumento);
+
+            if (eliminado) {
+                JOptionPane.showMessageDialog(this, "Documento eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                new DocumentoDao().listar5Cols(this.TablaDocumentos); 
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar el documento.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Hubo un error al eliminar el documento: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    private void editarDocumento(String idDocumento) {
+        try {
+            // Llamar a la ventana de Modificar_Documento y pasarle el id_documento
+            Modificar_Documento ventanaModificar = new Modificar_Documento(idDocumento);
+            ventanaModificar.setLocationRelativeTo(null);
+            ventanaModificar.setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Hubo un error al abrir la ventana de modificación: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,7 +114,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         BarraSuperior.setBackground(new java.awt.Color(53, 91, 62));
 
         TextSwiftFold.setBackground(new java.awt.Color(255, 255, 255));
-        TextSwiftFold.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
+        TextSwiftFold.setFont(new java.awt.Font("Inter", 1, 20)); // NOI18N
         TextSwiftFold.setForeground(new java.awt.Color(255, 255, 255));
         TextSwiftFold.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         TextSwiftFold.setText("SwiftFold");
@@ -117,11 +150,11 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Anonimo.png"))); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Inter", 1, 13)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("[Usuarios del actual con el cual trabaja]");
 
-        jLabel3.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Inter", 1, 13)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("[Rol - Cargo del usuario]");
 
@@ -137,9 +170,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TextSwiftFold, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(27, 27, 27)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 790, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 811, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addGroup(BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,14 +192,14 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BarraSuperiorLayout.createSequentialGroup()
                 .addGroup(BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(TextSwiftFold, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                     .addGroup(BarraSuperiorLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(BarraSuperiorLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3))
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
                             .addGroup(BarraSuperiorLayout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -219,6 +252,11 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
             }
         ));
+        TablaDocumentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaDocumentosMouseClicked(evt);
+            }
+        });
         JScrollDocumentos.setViewportView(TablaDocumentos);
 
         Backgraund.add(JScrollDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, 740, 430));
@@ -244,6 +282,11 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         });
 
         JButtomEditar.setText("Editar");
+        JButtomEditar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JButtomEditarMouseClicked(evt);
+            }
+        });
         JButtomEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JButtomEditarActionPerformed(evt);
@@ -251,6 +294,11 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         });
 
         JButtonEliminar.setText("Eliminar");
+        JButtonEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JButtonEliminarMouseClicked(evt);
+            }
+        });
         JButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JButtonEliminarActionPerformed(evt);
@@ -373,75 +421,101 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         Backgraund.add(JScrollDependencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 220, 340));
 
         JPanelAjustes.setBackground(new java.awt.Color(255, 251, 248));
+        JPanelAjustes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                JPanelAjustesMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                JPanelAjustesMouseExited(evt);
+            }
+        });
         JPanelAjustes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        TextAjustes.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        TextAjustes.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         TextAjustes.setForeground(new java.awt.Color(120, 116, 134));
         TextAjustes.setText("Ajustes");
-        JPanelAjustes.add(TextAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 90, -1));
+        JPanelAjustes.add(TextAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, -2, 90, 40));
 
         ImgAjustes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ImgAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ajustes.png"))); // NOI18N
         JPanelAjustes.add(ImgAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 40));
 
-        Backgraund.add(JPanelAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 230, 40));
+        Backgraund.add(JPanelAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 200, 40));
 
         JPanelMisDocumentos.setBackground(new java.awt.Color(255, 251, 248));
         JPanelMisDocumentos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JPanelMisDocumentosMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                JPanelMisDocumentosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                JPanelMisDocumentosMouseExited(evt);
+            }
         });
         JPanelMisDocumentos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        TextDocumentos.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        TextDocumentos.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         TextDocumentos.setForeground(new java.awt.Color(120, 116, 134));
         TextDocumentos.setText("Mis Documentos");
-        JPanelMisDocumentos.add(TextDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 160, -1));
+        JPanelMisDocumentos.add(TextDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 160, 40));
 
         ImgMisDocumentos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ImgMisDocumentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Mis_documentos.png"))); // NOI18N
         JPanelMisDocumentos.add(ImgMisDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 40));
 
-        Backgraund.add(JPanelMisDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 220, 40));
+        Backgraund.add(JPanelMisDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 200, 40));
 
         JPanelCargarDocumento.setBackground(new java.awt.Color(255, 251, 248));
         JPanelCargarDocumento.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JPanelCargarDocumentoMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                JPanelCargarDocumentoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                JPanelCargarDocumentoMouseExited(evt);
+            }
         });
         JPanelCargarDocumento.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        TextCargar.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        TextCargar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         TextCargar.setForeground(new java.awt.Color(120, 116, 134));
         TextCargar.setText("Cargar Documento");
-        JPanelCargarDocumento.add(TextCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 180, -1));
+        JPanelCargarDocumento.add(TextCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 140, 40));
 
         ImgCargar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ImgCargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Subir_documento.png"))); // NOI18N
         JPanelCargarDocumento.add(ImgCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 40));
 
-        Backgraund.add(JPanelCargarDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 230, 40));
+        Backgraund.add(JPanelCargarDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 200, 40));
 
         JPanelUsuarios.setBackground(new java.awt.Color(255, 251, 248));
         JPanelUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JPanelUsuariosMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                JPanelUsuariosMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                JPanelUsuariosMouseExited(evt);
+            }
         });
         JPanelUsuarios.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        TextUsuarios.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        TextUsuarios.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         TextUsuarios.setForeground(new java.awt.Color(120, 116, 134));
         TextUsuarios.setText("Usuarios");
-        JPanelUsuarios.add(TextUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 100, -1));
+        JPanelUsuarios.add(TextUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 100, 40));
 
         ImgUsuarios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ImgUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Usuarios.png"))); // NOI18N
         JPanelUsuarios.add(ImgUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 40));
 
-        Backgraund.add(JPanelUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 230, 40));
+        Backgraund.add(JPanelUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 200, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -503,6 +577,79 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         ventanaGestorDeDocumentos.setLocationRelativeTo(null);
         ventanaGestorDeDocumentos.setVisible(true);
     }//GEN-LAST:event_JPanelMisDocumentosMouseClicked
+
+    private void JButtonEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JButtonEliminarMouseClicked
+
+        int selectedRow = TablaDocumentos.getSelectedRow(); // Captura la fila seleccionada
+
+        if (selectedRow != -1) {
+            String idDocumento = TablaDocumentos.getValueAt(selectedRow, 0).toString();
+            eliminarDocumento(idDocumento);
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un documento para eliminar.", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_JButtonEliminarMouseClicked
+
+    private void TablaDocumentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaDocumentosMouseClicked
+        int selectedRow = TablaDocumentos.getSelectedRow();
+
+        if (selectedRow != -1) {  
+            String idDocumento = TablaDocumentos.getValueAt(selectedRow, 0).toString(); 
+
+            // Si la fila tiene un id_documento, lo puedes utilizar en el botón de Eliminar
+            JButtonEliminar.addActionListener(e -> {
+                eliminarDocumento(idDocumento);
+            });
+            JButtomEditar.addActionListener(e -> {
+                editarDocumento(idDocumento);
+            });
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un documento para eliminar.", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_TablaDocumentosMouseClicked
+
+    private void JPanelCargarDocumentoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelCargarDocumentoMouseEntered
+       JPanelCargarDocumento.setBackground(new java.awt.Color(211, 211, 211)); 
+    }//GEN-LAST:event_JPanelCargarDocumentoMouseEntered
+
+    private void JPanelCargarDocumentoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelCargarDocumentoMouseExited
+       JPanelCargarDocumento.setBackground(new java.awt.Color(255, 251, 248));
+    }//GEN-LAST:event_JPanelCargarDocumentoMouseExited
+
+    private void JPanelMisDocumentosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelMisDocumentosMouseEntered
+       JPanelMisDocumentos.setBackground(new java.awt.Color(211, 211, 211)); 
+    }//GEN-LAST:event_JPanelMisDocumentosMouseEntered
+
+    private void JPanelMisDocumentosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelMisDocumentosMouseExited
+       JPanelMisDocumentos.setBackground(new java.awt.Color(255, 251, 248));
+    }//GEN-LAST:event_JPanelMisDocumentosMouseExited
+
+    private void JPanelUsuariosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelUsuariosMouseEntered
+       JPanelUsuarios.setBackground(new java.awt.Color(211, 211, 211)); 
+    }//GEN-LAST:event_JPanelUsuariosMouseEntered
+
+    private void JPanelUsuariosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelUsuariosMouseExited
+       JPanelUsuarios.setBackground(new java.awt.Color(255, 251, 248));
+    }//GEN-LAST:event_JPanelUsuariosMouseExited
+
+    private void JPanelAjustesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelAjustesMouseEntered
+       JPanelAjustes.setBackground(new java.awt.Color(211, 211, 211)); 
+    }//GEN-LAST:event_JPanelAjustesMouseEntered
+
+    private void JPanelAjustesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelAjustesMouseExited
+       JPanelAjustes.setBackground(new java.awt.Color(255, 251, 248));
+    }//GEN-LAST:event_JPanelAjustesMouseExited
+
+    private void JButtomEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JButtomEditarMouseClicked
+        int selectedRow = TablaDocumentos.getSelectedRow(); // Captura la fila seleccionada
+
+        if (selectedRow != -1) {
+            String idDocumento = TablaDocumentos.getValueAt(selectedRow, 0).toString();
+            editarDocumento(idDocumento);
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un documento para eliminar.", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_JButtomEditarMouseClicked
 
     /**
      * @param args the command line arguments

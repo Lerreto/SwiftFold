@@ -1,10 +1,10 @@
 package data;
 
 import core.Documento;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,11 +24,11 @@ public class DocumentoDao {
     // PARTE DE TITULOS DE LA TABLA DE DOCUMENTOS // 
     
     private static final String[] COLS = {
-        "Tipo", "Documento", "Categoría", "Creado / Ubicación", "Estado"
+       "ID", "Tipo", "Documento", "Categoría", "Creado / Ubicación", "Estado"
     };
 
     private static final String SQL =
-        "SELECT d.file_type AS tipo, d.nombre, d.descripcion, d.file_size_bytes, " +
+        "SELECT d.id_documento, d.file_type AS tipo, d.nombre, d.descripcion, d.file_size_bytes, " +
         "       COALESCE(d.creador_nombre, d.creador_email) AS creador, d.codigo, " +
         "       COALESCE(c.nombre,'(sin categoría)') AS categoria, " +
         "       d.creado_en, d.departamento, d.municipio, d.tipo_acceso " +
@@ -53,6 +53,7 @@ public class DocumentoDao {
             if (rs == null) { tabla.setModel(m); return; }
 
             while (rs.next()) {
+                String idDocumento = rs.getString("id_documento"); // Obtenemos el id_documen
                 String tipo   = nz(rs.getString("tipo"));
                 String nombre = nz(rs.getString("nombre"));
                 String desc   = cut(nz(rs.getString("descripcion")), 90);
@@ -74,16 +75,16 @@ public class DocumentoDao {
 
                 String estado = nz(rs.getString("tipo_acceso"));
 
-                m.addRow(new Object[]{ tipo, documento, categoria, creadoUbic, estado });
+                m.addRow(new Object[]{ idDocumento, tipo, documento, categoria, creadoUbic, estado });
             }
         } catch (SQLException e) {
             System.err.println("[DocumentoDao] " + e.getMessage());
         }
 
-        tabla.setModel(m); // tu tabla ya maneja tamaño/estilo por defecto
+        tabla.setModel(m); 
     }
 
-    
+  
     
     
     // ACCION PARA GUARDAR DOCUMENTO //
@@ -128,7 +129,7 @@ public class DocumentoDao {
         }
 
         // === DUPLICAR ARCHIVO ===
-        Path dirDestino = Paths.get(System.getProperty("user.dir"), "archivos");
+        Path dirDestino = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "archivos");
         Files.createDirectories(dirDestino);
 
         Path destino = dirDestino.resolve(d.getFileName());
@@ -137,6 +138,82 @@ public class DocumentoDao {
 
         return id;
     }
+
+    
+    
+    // ACCION DE ACTUALIZAR DOCUMENTO //
+    
+    public boolean actualizarDocumento(Documento documento) throws SQLException {
+        String sql = "UPDATE documentos SET nombre = ?, codigo = ?, descripcion = ?, id_categoria = ?, tipo_acceso = ?, disposicion_final = ?, file_name = ? WHERE id_documento = ?";
+
+        try (Connection cn = new Db().establecerConexion(); 
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            // Establecer los parámetros de la consulta con los datos del documento
+            ps.setString(1, documento.getNombre());
+            ps.setString(2, documento.getCodigo());
+            ps.setString(3, documento.getDescripcion());
+            ps.setInt(4, documento.getIdCategoria());
+            ps.setString(5, documento.getTipoAcceso());
+            ps.setString(6, documento.getDisposicionFinal());
+            ps.setString(7, documento.getFileName());
+            ps.setLong(8, documento.getIdDocumento()); // Aquí es donde usamos el id_documento
+
+            // Ejecutar la actualización
+            int filasActualizadas = ps.executeUpdate();
+
+            return filasActualizadas > 0; // Devuelve true si al menos una fila fue actualizada
+        } catch (SQLException ex) {
+            throw new SQLException("Error al actualizar el documento: " + ex.getMessage(), ex);
+        }
+    }
+
+    
+    
+    // ACCION DE ELIMINAR DOCUMENTO //
+    
+    public boolean eliminarDocumento(String idDocumento) throws IOException {
+        String consulta = "SELECT file_name FROM documentos WHERE id_documento = ?";
+        String fileName = null;
+
+        try (Connection cn = new Db().establecerConexion();
+             PreparedStatement ps = cn.prepareStatement(consulta)) {
+
+            ps.setString(1, idDocumento);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    fileName = rs.getString("file_name");
+                } else {
+                    System.err.println("No se encontró el documento con ID: " + idDocumento);
+                    return false;  
+                }
+            }
+
+            if (fileName != null) {
+                Path filePath = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "archivos", fileName);
+
+                try {
+                    Files.deleteIfExists(filePath);
+                    System.out.println("Archivo eliminado correctamente: " + filePath);
+                } catch (IOException e) {
+                    System.err.println("Error al eliminar el archivo: " + e.getMessage());
+                    return false;
+                }
+            }
+
+            String deleteConsulta = "DELETE FROM documentos WHERE id_documento = ?";
+            try (PreparedStatement deletePs = cn.prepareStatement(deleteConsulta)) {
+                deletePs.setString(1, idDocumento);
+                int filasAfectadas = deletePs.executeUpdate();
+                return filasAfectadas > 0; 
+            }
+
+        } catch (SQLException ex) {
+            System.err.println("Error al eliminar documento: " + ex.getMessage());
+            return false;
+        }
+    }
+
 
     
     

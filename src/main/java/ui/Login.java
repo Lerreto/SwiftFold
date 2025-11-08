@@ -38,7 +38,7 @@ public class Login extends javax.swing.JFrame {
         setUndecorated(true);
         setResizable(false);
 
-        bg.setBackground(new java.awt.Color(255, 255, 255));
+        bg.setBackground(new java.awt.Color(255, 251, 248));
         bg.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         citybg.setBackground(new java.awt.Color(0, 134, 190));
@@ -120,6 +120,7 @@ public class Login extends javax.swing.JFrame {
         userLabel.setText("USUARIO");
         bg.add(userLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, -1, -1));
 
+        userTxt.setBackground(new java.awt.Color(255, 251, 248));
         userTxt.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         userTxt.setText("Ingrese su nombre de usuario");
         userTxt.setBorder(null);
@@ -137,6 +138,7 @@ public class Login extends javax.swing.JFrame {
         passLabel.setText("CONTRASEÑA");
         bg.add(passLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, -1, -1));
 
+        passTxt.setBackground(new java.awt.Color(255, 251, 248));
         passTxt.setText("********");
         passTxt.setBorder(null);
         passTxt.addMouseListener(new java.awt.event.MouseAdapter() {

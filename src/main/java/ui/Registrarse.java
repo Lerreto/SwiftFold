@@ -74,13 +74,18 @@ public class Registrarse extends javax.swing.JFrame {
         setUndecorated(true);
         setResizable(false);
 
-        bg.setBackground(new java.awt.Color(255, 255, 255));
+        bg.setBackground(new java.awt.Color(255, 251, 248));
         bg.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setBackground(new java.awt.Color(0, 0, 102));
         jButton1.setFont(new java.awt.Font("Roboto Condensed", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Registrarse");
+        jButton1.setText("REGISTRARSE");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -145,7 +150,7 @@ public class Registrarse extends javax.swing.JFrame {
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(headerLayout.createSequentialGroup()
                 .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 800, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -657,6 +662,15 @@ public class Registrarse extends javax.swing.JFrame {
             Password.setEchoChar((char)0);
         }
     }//GEN-LAST:event_ConfirmPasswordMousePressed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        this.dispose();
+
+        // Abrir la ventana de gestor de documentos
+        Login ventanaLogin = new Login();
+        ventanaLogin.setLocationRelativeTo(null);
+        ventanaLogin.setVisible(true);
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments

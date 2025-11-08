@@ -4,6 +4,7 @@ ui\Cargar_Documento$2.class
 ui\Registrarse$9.class
 app\Main.class
 ui\Registrarse$2.class
+ui\Cargar_Documento$9.class
 ui\Gestor_De_Documentos$3.class
 ui\Registrarse$18.class
 ui\Registrarse$6.class
@@ -25,6 +26,7 @@ ui\Registrarse$5.class
 core\DocumentService.class
 app\Pruebas.class
 ui\Registrarse$20.class
+ui\Gestor_De_Documentos$9.class
 ui\Registrarse$12.class
 data\Db.class
 data\Metadatos.class
@@ -35,16 +37,18 @@ ui\Cargar_Documento$7.class
 ui\Modificar_Documento.class
 ui\Registrarse$4.class
 ui\Login$7.class
+ui\Gestor_De_Documentos$8.class
 ui\Registrarse$13.class
+ui\Registrarse$23.class
 ui\Registrarse$1.class
 ui\Registrarse$7.class
-ui\Modificar_Documento$2.class
 ui\Registrarse$16.class
 ui\Gestor_De_Documentos$5.class
 ui\Login$3.class
 data\DocumentoDao$1.class
 ui\Cargar_Documento$3.class
 ui\Cargar_Documento$1.class
+ui\Gestor_De_Documentos$7.class
 ui\Registrarse$14.class
 data\CategoriaDao.class
 core\TipoAcceso.class
@@ -61,5 +65,6 @@ core\Categoria.class
 core\DisposicionFinal.class
 ui\Modificar_Documento$1.class
 ui\Registrarse$3.class
+ui\Cargar_Documento$10.class
 ui\Registrarse.class
 ui\Gestor_De_Documentos$1.class

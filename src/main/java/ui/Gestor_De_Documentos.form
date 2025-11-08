@@ -75,9 +75,9 @@
                       <Component id="jLabel4" min="-2" pref="78" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="TextSwiftFold" min="-2" pref="121" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="790" max="32767" attributes="0"/>
+                      <EmptySpace pref="811" max="32767" attributes="0"/>
                       <Component id="jPanel2" min="-2" pref="1" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -102,14 +102,14 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="TextSwiftFold" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel4" max="32767" attributes="0"/>
+                          <Component id="jLabel4" pref="54" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel2" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jLabel3" min="-2" pref="17" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jPanel2" alignment="1" pref="48" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
@@ -131,7 +131,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Inter" size="24" style="1"/>
+                  <Font name="Inter" size="20" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -197,7 +197,7 @@
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Inter" size="14" style="1"/>
+                  <Font name="Inter" size="13" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -208,7 +208,7 @@
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Inter" size="14" style="1"/>
+                  <Font name="Inter" size="13" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -306,6 +306,9 @@
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="TablaDocumentosMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -403,6 +406,7 @@
                 <Property name="text" type="java.lang.String" value="Editar"/>
               </Properties>
               <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JButtomEditarMouseClicked"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JButtomEditarActionPerformed"/>
               </Events>
             </Component>
@@ -411,6 +415,7 @@
                 <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
               <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JButtonEliminarMouseClicked"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JButtonEliminarActionPerformed"/>
               </Events>
             </Component>
@@ -573,9 +578,13 @@
               <Color blue="f8" green="fb" red="ff" type="rgb"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelAjustesMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelAjustesMouseExited"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="230" width="230" height="40"/>
+              <AbsoluteConstraints x="10" y="230" width="200" height="40"/>
             </Constraint>
           </Constraints>
 
@@ -586,7 +595,7 @@
             <Component class="javax.swing.JLabel" name="TextAjustes">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Inter" size="18" style="1"/>
+                  <Font name="Inter" size="14" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="86" green="74" red="78" type="rgb"/>
@@ -595,7 +604,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="60" y="10" width="90" height="-1"/>
+                  <AbsoluteConstraints x="60" y="-2" width="90" height="40"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -622,10 +631,12 @@
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelMisDocumentosMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelMisDocumentosMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelMisDocumentosMouseExited"/>
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="80" width="220" height="40"/>
+              <AbsoluteConstraints x="10" y="80" width="200" height="40"/>
             </Constraint>
           </Constraints>
 
@@ -636,7 +647,7 @@
             <Component class="javax.swing.JLabel" name="TextDocumentos">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Inter" size="18" style="1"/>
+                  <Font name="Inter" size="14" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="86" green="74" red="78" type="rgb"/>
@@ -645,7 +656,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="60" y="10" width="160" height="-1"/>
+                  <AbsoluteConstraints x="60" y="0" width="160" height="40"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -672,10 +683,12 @@
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelCargarDocumentoMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelCargarDocumentoMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelCargarDocumentoMouseExited"/>
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="130" width="230" height="40"/>
+              <AbsoluteConstraints x="10" y="130" width="200" height="40"/>
             </Constraint>
           </Constraints>
 
@@ -686,7 +699,7 @@
             <Component class="javax.swing.JLabel" name="TextCargar">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Inter" size="18" style="1"/>
+                  <Font name="Inter" size="14" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="86" green="74" red="78" type="rgb"/>
@@ -695,7 +708,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="60" y="10" width="180" height="-1"/>
+                  <AbsoluteConstraints x="60" y="0" width="140" height="40"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -722,10 +735,12 @@
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelUsuariosMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelUsuariosMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JPanelUsuariosMouseExited"/>
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="180" width="230" height="40"/>
+              <AbsoluteConstraints x="10" y="180" width="200" height="40"/>
             </Constraint>
           </Constraints>
 
@@ -736,7 +751,7 @@
             <Component class="javax.swing.JLabel" name="TextUsuarios">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Inter" size="18" style="1"/>
+                  <Font name="Inter" size="14" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="86" green="74" red="78" type="rgb"/>
@@ -745,7 +760,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="60" y="10" width="100" height="-1"/>
+                  <AbsoluteConstraints x="60" y="0" width="100" height="40"/>
                 </Constraint>
               </Constraints>
             </Component>
