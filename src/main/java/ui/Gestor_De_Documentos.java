@@ -4,6 +4,8 @@
  */
 package ui;
 
+import data.DocumentoDao;
+
 /**
  *
  * @author Juan Pablo
@@ -17,6 +19,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
      */
     public Gestor_De_Documentos() {
         initComponents();
+        new DocumentoDao().listar5Cols(this.TablaDocumentos); 
     }
 
     /**
@@ -207,13 +210,13 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         TablaDocumentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         JScrollDocumentos.setViewportView(TablaDocumentos);
@@ -231,7 +234,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         PanelOpcionesDocumentos.setBackground(new java.awt.Color(245, 245, 245));
 
-        JTextBusquedad.setText("jTextField1");
+        JTextBusquedad.setText("Buscar nombre del documento");
 
         JButtonBuscar.setText("Buscar");
         JButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -262,10 +265,10 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             PanelOpcionesDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelOpcionesDocumentosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(JTextBusquedad, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(JTextBusquedad, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
                 .addComponent(JButtomEditar)
                 .addGap(12, 12, 12)
                 .addComponent(JButtonEliminar)
@@ -356,13 +359,13 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         JScrollDependencias.setViewportView(jTable2);
@@ -375,7 +378,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         TextAjustes.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
         TextAjustes.setForeground(new java.awt.Color(120, 116, 134));
         TextAjustes.setText("Ajustes");
-        JPanelAjustes.add(TextAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+        JPanelAjustes.add(TextAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 90, -1));
 
         ImgAjustes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ImgAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ajustes.png"))); // NOI18N
@@ -394,7 +397,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         TextDocumentos.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
         TextDocumentos.setForeground(new java.awt.Color(120, 116, 134));
         TextDocumentos.setText("Mis Documentos");
-        JPanelMisDocumentos.add(TextDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+        JPanelMisDocumentos.add(TextDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 160, -1));
 
         ImgMisDocumentos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ImgMisDocumentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Mis_documentos.png"))); // NOI18N
@@ -413,7 +416,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         TextCargar.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
         TextCargar.setForeground(new java.awt.Color(120, 116, 134));
         TextCargar.setText("Cargar Documento");
-        JPanelCargarDocumento.add(TextCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+        JPanelCargarDocumento.add(TextCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 180, -1));
 
         ImgCargar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ImgCargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Subir_documento.png"))); // NOI18N
@@ -432,7 +435,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         TextUsuarios.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
         TextUsuarios.setForeground(new java.awt.Color(120, 116, 134));
         TextUsuarios.setText("Usuarios");
-        JPanelUsuarios.add(TextUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+        JPanelUsuarios.add(TextUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 100, -1));
 
         ImgUsuarios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ImgUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Usuarios.png"))); // NOI18N
