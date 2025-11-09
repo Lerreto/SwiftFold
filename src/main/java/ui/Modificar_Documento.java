@@ -26,27 +26,76 @@ public class Modificar_Documento extends javax.swing.JFrame {
     public Modificar_Documento(String idDocumento) {
         this.idDocumento = idDocumento;
         initComponents();
+        cargarCombos();
         cargarDatosDocumento(idDocumento);
     }
+    
+    private void cargarCombos() {
+        // Tipo de acceso
+        JComboTipoAcceso.removeAllItems();
+        JComboTipoAcceso.addItem("Seleccione tipo…");
+        JComboTipoAcceso.addItem("PUBLICO");
+        JComboTipoAcceso.addItem("INTERNO");
+        JComboTipoAcceso.addItem("RESERVADO");
+
+        // Disposición final
+        JComboDisposicionFinal.removeAllItems();
+        JComboDisposicionFinal.addItem("Seleccione disposición…");
+        JComboDisposicionFinal.addItem("CONSERVAR");
+        JComboDisposicionFinal.addItem("TRANSFERIR");
+        JComboDisposicionFinal.addItem("ELIMINAR");
+
+        // Categorías desde BD
+        JComboCategorias.removeAllItems();
+        JComboCategorias.addItem("Seleccione una categoría…");
+        
+        // Me lee la bases de datos y aparte los agrega al combobox
+        try {
+            for (String nombre : new CategoriaDao().listarNombres()) {
+                JComboCategorias.addItem(nombre);
+            }
+        } catch (Exception ex) {
+            System.err.println("No se pudieron cargar categorías: " + ex.getMessage());
+        }
+    }
+    
     
     // Método para cargar los datos del documento desde la base de datos
     private void cargarDatosDocumento(String idDocumento) {
         try {
-            // Obtener el documento desde la base de datos usando el id_documento
             Documento documento = new DocumentoDao().obtenerDocumentoPorId(idDocumento);
-            
             if (documento != null) {
-                // Cargar los datos en los campos
-                JTextNombreDocumento.setText(documento.getNombre());
+                // No editables (solo muestra)
+                JLabelMunicipio.setText(documento.getMunicipio());
+                JLabelDepartamento.setText(documento.getDepartamento());
+                JLabelNombreOriginal.setText(documento.getFileName());
+                JLabelFechaCreacion.setText(documento.getFechaCreacion());
+                JLabelFechaActualizacion.setText(documento.getFechaActualizacion());
+                TextNombreCreador.setText(documento.getUsuario_Demo()); // mapea a creador_nombre en la SQL
+                TextCorreo.setText(documento.getCorreo_demo());         // mapea a creador_email en la SQL
+                TextSize.setText(String.valueOf(documento.getFileSizeBytes()));
+
+                // Editables
                 JTextCodigo.setText(documento.getCodigo());
+                JTextNombreDocumento.setText(documento.getNombre());
                 AreaDescripcion.setText(documento.getDescripcion());
-                JComboCategorias.setSelectedItem(new CategoriaDao().idPorNombre(String.valueOf(documento.getIdCategoria())));
                 JComboTipoAcceso.setSelectedItem(documento.getTipoAcceso());
                 JComboDisposicionFinal.setSelectedItem(documento.getDisposicionFinal());
-                JLabelNombreOriginal.setText(documento.getFileName());
+
+                // Seleccionar categoría por ID comparando contra idPorNombre(nombre)
+                long idCatDoc = documento.getIdCategoria();
+                for (int i = 1; i < JComboCategorias.getItemCount(); i++) { // desde 1 para saltar el placeholder
+                    String nombreCat = (String) JComboCategorias.getItemAt(i);
+                    long idCat = new data.CategoriaDao().idPorNombre(nombreCat);
+                    if (idCat == idCatDoc) {
+                        JComboCategorias.setSelectedIndex(i);
+                        break;
+                    }
+                }
             }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar el documento: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (java.sql.SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar el documento: " + e.getMessage(),
+                                          "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -99,7 +148,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
         JPanelSize = new javax.swing.JPanel();
         TextSize = new javax.swing.JLabel();
         JPanelUltimaActualizacion = new javax.swing.JPanel();
-        jLabel23 = new javax.swing.JLabel();
+        JLabelFechaActualizacion = new javax.swing.JLabel();
         JPanelDepartamento = new javax.swing.JPanel();
         JLabelDepartamento = new javax.swing.JLabel();
 
@@ -133,6 +182,11 @@ public class Modificar_Documento extends javax.swing.JFrame {
         jPanel1.add(BarraHorizontal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 1000, 4));
 
         JTextNombreDocumento.setText("Nombre del documento");
+        JTextNombreDocumento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JTextNombreDocumentoActionPerformed(evt);
+            }
+        });
         jPanel1.add(JTextNombreDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 500, 40));
 
         JTextCodigo.setText("jTextField1");
@@ -145,6 +199,11 @@ public class Modificar_Documento extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 1000, -1));
 
         JBotonSalir.setText("Salir");
+        JBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JBotonSalirMouseClicked(evt);
+            }
+        });
         jPanel1.add(JBotonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 640, 120, 40));
 
         JBotonModificar.setText("Modificar");
@@ -342,7 +401,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
 
         jPanel1.add(JPanelSize, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 570, 320, -1));
 
-        jLabel23.setText("Fecha de ultima actualizacion");
+        JLabelFechaActualizacion.setText("Fecha de ultima actualizacion");
 
         javax.swing.GroupLayout JPanelUltimaActualizacionLayout = new javax.swing.GroupLayout(JPanelUltimaActualizacion);
         JPanelUltimaActualizacion.setLayout(JPanelUltimaActualizacionLayout);
@@ -350,13 +409,13 @@ public class Modificar_Documento extends javax.swing.JFrame {
             JPanelUltimaActualizacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPanelUltimaActualizacionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(JLabelFechaActualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
         JPanelUltimaActualizacionLayout.setVerticalGroup(
             JPanelUltimaActualizacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPanelUltimaActualizacionLayout.createSequentialGroup()
-                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(JLabelFechaActualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -399,12 +458,74 @@ public class Modificar_Documento extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBotonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBotonModificarActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Validaciones sencillas
+            if (JTextNombreDocumento.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El nombre es obligatorio.", "Validación", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (JComboCategorias.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(this, "Seleccione una categoría.", "Validación", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (JComboTipoAcceso.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(this, "Seleccione un tipo de acceso.", "Validación", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (JComboDisposicionFinal.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(this, "Seleccione la disposición final.", "Validación", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Construir el Documento con los campos editables
+            core.Documento d = new core.Documento();
+            d.setIdDocumento(Long.parseLong(this.idDocumento)); // viene del constructor
+            d.setNombre(JTextNombreDocumento.getText().trim());
+            d.setCodigo(JTextCodigo.getText().trim());
+            d.setDescripcion(AreaDescripcion.getText().trim());
+            d.setTipoAcceso((String) JComboTipoAcceso.getSelectedItem());
+            d.setDisposicionFinal((String) JComboDisposicionFinal.getSelectedItem());
+
+            // ID de categoría a partir del nombre seleccionado
+            String nombreCategoria = (String) JComboCategorias.getSelectedItem();
+            long idCategoria = new data.CategoriaDao().idPorNombre(nombreCategoria);
+            d.setIdCategoria(idCategoria);
+
+            // Mantener el nombre de archivo que se muestra (si no se cambia en esta pantalla)
+            d.setFileName(JLabelNombreOriginal.getText().trim());
+
+            boolean ok = new data.DocumentoDao().actualizarDocumento(d);
+
+            if (ok) {
+                JOptionPane.showMessageDialog(this, "Documento actualizado correctamente.");
+                this.dispose();
+                Gestor_De_Documentos g = new Gestor_De_Documentos("");
+                g.setLocationRelativeTo(null);
+                g.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se actualizó ninguna fila.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBotonModificarActionPerformed
 
     private void JBotonModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JBotonModificarMouseClicked
 
     }//GEN-LAST:event_JBotonModificarMouseClicked
+
+    private void JTextNombreDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JTextNombreDocumentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JTextNombreDocumentoActionPerformed
+
+    private void JBotonSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JBotonSalirMouseClicked
+        this.dispose();
+
+        Gestor_De_Documentos ventanaGestor = new Gestor_De_Documentos("");
+        ventanaGestor.setLocationRelativeTo(null);
+        ventanaGestor.setVisible(true);
+    }//GEN-LAST:event_JBotonSalirMouseClicked
 
     /**
      * @param args the command line arguments
@@ -428,7 +549,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Modificar_Documento().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Modificar_Documento("1").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -440,6 +561,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> JComboDisposicionFinal;
     private javax.swing.JComboBox<String> JComboTipoAcceso;
     private javax.swing.JLabel JLabelDepartamento;
+    private javax.swing.JLabel JLabelFechaActualizacion;
     private javax.swing.JLabel JLabelFechaCreacion;
     private javax.swing.JLabel JLabelMunicipio;
     private javax.swing.JLabel JLabelNombreOriginal;
@@ -465,7 +587,6 @@ public class Modificar_Documento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

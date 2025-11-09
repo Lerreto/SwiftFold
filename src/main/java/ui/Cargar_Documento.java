@@ -474,7 +474,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
             this.dispose();
 
             // Abrir la ventana de gestor de documentos
-            Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos();
+            Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
             ventanaGestorDeDocumentos.setLocationRelativeTo(null);
             ventanaGestorDeDocumentos.setVisible(true);
 
@@ -491,7 +491,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         this.dispose();
 
         // Abrir la ventana de gestor de documentos
-        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos();
+        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
         ventanaGestorDeDocumentos.setLocationRelativeTo(null);
         ventanaGestorDeDocumentos.setVisible(true);
     }//GEN-LAST:event_JBottomCancelarMouseClicked

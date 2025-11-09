@@ -41,46 +41,72 @@ public class DocumentoDao {
     
     // ACCION DE LEER PARA LA PRIMERA TABLA //
     
-    public void listar5Cols(JTable tabla) {
+    
+    public void listar5Cols(JTable tabla, String nombreFiltro) {
+        
         DefaultTableModel m = new DefaultTableModel(null, COLS) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
 
+        // Construir la consulta con el WHERE antes del ORDER BY
+        String sqlFiltrado = 
+            "SELECT d.id_documento, d.file_type AS tipo, d.nombre, d.descripcion, d.file_size_bytes, " +
+            "       COALESCE(d.creador_nombre, d.creador_email) AS creador, d.codigo, " +
+            "       COALESCE(c.nombre,'(sin categoría)') AS categoria, " +
+            "       d.creado_en, d.departamento, d.municipio, d.tipo_acceso " +
+            "FROM documentos d " +
+            "LEFT JOIN categorias c ON c.id_categoria = d.id_categoria ";
+
+        // Si hay un nombreFiltro, añadir la cláusula WHERE
+        if (nombreFiltro != null && !nombreFiltro.trim().isEmpty()) {
+            sqlFiltrado += "WHERE LOWER(d.nombre) LIKE LOWER(?) ";
+        }
+
+        // Agregar el ORDER BY al final
+        sqlFiltrado += "ORDER BY d.creado_en DESC";
+
         try (Connection cn = new Db().establecerConexion();
-             Statement st = cn != null ? cn.createStatement() : null;
-             ResultSet rs = st != null ? st.executeQuery(SQL) : null) {
+             PreparedStatement st = cn != null ? cn.prepareStatement(sqlFiltrado) : null) {
 
-            if (rs == null) { tabla.setModel(m); return; }
+            if (st == null) { 
+                tabla.setModel(m); 
+                return; 
+            }
 
-            while (rs.next()) {
-                String idDocumento = rs.getString("id_documento"); // Obtenemos el id_documen
-                String tipo   = nz(rs.getString("tipo"));
-                String nombre = nz(rs.getString("nombre"));
-                String desc   = cut(nz(rs.getString("descripcion")), 90);
-                String peso   = human(rs.getLong("file_size_bytes"));
-                String creador= nz(rs.getString("creador"));
-                String codigo = nz(rs.getString("codigo"));
+            // Si hay filtro, establecer el parámetro para la búsqueda
+            if (nombreFiltro != null && !nombreFiltro.trim().isEmpty()) {
+                String filtro = "%" + nombreFiltro + "%";
+                st.setString(1, filtro);
+            }
 
-                String documento = String.format(
-                    "%s — %s • %s • %s • %s", nombre, desc, peso, creador, codigo
-                );
+            System.out.println("Consulta SQL: " + st.toString()); // Mostrar la consulta SQL para depuración
 
-                String categoria = nz(rs.getString("categoria"));
 
-                String fecha = nz(rs.getString("creado_en"));
-                if (fecha.length() > 16) fecha = fecha.substring(0,16); // yyyy-MM-dd HH:mm
-                String dep  = nz(rs.getString("departamento"));
-                String mun  = nz(rs.getString("municipio"));
-                String creadoUbic = String.format("%s — %s, %s", fecha, dep, mun);
-
-                String estado = nz(rs.getString("tipo_acceso"));
-
-                m.addRow(new Object[]{ idDocumento, tipo, documento, categoria, creadoUbic, estado });
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    String idDocumento = rs.getString("id_documento");
+                    String tipo   = nz(rs.getString("tipo"));
+                    String nombre = nz(rs.getString("nombre"));
+                    String desc   = cut(nz(rs.getString("descripcion")), 90);
+                    String peso   = human(rs.getLong("file_size_bytes"));
+                    String creador= nz(rs.getString("creador"));
+                    String codigo = nz(rs.getString("codigo"));
+                    String documento = String.format(
+                        "%s — %s • %s • %s • %s", nombre, desc, peso, creador, codigo
+                    );
+                    String categoria = nz(rs.getString("categoria"));
+                    String fecha = nz(rs.getString("creado_en"));
+                    if (fecha.length() > 16) fecha = fecha.substring(0,16);
+                    String dep  = nz(rs.getString("departamento"));
+                    String mun  = nz(rs.getString("municipio"));
+                    String creadoUbic = String.format("%s — %s, %s", fecha, dep, mun);
+                    String estado = nz(rs.getString("tipo_acceso"));
+                    m.addRow(new Object[]{ idDocumento, tipo, documento, categoria, creadoUbic, estado });
+                }
             }
         } catch (SQLException e) {
             System.err.println("[DocumentoDao] " + e.getMessage());
         }
-
         tabla.setModel(m); 
     }
 
@@ -143,26 +169,33 @@ public class DocumentoDao {
     
     // ACCION DE ACTUALIZAR DOCUMENTO //
     
-    public boolean actualizarDocumento(Documento documento) throws SQLException {
-        String sql = "UPDATE documentos SET nombre = ?, codigo = ?, descripcion = ?, id_categoria = ?, tipo_acceso = ?, disposicion_final = ?, file_name = ? WHERE id_documento = ?";
+    public boolean actualizarDocumento(core.Documento documento) throws SQLException {
+        String sql = """
+            UPDATE documentos
+               SET nombre = ?,
+                   codigo = ?,
+                   descripcion = ?,
+                   id_categoria = ?,
+                   tipo_acceso = ?,
+                   disposicion_final = ?,
+                   file_name = ?,
+                   actualizado_en = datetime('now')
+             WHERE id_documento = ?
+        """;
 
-        try (Connection cn = new Db().establecerConexion(); 
+        try (Connection cn = new Db().establecerConexion();
              PreparedStatement ps = cn.prepareStatement(sql)) {
 
-            // Establecer los parámetros de la consulta con los datos del documento
             ps.setString(1, documento.getNombre());
             ps.setString(2, documento.getCodigo());
             ps.setString(3, documento.getDescripcion());
-            ps.setInt(4, documento.getIdCategoria());
+            ps.setLong(4, documento.getIdCategoria());
             ps.setString(5, documento.getTipoAcceso());
             ps.setString(6, documento.getDisposicionFinal());
-            ps.setString(7, documento.getFileName());
-            ps.setLong(8, documento.getIdDocumento()); // Aquí es donde usamos el id_documento
+            ps.setString(7, documento.getFileName());    // conservas el nombre original mostrado
+            ps.setLong(8, documento.getIdDocumento());
 
-            // Ejecutar la actualización
-            int filasActualizadas = ps.executeUpdate();
-
-            return filasActualizadas > 0; // Devuelve true si al menos una fila fue actualizada
+            return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new SQLException("Error al actualizar el documento: " + ex.getMessage(), ex);
         }
@@ -214,7 +247,51 @@ public class DocumentoDao {
         }
     }
 
+    
+    // ACCION DE OBTENER EL DOCUMENTO POR ID
+    
+    public Documento obtenerDocumentoPorId(String idDocumento) throws SQLException {
 
+        String sql = "SELECT id_documento, nombre, codigo, descripcion, id_categoria, tipo_acceso, disposicion_final, file_name, file_type, file_size_bytes, creador_email, creador_nombre, departamento, municipio, creado_en, actualizado_en "
+                   + "FROM documentos WHERE id_documento = ?";
+
+        try (Connection cn = new Db().establecerConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setString(1, idDocumento);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+
+                    core.Documento doc = new core.Documento();
+
+                    // Asignar valores del ResultSet al objeto
+                    doc.setIdDocumento(rs.getLong("id_documento"));
+                    doc.setNombre(rs.getString("nombre"));
+                    doc.setCodigo(rs.getString("codigo"));
+                    doc.setDescripcion(rs.getString("descripcion"));
+                    doc.setIdCategoria(rs.getLong("id_categoria"));
+                    doc.setTipoAcceso(rs.getString("tipo_acceso"));
+                    doc.setDisposicionFinal(rs.getString("disposicion_final"));
+                    doc.setFileName(rs.getString("file_name"));
+                    doc.setFileType(rs.getString("file_type"));
+                    doc.setFileSizeBytes(rs.getLong("file_size_bytes"));
+                    doc.setDepartamento(rs.getString("departamento"));
+                    doc.setMunicipio(rs.getString("municipio"));
+                    doc.setUsuario_Demo(rs.getString("creador_nombre"));
+                    doc.setCorreo_demo(rs.getString("creador_email"));
+                    doc.setFechaActualizacion(rs.getString("creado_en"));
+                    doc.setFechaCreacion(rs.getString("actualizado_en"));
+
+                    return doc; // Aquí retorna el documento listo
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener documento por ID: " + e.getMessage(), e);
+        }
+
+        return null; 
+    }
     
     
     // --- utilidades cortas ---

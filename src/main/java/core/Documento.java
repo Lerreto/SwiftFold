@@ -19,8 +19,13 @@ public class Documento {
     private String municipio;
     private String usuario_Demo;
     private String correo_demo;
+    private String fecha_creacion;
+    private String fecha_actualizacion;
 
     // --- Getters/Setters mínimos usados por el DAO ---
+    public Long getIdDocumento() { return idDocumento; }
+    public void setIdDocumento(long v) { this.idDocumento = v; }
+
     public String getNombre() { return nombre; }
     public void setNombre(String v) { this.nombre = v; }
 
@@ -54,21 +59,17 @@ public class Documento {
     public String getMunicipio() { return municipio; }
     public void setMunicipio(String v) { this.municipio = v; }
 
-    public String getUsuario_Demo() {
-        return usuario_Demo;
-    }
-
-    public String getCorreo_demo() {
-        return correo_demo;
-    }
-
-    public void setUsuario_Demo(String usuario_Demo) {
-        this.usuario_Demo = usuario_Demo;
-    }
-
-    public void setCorreo_demo(String correo_demo) {
-        this.correo_demo = correo_demo;
-    }
+    public String getUsuario_Demo() { return usuario_Demo;}
+    public void setUsuario_Demo(String usuario_Demo) { this.usuario_Demo = usuario_Demo; }
+    
+    public String getCorreo_demo() { return correo_demo; }
+    public void setCorreo_demo(String correo_demo) { this.correo_demo = correo_demo; }
+    
+    public String getFechaCreacion() { return fecha_creacion;}
+    public void setFechaCreacion(String fecha_creacion) { this.fecha_creacion = fecha_creacion; }
+    
+    public String getFechaActualizacion() { return fecha_actualizacion; }
+    public void setFechaActualizacion(String fecha_actualizacion) { this.fecha_actualizacion = fecha_actualizacion; }
 
     
 }

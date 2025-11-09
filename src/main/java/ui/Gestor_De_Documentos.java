@@ -5,6 +5,7 @@
 package ui;
 
 import data.DocumentoDao;
+import java.awt.Color;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,13 +15,37 @@ import javax.swing.JOptionPane;
 public class Gestor_De_Documentos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Gestor_De_Documentos.class.getName());
+    private String idSeleccionado;  
 
     /**
      * Creates new form Gestor_De_Documentos
      */
-    public Gestor_De_Documentos() {
+    
+     public Gestor_De_Documentos(String nombre) {
         initComponents();
-        new DocumentoDao().listar5Cols(this.TablaDocumentos); 
+        new DocumentoDao().listar5Cols(this.TablaDocumentos, nombre); 
+        
+                // Listener ÚNICO para Editar
+        JButtomEditar.addActionListener(e -> {
+            if (idSeleccionado == null) {
+                JOptionPane.showMessageDialog(this, "Selecciona un documento.", "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            this.dispose();
+            editarDocumento(idSeleccionado);
+        });
+
+        // Listener ÚNICO para Eliminar
+        JButtonEliminar.addActionListener(e -> {
+            if (idSeleccionado == null) {
+                JOptionPane.showMessageDialog(this, "Selecciona un documento.", "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            eliminarDocumento(idSeleccionado);
+            idSeleccionado = null; // limpia selección lógica
+        });
     }
     
     
@@ -32,7 +57,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             if (eliminado) {
                 JOptionPane.showMessageDialog(this, "Documento eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-                new DocumentoDao().listar5Cols(this.TablaDocumentos); 
+                new DocumentoDao().listar5Cols(this.TablaDocumentos, ""); 
             } else {
                 JOptionPane.showMessageDialog(this, "Error al eliminar el documento.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -86,7 +111,6 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JButtonEliminar = new javax.swing.JButton();
         JButtonExportar = new javax.swing.JButton();
         PanelEstadisticas = new javax.swing.JPanel();
-        PanelNotificaciones = new javax.swing.JPanel();
         LineaHorizontal01 = new javax.swing.JPanel();
         LineaHorizontal02 = new javax.swing.JPanel();
         TItuloDependencia = new javax.swing.JLabel();
@@ -273,6 +297,24 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         PanelOpcionesDocumentos.setBackground(new java.awt.Color(245, 245, 245));
 
         JTextBusquedad.setText("Buscar nombre del documento");
+        JTextBusquedad.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                JTextBusquedadFocusLost(evt);
+            }
+        });
+        JTextBusquedad.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                JTextBusquedadMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                JTextBusquedadMousePressed(evt);
+            }
+        });
+        JTextBusquedad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JTextBusquedadActionPerformed(evt);
+            }
+        });
 
         JButtonBuscar.setText("Buscar");
         JButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -345,29 +387,14 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         PanelEstadisticas.setLayout(PanelEstadisticasLayout);
         PanelEstadisticasLayout.setHorizontalGroup(
             PanelEstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 310, Short.MAX_VALUE)
+            .addGap(0, 190, Short.MAX_VALUE)
         );
         PanelEstadisticasLayout.setVerticalGroup(
             PanelEstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
         );
 
-        Backgraund.add(PanelEstadisticas, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 380, 310, 300));
-
-        PanelNotificaciones.setBackground(new java.awt.Color(245, 245, 245));
-
-        javax.swing.GroupLayout PanelNotificacionesLayout = new javax.swing.GroupLayout(PanelNotificaciones);
-        PanelNotificaciones.setLayout(PanelNotificacionesLayout);
-        PanelNotificacionesLayout.setHorizontalGroup(
-            PanelNotificacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 310, Short.MAX_VALUE)
-        );
-        PanelNotificacionesLayout.setVerticalGroup(
-            PanelNotificacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 260, Short.MAX_VALUE)
-        );
-
-        Backgraund.add(PanelNotificaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 90, -1, 260));
+        Backgraund.add(PanelEstadisticas, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 80, 190, 600));
 
         LineaHorizontal01.setBackground(new java.awt.Color(219, 219, 219));
         LineaHorizontal01.setPreferredSize(new java.awt.Dimension(740, 2));
@@ -538,7 +565,17 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtonBuscarActionPerformed
-        // TODO add your handling code here:
+        String textoBusqueda = JTextBusquedad.getText().trim();
+
+        if (textoBusqueda.equals("Buscar nombre del documento")) {
+            textoBusqueda = "";  
+        }
+
+        this.dispose();
+
+        Gestor_De_Documentos ventanaGestor = new Gestor_De_Documentos(textoBusqueda);
+        ventanaGestor.setLocationRelativeTo(null);
+        ventanaGestor.setVisible(true);
     }//GEN-LAST:event_JButtonBuscarActionPerformed
 
     private void JButtomEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtomEditarActionPerformed
@@ -573,38 +610,21 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         this.dispose();
 
         // Abrir la ventana de gestor de documentos
-        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos();
+        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
         ventanaGestorDeDocumentos.setLocationRelativeTo(null);
         ventanaGestorDeDocumentos.setVisible(true);
     }//GEN-LAST:event_JPanelMisDocumentosMouseClicked
 
     private void JButtonEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JButtonEliminarMouseClicked
 
-        int selectedRow = TablaDocumentos.getSelectedRow(); // Captura la fila seleccionada
-
-        if (selectedRow != -1) {
-            String idDocumento = TablaDocumentos.getValueAt(selectedRow, 0).toString();
-            eliminarDocumento(idDocumento);
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un documento para eliminar.", "Error", JOptionPane.WARNING_MESSAGE);
-        }
     }//GEN-LAST:event_JButtonEliminarMouseClicked
 
     private void TablaDocumentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaDocumentosMouseClicked
-        int selectedRow = TablaDocumentos.getSelectedRow();
-
-        if (selectedRow != -1) {  
-            String idDocumento = TablaDocumentos.getValueAt(selectedRow, 0).toString(); 
-
-            // Si la fila tiene un id_documento, lo puedes utilizar en el botón de Eliminar
-            JButtonEliminar.addActionListener(e -> {
-                eliminarDocumento(idDocumento);
-            });
-            JButtomEditar.addActionListener(e -> {
-                editarDocumento(idDocumento);
-            });
+        int row = TablaDocumentos.getSelectedRow();
+        if (row != -1) {
+            idSeleccionado = String.valueOf(TablaDocumentos.getValueAt(row, 0));
         } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un documento para eliminar.", "Error", JOptionPane.WARNING_MESSAGE);
+            idSeleccionado = null;
         }
     }//GEN-LAST:event_TablaDocumentosMouseClicked
 
@@ -641,15 +661,30 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     }//GEN-LAST:event_JPanelAjustesMouseExited
 
     private void JButtomEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JButtomEditarMouseClicked
-        int selectedRow = TablaDocumentos.getSelectedRow(); // Captura la fila seleccionada
-
-        if (selectedRow != -1) {
-            String idDocumento = TablaDocumentos.getValueAt(selectedRow, 0).toString();
-            editarDocumento(idDocumento);
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un documento para eliminar.", "Error", JOptionPane.WARNING_MESSAGE);
-        }
+        
     }//GEN-LAST:event_JButtomEditarMouseClicked
+
+    private void JTextBusquedadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JTextBusquedadActionPerformed
+
+    }//GEN-LAST:event_JTextBusquedadActionPerformed
+
+    private void JTextBusquedadMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTextBusquedadMousePressed
+        if (JTextBusquedad.getText().equals("Busque por nombre de Documento")) {
+            JTextBusquedad.setText("");  // Limpiar el texto base
+            JTextBusquedad.setForeground(Color.black);  // Cambiar el color del texto a negro
+        }
+    }//GEN-LAST:event_JTextBusquedadMousePressed
+
+    private void JTextBusquedadMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTextBusquedadMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JTextBusquedadMouseExited
+
+    private void JTextBusquedadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_JTextBusquedadFocusLost
+        if (JTextBusquedad.getText().isEmpty()) {
+            JTextBusquedad.setText("Busque por nombre de Documento");  // Colocar el texto base
+            JTextBusquedad.setForeground(Color.GRAY);  // Cambiar el color a gris
+        }
+    }//GEN-LAST:event_JTextBusquedadFocusLost
 
     /**
      * @param args the command line arguments
@@ -673,7 +708,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Gestor_De_Documentos().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Gestor_De_Documentos("").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -700,7 +735,6 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private javax.swing.JPanel LineaHorizontal01;
     private javax.swing.JPanel LineaHorizontal02;
     private javax.swing.JPanel PanelEstadisticas;
-    private javax.swing.JPanel PanelNotificaciones;
     private javax.swing.JPanel PanelOpcionesDocumentos;
     private javax.swing.JLabel TItuloDependencia;
     private javax.swing.JTable TablaDocumentos;

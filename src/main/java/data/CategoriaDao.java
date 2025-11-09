@@ -26,15 +26,26 @@ public class CategoriaDao {
     // ======= PASA DE NOMBRE DE CATEGORIA A ID PARA GUARDARLO EN LA BASE DE DATOS ======= //
     
     public long idPorNombre(String nombre) throws java.sql.SQLException {
-    String sql = "SELECT id_categoria FROM categorias WHERE nombre = ?";
-    try (java.sql.Connection cn = new data.Db().establecerConexion();
-         java.sql.PreparedStatement ps = cn.prepareStatement(sql)) {
-        ps.setString(1, nombre);
-        try (java.sql.ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) return rs.getLong(1);
+        String sql = "SELECT id_categoria FROM categorias WHERE nombre = ?";
+        try (java.sql.Connection cn = new data.Db().establecerConexion();
+             java.sql.PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, nombre);
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getLong(1);
+            }
+        }
+        throw new java.sql.SQLException("Categoría no encontrada: " + nombre);
+    }
+    
+    public String nombrePorId(long id) throws SQLException {
+        final String sql = "SELECT nombre FROM categorias WHERE id_categoria = ?";
+        try (Connection cn = new Db().establecerConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getString("nombre") : null;
+            }
         }
     }
-    throw new java.sql.SQLException("Categoría no encontrada: " + nombre);
-}
     
 }
