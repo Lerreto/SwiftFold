@@ -4,6 +4,8 @@
  */
 package ui;
 
+import app.SesionSingleton;
+import core.UsuarioPrueba;
 import data.DocumentoDao;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -23,28 +25,41 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     
      public Gestor_De_Documentos(String nombre) {
         initComponents();
-        new DocumentoDao().listar5Cols(this.TablaDocumentos, nombre); 
+        new DocumentoDao().listar5Cols(this.TablaDocumentos, nombre);
+        UsuarioPrueba usuario = SesionSingleton.getInstance().getUsuarioLogueado();
         
                 // Listener ÚNICO para Editar
         JButtomEditar.addActionListener(e -> {
-            if (idSeleccionado == null) {
-                JOptionPane.showMessageDialog(this, "Selecciona un documento.", "Aviso",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
+            if (usuario.getRol().tieneAccesoEditar()){
+                if (idSeleccionado == null) {
+                    JOptionPane.showMessageDialog(this, "Selecciona un documento.", "Aviso",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                this.dispose();
+                editarDocumento(idSeleccionado);
+            } else {
+                JOptionPane.showMessageDialog(this, "No tienes acceso para editar este documento.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
             }
-            this.dispose();
-            editarDocumento(idSeleccionado);
+
         });
 
         // Listener ÚNICO para Eliminar
         JButtonEliminar.addActionListener(e -> {
-            if (idSeleccionado == null) {
-                JOptionPane.showMessageDialog(this, "Selecciona un documento.", "Aviso",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
+            
+            if (usuario.getRol().tieneAccesoEliminar()){
+                
+                if (idSeleccionado == null) {
+                    JOptionPane.showMessageDialog(this, "Selecciona un documento.", "Aviso",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                eliminarDocumento(idSeleccionado);
+                idSeleccionado = null; // limpia selección lógica
+
+             } else {
+                JOptionPane.showMessageDialog(this, "No tienes acceso para eliminar este documento.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
             }
-            eliminarDocumento(idSeleccionado);
-            idSeleccionado = null; // limpia selección lógica
         });
     }
     

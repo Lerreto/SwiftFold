@@ -48,7 +48,6 @@ public class DocumentoDao {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
 
-        // Construir la consulta con el WHERE antes del ORDER BY
         String sqlFiltrado = 
             "SELECT d.id_documento, d.file_type AS tipo, d.nombre, d.descripcion, d.file_size_bytes, " +
             "       COALESCE(d.creador_nombre, d.creador_email) AS creador, d.codigo, " +
@@ -57,12 +56,11 @@ public class DocumentoDao {
             "FROM documentos d " +
             "LEFT JOIN categorias c ON c.id_categoria = d.id_categoria ";
 
-        // Si hay un nombreFiltro, añadir la cláusula WHERE
         if (nombreFiltro != null && !nombreFiltro.trim().isEmpty()) {
             sqlFiltrado += "WHERE LOWER(d.nombre) LIKE LOWER(?) ";
         }
 
-        // Agregar el ORDER BY al final
+
         sqlFiltrado += "ORDER BY d.creado_en DESC";
 
         try (Connection cn = new Db().establecerConexion();

@@ -4,6 +4,10 @@
  */
 package app;
 import com.formdev.flatlaf.FlatLightLaf;
+import core.Rol;
+import core.RolAdministrador;
+import core.RolCiudadano;
+import core.UsuarioPrueba;
 import javax.swing.UIManager;
 import ui.*;
 
@@ -14,6 +18,27 @@ import ui.*;
 public class Main {
     
     public static void main(String[] args) {
+        
+        String nombre = "Juan";
+        String apellido = "Pérez";
+        String email = "juan.perez@example.com";
+        String telefono = "1234567890";
+        String departamento = "Sistemas";
+        String municipio = "Bogotá";
+        String dependencia = "Tecnología";
+        String cargo = "Desarrollador";
+        String password = "password123";
+        String stringRol = "administrador";  // Este será el rol en formato string
+        Rol rol = new RolAdministrador();  // Asumiendo que RolAdministrador es una clase que extiende Rol
+        
+        // Crear el usuario con el constructor
+        UsuarioPrueba usuario_actual = new UsuarioPrueba(
+            nombre, apellido, email, telefono,
+            departamento, municipio, dependencia, cargo,
+            password, stringRol, rol
+        );
+        
+        SesionSingleton.getInstance().setUsuarioLogueado(usuario_actual);
 
 
         // ACTIVAR FLATLAF
@@ -32,6 +57,7 @@ public class Main {
         var Window = new Login();
         Window.setLocationRelativeTo(null);
         Window.setVisible(true);
+        
     }
 
     
