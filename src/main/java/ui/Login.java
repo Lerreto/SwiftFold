@@ -1,6 +1,11 @@
 package ui;
 
+import app.SesionSingleton;
+import core.RegistroManager;
+import core.Usuario;
+import core.ValidationResult;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
     
@@ -29,7 +34,7 @@ public class Login extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         loginBtn = new javax.swing.JPanel();
         loginBtnTxt = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        JBotonRegistrarse = new javax.swing.JButton();
         Logo = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -122,11 +127,16 @@ public class Login extends javax.swing.JFrame {
 
         userTxt.setBackground(new java.awt.Color(255, 251, 248));
         userTxt.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        userTxt.setText("Ingrese su nombre de usuario");
+        userTxt.setText("Ingrese su correo electronico");
         userTxt.setBorder(null);
         userTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 userTxtMousePressed(evt);
+            }
+        });
+        userTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userTxtActionPerformed(evt);
             }
         });
         bg.add(userTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 410, 30));
@@ -188,16 +198,16 @@ public class Login extends javax.swing.JFrame {
 
         bg.add(loginBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, 130, 40));
 
-        jButton1.setBackground(new java.awt.Color(0, 153, 0));
-        jButton1.setFont(new java.awt.Font("Roboto Condensed", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("REGISTRARSE");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        JBotonRegistrarse.setBackground(new java.awt.Color(0, 153, 0));
+        JBotonRegistrarse.setFont(new java.awt.Font("Roboto Condensed", 1, 14)); // NOI18N
+        JBotonRegistrarse.setForeground(new java.awt.Color(255, 255, 255));
+        JBotonRegistrarse.setText("REGISTRARSE");
+        JBotonRegistrarse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                JBotonRegistrarseActionPerformed(evt);
             }
         });
-        bg.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 430, 140, 40));
+        bg.add(JBotonRegistrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 430, 140, 40));
 
         Logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Logo_fondo.png"))); // NOI18N
@@ -255,7 +265,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_loginBtnTxtMouseExited
 
     private void userTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTxtMousePressed
-        if (userTxt.getText().equals("Ingrese su nombre de usuario")) {
+        if (userTxt.getText().equals("Ingrese su correo electronico")) {
             userTxt.setText("");
             userTxt.setForeground(Color.black);
         }
@@ -271,22 +281,34 @@ public class Login extends javax.swing.JFrame {
             passTxt.setForeground(Color.black);
         }
         if (userTxt.getText().isEmpty()) {
-            userTxt.setText("Ingrese su nombre de usuario");
+            userTxt.setText("Ingrese su correo electronico");
             userTxt.setForeground(Color.gray);
         }
     }//GEN-LAST:event_passTxtMousePressed
 
     private void loginBtnTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnTxtMouseClicked
-        // Cerrar login
-        this.dispose();
+        String email = userTxt.getText().trim();
+        String contrasena = new String(passTxt.getPassword()).trim();
 
-        // Abrir la ventana de gestor de documentos
-        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
-        ventanaGestorDeDocumentos.setLocationRelativeTo(null);
-        ventanaGestorDeDocumentos.setVisible(true);
+        RegistroManager registroManager = new RegistroManager("usuarios.csv"); 
+        ValidationResult resultado = registroManager.iniciarSesion(email, contrasena);
+
+        if (resultado.isSuccess()) {
+            Usuario usuarioActual = registroManager.getMapaUsuarios().get(email);
+            SesionSingleton.getInstance().setUsuarioLogueado(usuarioActual);
+
+            this.dispose();
+
+            Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
+            ventanaGestorDeDocumentos.setLocationRelativeTo(null);
+            ventanaGestorDeDocumentos.setVisible(true);
+        } else {
+            String errorMessage = String.join("\n", resultado.getMessages());
+            JOptionPane.showMessageDialog(this, errorMessage, "Error de login", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_loginBtnTxtMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void JBotonRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBotonRegistrarseActionPerformed
         // Cerrar login
         this.dispose();
 
@@ -294,7 +316,11 @@ public class Login extends javax.swing.JFrame {
         Registrarse ventanaRegistro = new Registrarse();
         ventanaRegistro.setLocationRelativeTo(null);
         ventanaRegistro.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_JBotonRegistrarseActionPerformed
+
+    private void userTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userTxtActionPerformed
 
     /**
      * @param args the command line arguments
@@ -333,6 +359,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton JBotonRegistrarse;
     private javax.swing.JLabel Logo;
     private javax.swing.JPanel bg;
     private javax.swing.JLabel citybg;
@@ -340,7 +367,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel exitTxt;
     private javax.swing.JLabel favicon;
     private javax.swing.JPanel header;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;

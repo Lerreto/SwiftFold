@@ -8,7 +8,7 @@ import core.Rol;
 import core.RolAdministrador;
 import core.RolCiudadano;
 import core.RolSecretario;
-import core.UsuarioPrueba;
+import core.Usuario;
 import javax.swing.UIManager;
 import ui.*;
 
@@ -20,28 +20,6 @@ public class Main {
     
     public static void main(String[] args) {
         
-        String nombre = "Juan";
-        String apellido = "Pérez";
-        String email = "juan.perez@example.com";
-        String telefono = "1234567890";
-        String departamento = "Santander";
-        String municipio = "Bucaramanga";
-        String dependencia = "Tecnología";
-        String cargo = "Desarrollador";
-        String password = "password123";
-        String stringRol = "administrador";  
-        Rol rol = new RolSecretario();  
-        
-        // Crear el usuario con el constructor
-        UsuarioPrueba usuario_actual = new UsuarioPrueba(
-            nombre, apellido, email, telefono,
-            departamento, municipio, dependencia, cargo,
-            password, stringRol, rol
-        );
-        
-        SesionSingleton.getInstance().setUsuarioLogueado(usuario_actual);
-
-
         // ACTIVAR FLATLAF
         FlatLightLaf.setup();
 

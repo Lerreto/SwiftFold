@@ -2,19 +2,101 @@ package ui;
 
 import java.awt.Color;
 import com.formdev.flatlaf.FlatLightLaf;
+import core.RegistroManager;
+import core.Usuario;
+import core.ValidationResult;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class Registrarse extends javax.swing.JFrame {
     
-    int xMouse, yMouse;
+    private Map<String, String[]> departamentosMunicipios;
+    private final RegistroManager registroManager = new RegistroManager("usuarios.csv");
     
+    int xMouse, yMouse;   
 
     
     public Registrarse() {
         initComponents();
+        initDepartamentosMunicipios();
+        configurarComboBoxes();
+        setupDepartamentoListener();
     }
     
+    private void configurarComboBoxes() {
+        // Configurar el JComboBox de departamentos
+        SelectDepart.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { 
+            "Cundinamarca", "Santander", "Antioquia", "ValledelCauca", 
+            "Atlántico", "Bolívar", "Meta", "Boyacá"
+        }));
 
+        // Configurar el JComboBox de municipios inicialmente vacío
+        SelectMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+
+        // Deshabilitar SelectMunicipio inicialmente
+        SelectMunicipio.setEnabled(false);
+    }
+    
+    private void initDepartamentosMunicipios() {
+        departamentosMunicipios = new HashMap<>();
+        
+        departamentosMunicipios.put("Cundinamarca", new String[]{
+            "Bogotá", "Soacha", "Chía", "Cajicá", "La Calera"
+        });
+
+        departamentosMunicipios.put("Antioquia", new String[]{
+            "Medellín", "Bello", "Itagüí", "Envigado", "Girardota"
+        });
+
+        departamentosMunicipios.put("Santander", new String[]{
+            "Bucaramanga", "Floridablanca", "Girón", "Piedecuesta", "San Alberto"
+        });
+
+        // Otros 5 departamentos con algunos municipios
+        departamentosMunicipios.put("ValledelCauca", new String[]{
+            "Cali", "Palmira", "Yumbo", "Jamundí", "Buga"
+        });
+
+        departamentosMunicipios.put("Atlántico", new String[]{
+            "Barranquilla", "Soledad", "Malambo", "Galapa", "Puerto Colombia"
+        });
+
+        departamentosMunicipios.put("Bolívar", new String[]{
+            "Cartagena", "Turbaná", "Magangué", "Mahates", "San Fernando"
+        });
+
+        departamentosMunicipios.put("Meta", new String[]{
+            "Villavicencio", "Acacías", "Granada", "Cumaral", "Guamal"
+        });
+
+        departamentosMunicipios.put("Boyacá", new String[]{
+            "Tunja", "Duitama", "Sogamoso", "Paipa", "Villa de Leyva"
+        });
+    }
+    
+    private void setupDepartamentoListener() {
+        SelectDepart.addActionListener(evt -> updateMunicipios());
+    }
+    
+    private void updateMunicipios() {
+        // Obtener el departamento seleccionado
+        String departamentoSeleccionado = (String) SelectDepart.getSelectedItem();
+        String[] municipios;
+
+        // Obtener los municipios correspondientes al departamento
+        if (departamentosMunicipios.containsKey(departamentoSeleccionado)) {
+            municipios = departamentosMunicipios.get(departamentoSeleccionado);
+        } else {
+            municipios = new String[]{};
+        }
+
+        // Actualizar el JComboBox de municipios
+        SelectMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(municipios));
+        SelectMunicipio.setEnabled(true);  // Habilitar el JComboBox de municipios
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -25,7 +107,8 @@ public class Registrarse extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         bg = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        BotonRegistrarse = new javax.swing.JButton();
+        BotonDevolverse = new javax.swing.JButton();
         citybg = new javax.swing.JLabel();
         header = new javax.swing.JPanel();
         exitBtn = new javax.swing.JPanel();
@@ -77,25 +160,41 @@ public class Registrarse extends javax.swing.JFrame {
         bg.setBackground(new java.awt.Color(255, 251, 248));
         bg.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 102));
-        jButton1.setFont(new java.awt.Font("Roboto Condensed", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("REGISTRARSE");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        BotonRegistrarse.setBackground(new java.awt.Color(0, 0, 102));
+        BotonRegistrarse.setFont(new java.awt.Font("Roboto Condensed", 1, 14)); // NOI18N
+        BotonRegistrarse.setForeground(new java.awt.Color(255, 255, 255));
+        BotonRegistrarse.setText("REGISTRARSE");
+        BotonRegistrarse.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                BotonRegistrarseMouseClicked(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        BotonRegistrarse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                BotonRegistrarseActionPerformed(evt);
             }
         });
-        bg.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 470, 180, 40));
+        bg.add(BotonRegistrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 470, 180, 40));
+
+        BotonDevolverse.setBackground(new java.awt.Color(0, 0, 102));
+        BotonDevolverse.setFont(new java.awt.Font("Roboto Condensed", 1, 14)); // NOI18N
+        BotonDevolverse.setForeground(new java.awt.Color(255, 255, 255));
+        BotonDevolverse.setText("DEVOLVERSE");
+        BotonDevolverse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BotonDevolverseMouseClicked(evt);
+            }
+        });
+        BotonDevolverse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonDevolverseActionPerformed(evt);
+            }
+        });
+        bg.add(BotonDevolverse, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 420, 180, 40));
 
         citybg.setBackground(new java.awt.Color(0, 134, 190));
         citybg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ciudad_verde.png"))); // NOI18N
-        bg.add(citybg, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 0, 330, 540));
+        bg.add(citybg, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 0, 330, 550));
 
         header.setBackground(new java.awt.Color(150, 150, 150));
         header.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -185,7 +284,6 @@ public class Registrarse extends javax.swing.JFrame {
 
         SelectMunicipio.setFont(new java.awt.Font("Roboto SemiCondensed", 0, 14)); // NOI18N
         SelectMunicipio.setForeground(new java.awt.Color(102, 102, 102));
-        SelectMunicipio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         SelectMunicipio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SelectMunicipioActionPerformed(evt);
@@ -264,7 +362,6 @@ public class Registrarse extends javax.swing.JFrame {
 
         SelectDepart.setFont(new java.awt.Font("Roboto SemiCondensed", 0, 14)); // NOI18N
         SelectDepart.setForeground(new java.awt.Color(102, 102, 102));
-        SelectDepart.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá, D.C.", "Bolívar", "Boyacá", "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", "Valle del Cauca", "Vaupés", "Vichada" }));
         SelectDepart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SelectDepartActionPerformed(evt);
@@ -458,9 +555,9 @@ public class Registrarse extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CasillaNombreMousePressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void BotonRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRegistrarseActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_BotonRegistrarseActionPerformed
 
     private void CasillaApellidoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CasillaApellidoMousePressed
         if (CasillaApellido.getText().equals("Ingrese su apellido")) {
@@ -663,14 +760,99 @@ public class Registrarse extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ConfirmPasswordMousePressed
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        this.dispose();
+    private void BotonRegistrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonRegistrarseMouseClicked
+        // 1) Leer campos
+        String nombre       = CasillaNombre.getText().trim();
+        String apellido     = CasillaApellido.getText().trim();
+        String email        = CasillaEmail.getText().trim().toLowerCase();
+        String telefono     = CasillaNumero.getText().replaceAll("\\s+", "").trim();
+        String departamento = (String) SelectDepart.getSelectedItem();
+        String municipio    = (String) SelectMunicipio.getSelectedItem();
+        String dependencia  = (String) SelectDependencia.getSelectedItem();
+        String cargo        = CasillaCargo.getText().trim();
 
-        // Abrir la ventana de gestor de documentos
+        // 2) Contraseñas
+        String pwd1 = new String(Password.getPassword());
+        String pwd2 = new String(ConfirmPassword.getPassword());
+
+        // ========== DEBUG (IMPRIMIR TODO EN CONSOLA) ==========
+        System.out.println("===== DATOS CAPTURADOS EN FORMULARIO =====");
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Apellidos: " + apellido);
+        System.out.println("Email: " + email);
+        System.out.println("Teléfono: " + telefono);
+        System.out.println("Departamento: " + departamento);
+        System.out.println("Municipio: " + municipio);
+        System.out.println("Dependencia: " + dependencia);
+        System.out.println("Cargo: " + cargo);
+        System.out.println("Contraseña (pwd1): " + pwd1);
+        System.out.println("Confirmar Contraseña (pwd2): " + pwd2);
+        System.out.println("==========================================");
+
+        // 3) Validación UI: contraseñas coinciden
+        if (!pwd1.equals(pwd2)) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Las contraseñas no coinciden.",
+                "Errores de validación",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        // 4) Construir usuario
+        Usuario nuevo = new Usuario(
+            nombre, apellido, email, telefono,
+            departamento, municipio, dependencia, cargo,
+            "" // hashContrasena lo asigna RegistroManager
+        );
+
+        // 5) Registrar
+        RegistroManager manager = new RegistroManager("usuarios.csv");
+        ValidationResult res = manager.registrarUsuario(nuevo, pwd1);
+
+        // 6) Mostrar resultado
+        if (res.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "¡Usuario registrado correctamente!",
+                "Registro",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+
+            this.dispose();
+            Login ventanaLogin = new Login();
+            ventanaLogin.setLocationRelativeTo(null);
+            ventanaLogin.setVisible(true);
+
+        } else {
+            StringBuilder sb = new StringBuilder("No se pudo registrar el usuario:\n");
+            for (String m : res.getMessages()) {
+                sb.append("• ").append(m).append("\n");
+            }
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                sb.toString(),
+                "Errores de validación",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+        // 7) Limpiar variables sensibles
+        java.util.Arrays.fill(pwd1.toCharArray(), '\0');
+        java.util.Arrays.fill(pwd2.toCharArray(), '\0');
+    }//GEN-LAST:event_BotonRegistrarseMouseClicked
+
+    private void BotonDevolverseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonDevolverseMouseClicked
+        this.dispose();
         Login ventanaLogin = new Login();
         ventanaLogin.setLocationRelativeTo(null);
         ventanaLogin.setVisible(true);
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_BotonDevolverseMouseClicked
+
+    private void BotonDevolverseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDevolverseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonDevolverseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -695,6 +877,8 @@ public class Registrarse extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Apellidos;
+    private javax.swing.JButton BotonDevolverse;
+    private javax.swing.JButton BotonRegistrarse;
     private javax.swing.JLabel Cargo;
     private javax.swing.JTextField CasillaApellido;
     private javax.swing.JTextField CasillaCargo;
@@ -719,7 +903,6 @@ public class Registrarse extends javax.swing.JFrame {
     private javax.swing.JPanel exitBtn;
     private javax.swing.JLabel exitTxt;
     private javax.swing.JPanel header;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel5;

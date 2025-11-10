@@ -4,7 +4,7 @@
  */
 package app;
 
-import core.UsuarioPrueba;
+import core.Usuario;
 
 /**
  *
@@ -13,7 +13,7 @@ import core.UsuarioPrueba;
 public class SesionSingleton {
 
     private static SesionSingleton instance;
-    private UsuarioPrueba usuarioLogueado;
+    private Usuario usuarioLogueado;
 
     private SesionSingleton() {}
 
@@ -25,12 +25,12 @@ public class SesionSingleton {
     }
 
     // Método para establecer el usuario logueado
-    public void setUsuarioLogueado(UsuarioPrueba usuario) {
+    public void setUsuarioLogueado(Usuario usuario) {
         this.usuarioLogueado = usuario;
     }
 
     // Método para obtener el usuario logueado
-    public UsuarioPrueba getUsuarioLogueado() {
+    public Usuario getUsuarioLogueado() {
         return usuarioLogueado;
     }
 }

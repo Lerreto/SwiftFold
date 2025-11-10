@@ -23,7 +23,7 @@ public class ValidationResult {
     private List<String> messages;
 
     public ValidationResult() {
-        this.success = false;
+        this.success = true;
         this.messages = new ArrayList<>();
     }
 
@@ -39,6 +39,7 @@ public class ValidationResult {
 
     public void addMessage(String msg) {
         this.messages.add(msg);
+        this.success = false; 
     }
 
     public void addMessages(List<String> msgs) {

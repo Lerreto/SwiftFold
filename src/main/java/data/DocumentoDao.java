@@ -2,7 +2,7 @@ package data;
 
 import app.SesionSingleton;
 import core.Documento;
-import core.UsuarioPrueba;
+import core.Usuario;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,7 +46,7 @@ public class DocumentoDao {
     
     public void listar5Cols(JTable tabla, String nombreFiltro) {
         
-        UsuarioPrueba usuario = SesionSingleton.getInstance().getUsuarioLogueado();
+        Usuario usuario = SesionSingleton.getInstance().getUsuarioLogueado();
         
         DefaultTableModel m = new DefaultTableModel(null, COLS) {
             @Override public boolean isCellEditable(int r, int c) { return false; }

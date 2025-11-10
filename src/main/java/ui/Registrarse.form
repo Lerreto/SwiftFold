@@ -81,7 +81,7 @@
         <Property name="useNullLayout" type="boolean" value="false"/>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="BotonRegistrarse">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="66" green="0" red="0" type="rgb"/>
@@ -95,12 +95,35 @@
             <Property name="text" type="java.lang.String" value="REGISTRARSE"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton1MouseClicked"/>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="BotonRegistrarseMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotonRegistrarseActionPerformed"/>
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="700" y="470" width="180" height="40"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="javax.swing.JButton" name="BotonDevolverse">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="66" green="0" red="0" type="rgb"/>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Roboto Condensed" size="14" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="DEVOLVERSE"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="BotonDevolverseMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotonDevolverseActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="700" y="420" width="180" height="40"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -115,7 +138,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="620" y="0" width="330" height="540"/>
+              <AbsoluteConstraints x="620" y="0" width="330" height="550"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -262,12 +285,7 @@
               <Color blue="66" green="66" red="66" type="rgb"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
           <Events>
@@ -418,41 +436,7 @@
               <Color blue="66" green="66" red="66" type="rgb"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="33">
-                <StringItem index="0" value="Amazonas"/>
-                <StringItem index="1" value="Antioquia"/>
-                <StringItem index="2" value="Arauca"/>
-                <StringItem index="3" value="Atl&#xe1;ntico"/>
-                <StringItem index="4" value="Bogot&#xe1;, D.C."/>
-                <StringItem index="5" value="Bol&#xed;var"/>
-                <StringItem index="6" value="Boyac&#xe1;"/>
-                <StringItem index="7" value="Caldas"/>
-                <StringItem index="8" value="Caquet&#xe1;"/>
-                <StringItem index="9" value="Casanare"/>
-                <StringItem index="10" value="Cauca"/>
-                <StringItem index="11" value="Cesar"/>
-                <StringItem index="12" value="Choc&#xf3;"/>
-                <StringItem index="13" value="C&#xf3;rdoba"/>
-                <StringItem index="14" value="Cundinamarca"/>
-                <StringItem index="15" value="Guain&#xed;a"/>
-                <StringItem index="16" value="Guaviare"/>
-                <StringItem index="17" value="Huila"/>
-                <StringItem index="18" value="La Guajira"/>
-                <StringItem index="19" value="Magdalena"/>
-                <StringItem index="20" value="Meta"/>
-                <StringItem index="21" value="Nari&#xf1;o"/>
-                <StringItem index="22" value="Norte de Santander"/>
-                <StringItem index="23" value="Putumayo"/>
-                <StringItem index="24" value="Quind&#xed;o"/>
-                <StringItem index="25" value="Risaralda"/>
-                <StringItem index="26" value="San Andr&#xe9;s y Providencia"/>
-                <StringItem index="27" value="Santander"/>
-                <StringItem index="28" value="Sucre"/>
-                <StringItem index="29" value="Tolima"/>
-                <StringItem index="30" value="Valle del Cauca"/>
-                <StringItem index="31" value="Vaup&#xe9;s"/>
-                <StringItem index="32" value="Vichada"/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
           <Events>

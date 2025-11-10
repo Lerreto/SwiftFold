@@ -1,4 +1,5 @@
 ui\Registrarse$15.class
+ui\Login$9.class
 app\Main.class
 ui\Registrarse$2.class
 ui\Cargar_Documento$9.class
@@ -39,7 +40,6 @@ ui\Login$1.class
 ui\Cargar_Documento.class
 ui\Registrarse$17.class
 ui\Registrarse$10.class
-core\TestLoginRegistro.class
 ui\Gestor_De_Documentos$11.class
 ui\Registrarse$22.class
 core\Categoria.class
@@ -63,17 +63,19 @@ ui\Gestor_De_Documentos.class
 ui\Registrarse$21.class
 ui\Login$8.class
 ui\Gestor_De_Documentos$12.class
+ui\Registrarse$24.class
 data\Metadatos$Info.class
-core\UsuarioPrueba.class
 ui\Gestor_De_Documentos$2.class
 ui\Registrarse$19.class
 core\DocumentService.class
 data\Db.class
 app\SesionSingleton.class
 ui\Gestor_De_Documentos$13.class
+core\HashUtil.class
 ui\Registrarse$13.class
 ui\Registrarse$1.class
 ui\Registrarse$7.class
+core\Usuario.class
 ui\Gestor_De_Documentos$5.class
 ui\Login$3.class
 data\DocumentoDao$1.class
@@ -81,8 +83,11 @@ ui\Cargar_Documento$3.class
 ui\Registrarse$14.class
 data\CategoriaDao.class
 core\TipoAcceso.class
+core\UtilidadesDeArchivos.class
 ui\Login.class
 ui\Cargar_Documento$4.class
 ui\Gestor_De_Documentos$4.class
 ui\Login$4.class
 ui\Modificar_Documento$4.class
+ui\Gestor_De_Documentos$14.class
+ui\Registrarse$25.class
