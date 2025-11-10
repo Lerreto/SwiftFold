@@ -15,9 +15,7 @@ public class RolAdministrador extends Rol{
     
     List<String> listaVacia = new ArrayList<>();
 
-    public RolAdministrador() {
-        super("administrador");
-        
+    public RolAdministrador() {  
         listaVacia.add("publico");
         listaVacia.add("interno");
         listaVacia.add("reservado");

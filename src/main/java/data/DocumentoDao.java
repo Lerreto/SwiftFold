@@ -1,6 +1,8 @@
 package data;
 
+import app.SesionSingleton;
 import core.Documento;
+import core.UsuarioPrueba;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,6 +45,8 @@ public class DocumentoDao {
     
     
     public void listar5Cols(JTable tabla, String nombreFiltro) {
+        
+        UsuarioPrueba usuario = SesionSingleton.getInstance().getUsuarioLogueado();
         
         DefaultTableModel m = new DefaultTableModel(null, COLS) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
@@ -99,7 +103,14 @@ public class DocumentoDao {
                     String mun  = nz(rs.getString("municipio"));
                     String creadoUbic = String.format("%s — %s, %s", fecha, dep, mun);
                     String estado = nz(rs.getString("tipo_acceso"));
-                    m.addRow(new Object[]{ idDocumento, tipo, documento, categoria, creadoUbic, estado });
+                    
+                    Documento documentoTemporal = new Documento();
+                    documentoTemporal.setTipoAcceso(estado);
+                    documentoTemporal.setMunicipio(mun);
+                    
+                    if (usuario.getRol().tieneAccesoVer(documentoTemporal, usuario.getMunicipio())){
+                        m.addRow(new Object[]{ idDocumento, tipo, documento, categoria, creadoUbic, estado });
+                    }
                 }
             }
         } catch (SQLException e) {

@@ -18,6 +18,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Gestor_De_Documentos.class.getName());
     private String idSeleccionado;  
+    public UsuarioPrueba usuario = SesionSingleton.getInstance().getUsuarioLogueado();
 
     /**
      * Creates new form Gestor_De_Documentos
@@ -26,7 +27,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
      public Gestor_De_Documentos(String nombre) {
         initComponents();
         new DocumentoDao().listar5Cols(this.TablaDocumentos, nombre);
-        UsuarioPrueba usuario = SesionSingleton.getInstance().getUsuarioLogueado();
+
         
                 // Listener ÚNICO para Editar
         JButtomEditar.addActionListener(e -> {
@@ -582,12 +583,18 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     }//GEN-LAST:event_JButtonEliminarActionPerformed
 
     private void JPanelCargarDocumentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelCargarDocumentoMouseClicked
-        this.dispose();
+            if (usuario.getRol().tieneAccesoSubir()){
+                
+                this.dispose();
 
-        // Abrir la ventana de gestor de documentos
-        Cargar_Documento ventanaCargarDocumento= new Cargar_Documento();
-        ventanaCargarDocumento.setLocationRelativeTo(null);
-        ventanaCargarDocumento.setVisible(true);
+                // Abrir la ventana de gestor de documentos
+                Cargar_Documento ventanaCargarDocumento= new Cargar_Documento();
+                ventanaCargarDocumento.setLocationRelativeTo(null);
+                ventanaCargarDocumento.setVisible(true);
+
+             } else {
+                JOptionPane.showMessageDialog(this, "No tienes acceso para eliminar este documento.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+            }
     }//GEN-LAST:event_JPanelCargarDocumentoMouseClicked
 
     private void JPanelUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelUsuariosMouseClicked

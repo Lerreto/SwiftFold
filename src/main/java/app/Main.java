@@ -7,6 +7,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import core.Rol;
 import core.RolAdministrador;
 import core.RolCiudadano;
+import core.RolSecretario;
 import core.UsuarioPrueba;
 import javax.swing.UIManager;
 import ui.*;
@@ -23,13 +24,13 @@ public class Main {
         String apellido = "Pérez";
         String email = "juan.perez@example.com";
         String telefono = "1234567890";
-        String departamento = "Sistemas";
-        String municipio = "Bogotá";
+        String departamento = "Santander";
+        String municipio = "Bucaramanga";
         String dependencia = "Tecnología";
         String cargo = "Desarrollador";
         String password = "password123";
-        String stringRol = "administrador";  // Este será el rol en formato string
-        Rol rol = new RolAdministrador();  // Asumiendo que RolAdministrador es una clase que extiende Rol
+        String stringRol = "administrador";  
+        Rol rol = new RolSecretario();  
         
         // Crear el usuario con el constructor
         UsuarioPrueba usuario_actual = new UsuarioPrueba(

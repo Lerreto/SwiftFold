@@ -16,8 +16,6 @@ public class RolSecretario extends Rol{
         List<String> listaVacia = new ArrayList<>();
 
     public RolSecretario() {
-        super("administrador");
-        
         listaVacia.add("publico");
         listaVacia.add("interno");
         listaVacia.add("reservado");
@@ -26,7 +24,7 @@ public class RolSecretario extends Rol{
     @Override
     public boolean tieneAccesoVer(Documento documento, String municipio) {
         String accesoLimpio = limpiarTexto(documento.getTipoAcceso());
-        return (mismaDependencia(documento, municipio) || listaVacia.contains(accesoLimpio));
+        return (mismaDependencia(documento, municipio) && listaVacia.contains(accesoLimpio));
     }
 
     @Override

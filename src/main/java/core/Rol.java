@@ -13,11 +13,6 @@ import java.text.Normalizer;
  */
 public abstract class Rol {
     
-    private String nombreRol;
-    
-    public Rol(String nombreRol) {
-        this.nombreRol = nombreRol;
-    }
     
     public String limpiarTexto(String texto) {
         String sinTildes = Normalizer.normalize(texto, Normalizer.Form.NFD);
