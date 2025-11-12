@@ -7,7 +7,6 @@ package ui;
 import core.Documento;
 import data.CategoriaDao;
 import data.DocumentoDao;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**

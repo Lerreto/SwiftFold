@@ -302,6 +302,47 @@ public class DocumentoDao {
         return null; 
     }
     
+    // Cosas extras porque si
+    
+    public int obtenerNumeroDocumentos() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM documentos";
+
+        try (Connection cn = new Db().establecerConexion();
+             PreparedStatement ps = cn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);  // Retorna el número total de documentos
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener el número de documentos: " + e.getMessage(), e);
+        }
+
+        return 0; // En caso de error o no haber documentos
+    }
+
+    
+    public int obtenerNumeroDocumentosPorUsuario() throws SQLException {
+        String correoUsuario = SesionSingleton.getInstance().getUsuarioLogueado().getEmail(); 
+        String sql = "SELECT COUNT(*) FROM documentos WHERE creador_email = ?";
+
+        try (Connection cn = new Db().establecerConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setString(1, correoUsuario); 
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);  
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener el número de documentos por usuario: " + e.getMessage(), e);
+        }
+
+        return 0;
+    }
+
     
     // --- utilidades cortas ---
     private static String nz(String s) { return s == null ? "" : s; }

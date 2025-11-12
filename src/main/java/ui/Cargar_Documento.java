@@ -6,12 +6,17 @@ package ui;
 
 // LIBRERIAS UTILIZADAS
 
+import core.RolSecretario;
+import core.Usuario;
+import core.UtilidadesDeArchivos;
 import data.CategoriaDao;
 import java.awt.Color;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 
 import java.io.File;
+import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -43,6 +48,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         JTextDescripcion.setForeground(Color.GRAY);
         
     }
+    
     
   
     
@@ -491,7 +497,8 @@ public class Cargar_Documento extends javax.swing.JFrame {
         this.dispose();
 
         // Abrir la ventana de gestor de documentos
-        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
+        Gestor_De_Documentos ventanaGestorDeDocumentos;
+        ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
         ventanaGestorDeDocumentos.setLocationRelativeTo(null);
         ventanaGestorDeDocumentos.setVisible(true);
     }//GEN-LAST:event_JBottomCancelarMouseClicked

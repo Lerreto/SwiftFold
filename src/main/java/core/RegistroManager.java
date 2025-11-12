@@ -183,6 +183,7 @@ public class RegistroManager {
     private Rol crearRolDesdeNombre(String nombreRol) {
         nombreRol = nombreRol.toLowerCase();
         return switch (nombreRol) {
+            case "rolciudadano" -> new RolCiudadano();
             case "roladministrador" -> new RolAdministrador();
             case "rolfuncionario" -> new RolFuncionario();
             case "rolsecretario" -> new RolSecretario();

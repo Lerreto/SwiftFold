@@ -23,6 +23,9 @@ public class Documento {
     private String fecha_actualizacion;
 
     // --- Getters/Setters mínimos usados por el DAO ---
+    
+    public Boolean esPublico() { return "publico".equals(this.tipoAcceso.toLowerCase()); }
+    
     public Long getIdDocumento() { return idDocumento; }
     public void setIdDocumento(long v) { this.idDocumento = v; }
 

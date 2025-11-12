@@ -4,9 +4,12 @@
  */
 package core;
 
+import app.SesionSingleton;
 import java.io.*;
 import java.util.*;
 import java.nio.charset.StandardCharsets;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -34,7 +37,6 @@ public class UtilidadesDeArchivos {
                 new OutputStreamWriter(new FileOutputStream(ARCHIVO_USUARIOS), StandardCharsets.UTF_8))) {
 
             // Encabezado opcional
-            writer.write("nombre,apellido,email,telefono,departamento,municipio,dependencia,cargo,hashContrasena,rol");
             writer.newLine();
 
             for (Usuario u : usuarios) {
@@ -158,4 +160,61 @@ public class UtilidadesDeArchivos {
                 return new RolCiudadano(); // rol por defecto
         }
     }
+    
+     /**
+     * Quita las comillas y desescapa caracteres al leer desde CSV.
+     */
+    
+    public void crearTablaUsuarios(JTable jTableUsuarios) {
+        List<Usuario> listaUsuarios = cargarUsuarios(); 
+
+        String[] columnas = {"Nombre y Apellido", "Email", "Departamento", "Municipio", "Rol"};
+
+        // Inicializar la lista de datos con un tamaño máximo
+        List<Object[]> datosList = new ArrayList<>();
+
+        // Iterar sobre los usuarios y llenar los datos
+        for (Usuario usuario : listaUsuarios) {
+            // Verificar si el usuario no es el mismo que el usuario logueado
+            if (!usuario.getEmail().equals(SesionSingleton.getInstance().getUsuarioLogueado().getEmail())) {
+                Object[] datos = new Object[5];
+                datos[0] = usuario.getNombre() + " " + usuario.getApellido();
+                datos[1] = usuario.getEmail(); 
+                datos[2] = usuario.getDepartamento(); 
+                datos[3] = usuario.getMunicipio(); 
+                datos[4] = usuario.getRol().getClass().getSimpleName(); 
+                datosList.add(datos);
+            }
+        }
+
+        // Convertir la lista a un arreglo de objetos
+        Object[][] datos = datosList.toArray(new Object[0][0]);
+
+        // Crear el modelo de la tabla con los datos y las columnas
+        DefaultTableModel model = new DefaultTableModel(datos, columnas);
+
+        // Asignar el modelo de la tabla al JTable
+        jTableUsuarios.setModel(model);
+    }
+
+
+    
+    public void eliminarUsuario(String email) {
+
+    }
+
+    
+    
+    public void modificarUsuario(String email, String nuevoDepartamento, String nuevoMunicipio, String nuevaDependencia, String nuevoCargo, String nuevoRol) {
+
+    }
+    
+    
+    public void modificarUsuario(String email, String nuevoNombre, String nuevoApellido, String nuevaDependencia, String nuevaContraseña) {
+
+    }
+
+
+
+    
 }

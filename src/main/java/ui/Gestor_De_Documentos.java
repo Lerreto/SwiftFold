@@ -8,6 +8,7 @@ import app.SesionSingleton;
 import core.Usuario;
 import data.DocumentoDao;
 import java.awt.Color;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -19,6 +20,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Gestor_De_Documentos.class.getName());
     private String idSeleccionado;  
     public Usuario usuario = SesionSingleton.getInstance().getUsuarioLogueado();
+    
 
     /**
      * Creates new form Gestor_De_Documentos
@@ -27,6 +29,10 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
      public Gestor_De_Documentos(String nombre) {
             
         initComponents();
+        establecerEstadisticas();
+        
+        
+        
         new DocumentoDao().listar5Cols(this.TablaDocumentos, nombre);
         
         JLabelNombreUsuario.setText(usuario.getNombre() + " " + usuario.getApellido());
@@ -65,7 +71,23 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         });
     }
     
-    
+     
+    public void establecerEstadisticas() {
+        try {
+            int totalDocumentos = new DocumentoDao().obtenerNumeroDocumentos();
+            int documentosPorUsuario = new DocumentoDao().obtenerNumeroDocumentosPorUsuario();
+
+            System.out.println("Total de documentos: " + totalDocumentos);
+            System.out.println("Documentos por usuario: " + documentosPorUsuario);
+
+            TextIntDocumentos.setText(Integer.toString(totalDocumentos));
+            TextDocumentosUsuario.setText(Integer.toString(documentosPorUsuario));
+        } catch (Exception e) {
+            System.out.println("Error en la carga: " + e.getMessage());
+        }
+    }
+
+     
     private void eliminarDocumento(String idDocumento) {
         try {
 
@@ -73,7 +95,6 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
             if (eliminado) {
                 JOptionPane.showMessageDialog(this, "Documento eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
                 new DocumentoDao().listar5Cols(this.TablaDocumentos, ""); 
             } else {
                 JOptionPane.showMessageDialog(this, "Error al eliminar el documento.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -129,12 +150,12 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        TextIntDocumentos = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
+        TextDocumentosUsuario = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -334,6 +355,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             }
         });
 
+        JButtonBuscar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButtonBuscar.setText("Buscar");
         JButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -341,6 +363,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             }
         });
 
+        JButtomEditar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButtomEditar.setText("Editar");
         JButtomEditar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -353,6 +376,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             }
         });
 
+        JButtonEliminar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButtonEliminar.setText("Eliminar");
         JButtonEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -365,6 +389,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             }
         });
 
+        JButtonExportar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButtonExportar.setText("Exportar");
 
         javax.swing.GroupLayout PanelOpcionesDocumentosLayout = new javax.swing.GroupLayout(PanelOpcionesDocumentos);
@@ -376,7 +401,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
                 .addComponent(JTextBusquedad, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
                 .addComponent(JButtomEditar)
                 .addGap(12, 12, 12)
                 .addComponent(JButtonEliminar)
@@ -412,30 +437,30 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(204, 255, 204));
 
-        jLabel3.setBackground(new java.awt.Color(73, 213, 89));
-        jLabel3.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(51, 102, 0));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("48");
+        TextIntDocumentos.setBackground(new java.awt.Color(73, 213, 89));
+        TextIntDocumentos.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
+        TextIntDocumentos.setForeground(new java.awt.Color(51, 102, 0));
+        TextIntDocumentos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TextIntDocumentos.setText("48");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+            .addComponent(TextIntDocumentos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+            .addComponent(TextIntDocumentos, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
         );
 
         jLabel7.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("MIS");
+        jLabel7.setText("DOCUMENTOS");
 
         jLabel8.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("DOCUMENTOS");
+        jLabel8.setText("TOTALES");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -467,30 +492,30 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         jPanel7.setBackground(new java.awt.Color(204, 255, 204));
 
-        jLabel5.setBackground(new java.awt.Color(73, 213, 89));
-        jLabel5.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(51, 102, 0));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("48");
+        TextDocumentosUsuario.setBackground(new java.awt.Color(73, 213, 89));
+        TextDocumentosUsuario.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
+        TextDocumentosUsuario.setForeground(new java.awt.Color(51, 102, 0));
+        TextDocumentosUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TextDocumentosUsuario.setText("48");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+            .addComponent(TextDocumentosUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+            .addComponent(TextDocumentosUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
         );
 
         jLabel10.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("TOTALES");
+        jLabel10.setText("DOCUMENTOS");
 
         jLabel9.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("DOCUMENTOS");
+        jLabel9.setText("MIS");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -671,6 +696,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         JPanelAjustes.setBackground(new java.awt.Color(255, 251, 248));
         JPanelAjustes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JPanelAjustesMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 JPanelAjustesMouseEntered(evt);
             }
@@ -824,11 +852,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     }//GEN-LAST:event_JPanelCargarDocumentoMouseClicked
 
     private void JPanelUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelUsuariosMouseClicked
-        // Cerrar login
         this.dispose();
 
-        // Abrir la ventana de gestor de documentos
-        Ajustes_Usuario ventanaGestorDeUsuario = new Ajustes_Usuario();
+        Gesto_De_Usuarios ventanaGestorDeUsuario = new Gesto_De_Usuarios();
         ventanaGestorDeUsuario.setLocationRelativeTo(null);
         ventanaGestorDeUsuario.setVisible(true);
     }//GEN-LAST:event_JPanelUsuariosMouseClicked
@@ -921,6 +947,13 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         ventanaLogin.setVisible(true);
     }//GEN-LAST:event_IconoMouseClicked
 
+    private void JPanelAjustesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelAjustesMouseClicked
+        this.dispose();
+        Ajustes_Usuario ajustesUSuarioPropio = new Ajustes_Usuario();
+        ajustesUSuarioPropio.setLocationRelativeTo(null);
+        ajustesUSuarioPropio.setVisible(true);
+    }//GEN-LAST:event_JPanelAjustesMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -979,6 +1012,8 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private javax.swing.JLabel TextAjustes;
     private javax.swing.JLabel TextCargar;
     private javax.swing.JLabel TextDocumentos;
+    private javax.swing.JLabel TextDocumentosUsuario;
+    private javax.swing.JLabel TextIntDocumentos;
     private javax.swing.JLabel TextSwiftFold;
     private javax.swing.JLabel TextUsuarios;
     private javax.swing.JLabel TituloGrande;
@@ -986,9 +1021,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
