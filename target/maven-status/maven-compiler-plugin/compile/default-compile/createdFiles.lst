@@ -7,6 +7,7 @@ ui\Cargar_Documento$9.class
 ui\Gestor_De_Documentos$3.class
 ui\Registrarse$18.class
 ui\Gesto_De_Usuarios$4.class
+data\CategoriaDao$1.class
 ui\Ajustes_Usuario.class
 ui\Ajustes_Usuario_Fuera$3.class
 core\RolAdministrador.class
@@ -25,9 +26,11 @@ ui\Ajustes_Usuario$2.class
 ui\Registrarse$20.class
 ui\Gestor_De_Documentos$9.class
 ui\Registrarse$12.class
+ui\Gestor_De_Documentos$16.class
 data\Metadatos.class
 ui\Gestor_De_Documentos$6.class
 data\DocumentoDao.class
+ui\Ver_Documento.class
 ui\Ajustes_Usuario$5.class
 ui\Registrarse$8.class
 ui\Cargar_Documento$7.class
@@ -35,7 +38,6 @@ ui\Ajustes_Usuario_Fuera$4.class
 ui\Modificar_Documento.class
 ui\Registrarse$4.class
 ui\Login$7.class
-ui\Ajustes_Usuario$15.class
 ui\Gestor_De_Documentos$8.class
 core\RegistroManager.class
 ui\Registrarse$23.class
@@ -52,12 +54,12 @@ ui\Ajustes_Usuario_Fuera$5.class
 ui\Ajustes_Usuario$4.class
 ui\Gesto_De_Usuarios$6.class
 ui\Login$1.class
+core\EnviadorCorreos$1.class
 ui\Cargar_Documento.class
 ui\Registrarse$17.class
 ui\Registrarse$10.class
 ui\Gestor_De_Documentos$11.class
 ui\Registrarse$22.class
-core\Categoria.class
 ui\Ajustes_Usuario$14.class
 ui\Modificar_Documento$1.class
 ui\Registrarse$3.class
@@ -68,8 +70,10 @@ ui\Login$2.class
 ui\Ajustes_Usuario$13.class
 ui\Cargar_Documento$2.class
 ui\Registrarse$9.class
+core\EnviadorCorreos.class
 ui\Registrarse$6.class
 ui\Cargar_Documento$5.class
+ui\Ver_Documento$1.class
 core\Documento.class
 ui\Ajustes_Usuario$3.class
 core\RolFuncionario.class
@@ -78,6 +82,7 @@ ui\Registrarse$11.class
 ui\Login$5.class
 ui\Ajustes_Usuario$6.class
 ui\Cargar_Documento$8.class
+ui\Gestor_De_Documentos$15.class
 ui\Gestor_De_Documentos.class
 ui\Registrarse$21.class
 ui\Login$8.class
@@ -86,7 +91,6 @@ ui\Registrarse$24.class
 data\Metadatos$Info.class
 ui\Gestor_De_Documentos$2.class
 ui\Registrarse$19.class
-ui\Ajustes_Usuario$16.class
 ui\Ajustes_Usuario$8.class
 ui\Ajustes_Usuario_Fuera$7.class
 data\Db.class
@@ -105,7 +109,6 @@ core\Usuario.class
 ui\Gestor_De_Documentos$5.class
 ui\Login$3.class
 data\DocumentoDao$1.class
-ui\Ajustes_Usuario$18.class
 ui\Cargar_Documento$3.class
 ui\Registrarse$14.class
 data\CategoriaDao.class
@@ -118,6 +121,5 @@ ui\Ajustes_Usuario$7.class
 ui\Login$4.class
 ui\Ajustes_Usuario_Fuera$2.class
 ui\Modificar_Documento$4.class
-ui\Ajustes_Usuario$17.class
 ui\Gestor_De_Documentos$14.class
 ui\Registrarse$25.class

@@ -5,7 +5,6 @@ import core.RegistroManager;
 import core.Usuario;
 import core.ValidationResult;
 import java.awt.Color;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
@@ -301,7 +300,7 @@ public class Login extends javax.swing.JFrame {
             this.dispose();
 
             Gestor_De_Documentos ventanaGestorDeDocumentos;
-            ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
+            ventanaGestorDeDocumentos = new Gestor_De_Documentos("", 0L);
             ventanaGestorDeDocumentos.setLocationRelativeTo(null);
             ventanaGestorDeDocumentos.setVisible(true);
 

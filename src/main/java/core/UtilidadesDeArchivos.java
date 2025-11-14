@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package core;
 
 import app.SesionSingleton;
@@ -11,16 +7,6 @@ import java.nio.charset.StandardCharsets;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author adria
- */
-
-/**
- * Esta clase se encarga de utilidades para manejar lectura y escritura
- * de archivos relacionados con usuarios.
- * Promueve la optimizacion del codigo.
- */
 
 public class UtilidadesDeArchivos {
 
@@ -49,8 +35,8 @@ public class UtilidadesDeArchivos {
                         escapar(u.getMunicipio()),
                         escapar(u.getDependencia()),
                         escapar(u.getCargo()),
-                        escapar(u.getHashContrasena()),
-                        escapar(u.getRol().getClass().getSimpleName())
+                        escapar(u.getRol().getClass().getSimpleName()),
+                        escapar(u.getHashContrasena())
                 ));
                 writer.newLine();
             }
@@ -98,8 +84,8 @@ public class UtilidadesDeArchivos {
                 String municipio = desescapar(partes[5]);
                 String dependencia = desescapar(partes[6]);
                 String cargo = desescapar(partes[7]);
-                String hashContrasena = desescapar(partes[8]);
-                String rolNombre = desescapar(partes[9]);
+                String hashContrasena = desescapar(partes[9]);
+                String rolNombre = desescapar(partes[8]);
 
                 Rol rol = crearRolDesdeNombre(rolNombre);
 
@@ -196,25 +182,28 @@ public class UtilidadesDeArchivos {
         // Asignar el modelo de la tabla al JTable
         jTableUsuarios.setModel(model);
     }
-
-
     
-    public void eliminarUsuario(String email) {
+    
+    public static Usuario buscarUsuarioPorEmail(String emailBuscado) {
+        if (emailBuscado == null || emailBuscado.isBlank()) {
+            return null;
+        }
 
+        // Normalizar un poquito el correo
+        String normalizado = emailBuscado.trim().toLowerCase();
+
+        // Reutilizamos el método que ya tienes
+        List<Usuario> usuarios = cargarUsuarios();
+
+        for (Usuario u : usuarios) {
+            if (u.getEmail() != null && u.getEmail().trim().toLowerCase().equals(normalizado)) {
+                return u;  // lo encontramos
+            }
+        }
+
+        // Si no lo encuentra, devuelve null
+        return null;
     }
 
-    
-    
-    public void modificarUsuario(String email, String nuevoDepartamento, String nuevoMunicipio, String nuevaDependencia, String nuevoCargo, String nuevoRol) {
 
-    }
-    
-    
-    public void modificarUsuario(String email, String nuevoNombre, String nuevoApellido, String nuevaDependencia, String nuevaContraseña) {
-
-    }
-
-
-
-    
 }

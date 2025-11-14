@@ -62,7 +62,8 @@ public class EnviadorCorreos {
     public void enviarCorreosAUsuariosConRoles(String mensaje, Documento d) {
         List<Usuario> listaUsuarios = new UtilidadesDeArchivos().cargarUsuarios(); 
 
-        boolean esPublico = d.esPublico(); 
+        boolean esPublico = d.esPublico();
+        String asunto = "Se subió un nuevo archivo";
 
         for (Usuario usuario : listaUsuarios) {
             if (esPublico) {
@@ -71,7 +72,7 @@ public class EnviadorCorreos {
                     usuario.getRol() instanceof RolSuperAdministrador) {
 
                     String destinatario = usuario.getEmail();
-                    String asunto = "Se subió un nuevo archivo";
+
                     enviarCorreo(destinatario, asunto, mensaje); // Enviar el correo
                 }
             } else {
@@ -82,7 +83,6 @@ public class EnviadorCorreos {
                     usuario.getRol() instanceof RolSuperAdministrador) {
 
                     String destinatario = usuario.getEmail();
-                    String asunto = "Se subió un nuevo archivo";
                     enviarCorreo(destinatario, asunto, mensaje); // Enviar el correo
                 }
             }

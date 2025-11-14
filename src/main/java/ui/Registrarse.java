@@ -7,8 +7,6 @@ import core.Usuario;
 import core.ValidationResult;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class Registrarse extends javax.swing.JFrame {

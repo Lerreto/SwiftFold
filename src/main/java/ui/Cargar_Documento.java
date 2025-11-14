@@ -1,22 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package ui;
 
 // LIBRERIAS UTILIZADAS
 
-import core.RolSecretario;
-import core.Usuario;
-import core.UtilidadesDeArchivos;
+
 import data.CategoriaDao;
 import java.awt.Color;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
 
 import java.io.File;
-import java.sql.SQLException;
-import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -169,6 +161,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         BarraHorizontal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 251, 248));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -183,16 +176,16 @@ public class Cargar_Documento extends javax.swing.JFrame {
         DescripcionCargar.setText("Guarda y crea un nuevo documento para guardarlo en el archivador");
         jPanel1.add(DescripcionCargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 490, -1));
 
-        JFechaDisposicionFinal.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        JFechaDisposicionFinal.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         jPanel1.add(JFechaDisposicionFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, 370, 40));
 
-        JComboBoxCategorias.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        JComboBoxCategorias.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         jPanel1.add(JComboBoxCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 370, 40));
 
-        JComboBoxTipoAcceso.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        JComboBoxTipoAcceso.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         jPanel1.add(JComboBoxTipoAcceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 370, 40));
 
-        JTextCodigo.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        JTextCodigo.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         JTextCodigo.setText("jTextField1");
         JTextCodigo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -202,7 +195,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         jPanel1.add(JTextCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 370, 40));
 
         JTextDescripcion.setColumns(20);
-        JTextDescripcion.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        JTextDescripcion.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         JTextDescripcion.setRows(5);
         JTextDescripcion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -283,7 +276,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         });
         jPanel1.add(JBotonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 500, -1, 40));
 
-        JTextTituloDocumento1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        JTextTituloDocumento1.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         JTextTituloDocumento1.setText("jTextField1");
         JTextTituloDocumento1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -292,7 +285,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         });
         jPanel1.add(JTextTituloDocumento1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 370, 40));
 
-        JLabelArchivoRuta.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        JLabelArchivoRuta.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         JLabelArchivoRuta.setText("Ingrese el archivo");
         JLabelArchivoRuta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -480,7 +473,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
             this.dispose();
 
             // Abrir la ventana de gestor de documentos
-            Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
+            Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("", 0L);
             ventanaGestorDeDocumentos.setLocationRelativeTo(null);
             ventanaGestorDeDocumentos.setVisible(true);
 
@@ -498,7 +491,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
 
         // Abrir la ventana de gestor de documentos
         Gestor_De_Documentos ventanaGestorDeDocumentos;
-        ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
+        ventanaGestorDeDocumentos = new Gestor_De_Documentos("", 0L);
         ventanaGestorDeDocumentos.setLocationRelativeTo(null);
         ventanaGestorDeDocumentos.setVisible(true);
     }//GEN-LAST:event_JBottomCancelarMouseClicked

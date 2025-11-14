@@ -1,39 +1,35 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package ui;
+
 
 import app.SesionSingleton;
 import core.Usuario;
+import data.CategoriaDao;
 import data.DocumentoDao;
 import java.awt.Color;
-
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Juan Pablo
- */
+
 public class Gestor_De_Documentos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Gestor_De_Documentos.class.getName());
-    private String idSeleccionado;  
+    private String idSeleccionado;
+    private String idSeleccionadoCategoria;
     public Usuario usuario = SesionSingleton.getInstance().getUsuarioLogueado();
+    private Long categoriaSelect;
     
 
     /**
      * Creates new form Gestor_De_Documentos
      */
     
-     public Gestor_De_Documentos(String nombre) {
+     public Gestor_De_Documentos(String nombre, Long Idcategoria) {
             
         initComponents();
         establecerEstadisticas();
         
         
-        
-        new DocumentoDao().listar5Cols(this.TablaDocumentos, nombre);
+        new DocumentoDao().listar5Cols(this.TablaDocumentos, nombre, Idcategoria);
+        new CategoriaDao().listarCategorias(this.TablaCategorias);
         
         JLabelNombreUsuario.setText(usuario.getNombre() + " " + usuario.getApellido());
         JLabelRolCargo.setText( usuario.getStringRol() + " - " + usuario.getCargo() + " - " + usuario.getDependencia());
@@ -69,8 +65,25 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "No tienes acceso para eliminar este documento.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
             }
         });
+        
+        
+        JButtonVer.addActionListener(e -> {
+                          
+            if (idSeleccionado == null) {
+                JOptionPane.showMessageDialog(this, "Selecciona un documento.", "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            } 
+            
+            this.dispose();
+            verDocumento(idSeleccionado);
+
+        });
+        
     }
     
+ 
+     
      
     public void establecerEstadisticas() {
         try {
@@ -87,6 +100,17 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         }
     }
 
+    
+    private void verDocumento(String idDocumento){
+        try {
+            Ver_Documento verDocumentico = new Ver_Documento(idDocumento);
+            verDocumentico.setLocationRelativeTo(null);
+            verDocumentico.setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Hubo un error al abrir la ventana de ver documento: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
      
     private void eliminarDocumento(String idDocumento) {
         try {
@@ -95,7 +119,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
             if (eliminado) {
                 JOptionPane.showMessageDialog(this, "Documento eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                new DocumentoDao().listar5Cols(this.TablaDocumentos, ""); 
+                new DocumentoDao().listar5Cols(this.TablaDocumentos, "", 0L); 
             } else {
                 JOptionPane.showMessageDialog(this, "Error al eliminar el documento.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -145,7 +169,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JButtonBuscar = new javax.swing.JButton();
         JButtomEditar = new javax.swing.JButton();
         JButtonEliminar = new javax.swing.JButton();
-        JButtonExportar = new javax.swing.JButton();
+        JButtonVer = new javax.swing.JButton();
         PanelEstadisticas = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -168,7 +192,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         LineaHorizontal02 = new javax.swing.JPanel();
         TItuloDependencia = new javax.swing.JLabel();
         JScrollDependencias = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        TablaCategorias = new javax.swing.JTable();
         JPanelAjustes = new javax.swing.JPanel();
         TextAjustes = new javax.swing.JLabel();
         ImgAjustes = new javax.swing.JLabel();
@@ -183,6 +207,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         ImgUsuarios = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         Backgraund.setBackground(new java.awt.Color(255, 251, 248));
         Backgraund.setPreferredSize(new java.awt.Dimension(1400, 700));
@@ -389,8 +414,13 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             }
         });
 
-        JButtonExportar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
-        JButtonExportar.setText("Exportar");
+        JButtonVer.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JButtonVer.setText("Ver");
+        JButtonVer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JButtonVerActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelOpcionesDocumentosLayout = new javax.swing.GroupLayout(PanelOpcionesDocumentos);
         PanelOpcionesDocumentos.setLayout(PanelOpcionesDocumentosLayout);
@@ -401,12 +431,12 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
                 .addComponent(JTextBusquedad, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
                 .addComponent(JButtomEditar)
                 .addGap(12, 12, 12)
                 .addComponent(JButtonEliminar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(JButtonExportar)
+                .addComponent(JButtonVer)
                 .addGap(28, 28, 28))
         );
         PanelOpcionesDocumentosLayout.setVerticalGroup(
@@ -418,7 +448,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
                         .addGap(1, 1, 1)
                         .addComponent(JButtonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
                     .addComponent(JTextBusquedad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JButtonExportar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(JButtonVer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                     .addComponent(JButtonEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(JButtomEditar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14))
@@ -679,7 +709,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         TItuloDependencia.setText("POR DEPENDENCIA");
         Backgraund.add(TItuloDependencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        TablaCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -690,7 +720,12 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
             }
         ));
-        JScrollDependencias.setViewportView(jTable2);
+        TablaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaCategoriasMouseClicked(evt);
+            }
+        });
+        JScrollDependencias.setViewportView(TablaCategorias);
 
         Backgraund.add(JScrollDependencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 220, 340));
 
@@ -823,7 +858,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         this.dispose();
 
-        Gestor_De_Documentos ventanaGestor = new Gestor_De_Documentos(textoBusqueda);
+        Gestor_De_Documentos ventanaGestor = new Gestor_De_Documentos(textoBusqueda, categoriaSelect);
         ventanaGestor.setLocationRelativeTo(null);
         ventanaGestor.setVisible(true);
     }//GEN-LAST:event_JButtonBuscarActionPerformed
@@ -837,18 +872,18 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     }//GEN-LAST:event_JButtonEliminarActionPerformed
 
     private void JPanelCargarDocumentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelCargarDocumentoMouseClicked
-            if (usuario.getRol().tieneAccesoSubir()){
-                
-                this.dispose();
+        if (usuario.getRol().tieneAccesoSubir()){
 
-                // Abrir la ventana de gestor de documentos
-                Cargar_Documento ventanaCargarDocumento= new Cargar_Documento();
-                ventanaCargarDocumento.setLocationRelativeTo(null);
-                ventanaCargarDocumento.setVisible(true);
+            this.dispose();
 
-             } else {
-                JOptionPane.showMessageDialog(this, "No tienes acceso para eliminar este documento.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
-            }
+            // Abrir la ventana de gestor de documentos
+            Cargar_Documento ventanaCargarDocumento= new Cargar_Documento();
+            ventanaCargarDocumento.setLocationRelativeTo(null);
+            ventanaCargarDocumento.setVisible(true);
+
+         } else {
+            JOptionPane.showMessageDialog(this, "No tienes acceso para eliminar este documento.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JPanelCargarDocumentoMouseClicked
 
     private void JPanelUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelUsuariosMouseClicked
@@ -864,7 +899,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         this.dispose();
 
         // Abrir la ventana de gestor de documentos
-        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
+        Gestor_De_Documentos ventanaGestorDeDocumentos = new Gestor_De_Documentos("", 0L);
         ventanaGestorDeDocumentos.setLocationRelativeTo(null);
         ventanaGestorDeDocumentos.setVisible(true);
     }//GEN-LAST:event_JPanelMisDocumentosMouseClicked
@@ -954,6 +989,25 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         ajustesUSuarioPropio.setVisible(true);
     }//GEN-LAST:event_JPanelAjustesMouseClicked
 
+    private void JButtonVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtonVerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JButtonVerActionPerformed
+
+    private void TablaCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaCategoriasMouseClicked
+        int row = TablaCategorias.getSelectedRow();
+        if (row != -1) {
+            idSeleccionadoCategoria = String.valueOf(TablaCategorias.getValueAt(row, 0));
+            
+            this.dispose();
+            Gestor_De_Documentos gestorDocumentos = new Gestor_De_Documentos("", Long.valueOf(idSeleccionadoCategoria));
+            gestorDocumentos.setLocationRelativeTo(null);
+            gestorDocumentos.setVisible(true);
+            
+        } else {
+            idSeleccionadoCategoria = null;
+        }
+    }//GEN-LAST:event_TablaCategoriasMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -976,7 +1030,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Gestor_De_Documentos("").setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Gestor_De_Documentos("", 0L).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -993,7 +1047,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private javax.swing.JButton JButtomEditar;
     private javax.swing.JButton JButtonBuscar;
     private javax.swing.JButton JButtonEliminar;
-    private javax.swing.JButton JButtonExportar;
+    private javax.swing.JButton JButtonVer;
     private javax.swing.JLabel JLabelNombreUsuario;
     private javax.swing.JLabel JLabelRolCargo;
     private javax.swing.JPanel JPanelAjustes;
@@ -1008,6 +1062,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private javax.swing.JPanel PanelEstadisticas;
     private javax.swing.JPanel PanelOpcionesDocumentos;
     private javax.swing.JLabel TItuloDependencia;
+    private javax.swing.JTable TablaCategorias;
     private javax.swing.JTable TablaDocumentos;
     private javax.swing.JLabel TextAjustes;
     private javax.swing.JLabel TextCargar;
@@ -1034,6 +1089,5 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }

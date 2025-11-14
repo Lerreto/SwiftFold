@@ -16,10 +16,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 
-/**
- *
- * @author Juan Pablo
- */
 public class DocumentoDao {
     
     
@@ -42,50 +38,67 @@ public class DocumentoDao {
     
     
     // ACCION DE LEER PARA LA PRIMERA TABLA //
-    
-    
-    public void listar5Cols(JTable tabla, String nombreFiltro) {
         
+    public void listar5Cols(JTable tabla, String nombreFiltro, Long idCategoriaFiltro) {
+
         Usuario usuario = SesionSingleton.getInstance().getUsuarioLogueado();
-        
+
         DefaultTableModel m = new DefaultTableModel(null, COLS) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
 
-        String sqlFiltrado = 
+        String sql =
             "SELECT d.id_documento, d.file_type AS tipo, d.nombre, d.descripcion, d.file_size_bytes, " +
             "       COALESCE(d.creador_nombre, d.creador_email) AS creador, d.codigo, " +
             "       COALESCE(c.nombre,'(sin categoría)') AS categoria, " +
-            "       d.creado_en, d.departamento, d.municipio, d.tipo_acceso " +
+            "       d.creado_en, d.departamento, d.municipio, d.tipo_acceso, d.id_categoria " +
             "FROM documentos d " +
-            "LEFT JOIN categorias c ON c.id_categoria = d.id_categoria ";
+            "LEFT JOIN categorias c ON c.id_categoria = d.id_categoria " +
+            "WHERE 1=1 ";
 
+        // -----------------------------
+        // FILTRO POR NOMBRE (OPCIONAL)
+        // -----------------------------
         if (nombreFiltro != null && !nombreFiltro.trim().isEmpty()) {
-            sqlFiltrado += "WHERE LOWER(d.nombre) LIKE LOWER(?) ";
+            sql += "AND LOWER(d.nombre) LIKE LOWER(?) ";
         }
 
+        // ---------------------------------------------
+        // FILTRO POR CATEGORÍA:
+        // 0 → mostrar todas
+        // >0 → filtrar
+        // ---------------------------------------------
+        if (idCategoriaFiltro != null && idCategoriaFiltro > 0) {
+            sql += "AND d.id_categoria = ? ";
+        }
 
-        sqlFiltrado += "ORDER BY d.creado_en DESC";
+        sql += "ORDER BY d.creado_en DESC";
 
         try (Connection cn = new Db().establecerConexion();
-             PreparedStatement st = cn != null ? cn.prepareStatement(sqlFiltrado) : null) {
+             PreparedStatement st = (cn != null ? cn.prepareStatement(sql) : null)) {
 
-            if (st == null) { 
-                tabla.setModel(m); 
-                return; 
+            if (st == null) {
+                tabla.setModel(m);
+                return;
             }
 
-            // Si hay filtro, establecer el parámetro para la búsqueda
+            int idx = 1;
+
+            // Param nombre
             if (nombreFiltro != null && !nombreFiltro.trim().isEmpty()) {
-                String filtro = "%" + nombreFiltro + "%";
-                st.setString(1, filtro);
+                st.setString(idx++, "%" + nombreFiltro + "%");
             }
 
-            System.out.println("Consulta SQL: " + st.toString()); // Mostrar la consulta SQL para depuración
+            // Param categoría (solo si > 0)
+            if (idCategoriaFiltro != null && idCategoriaFiltro > 0) {
+                st.setLong(idx++, idCategoriaFiltro);
+            }
 
+            System.out.println("SQL Ejecutada: " + st.toString());
 
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
+
                     String idDocumento = rs.getString("id_documento");
                     String tipo   = nz(rs.getString("tipo"));
                     String nombre = nz(rs.getString("nombre"));
@@ -93,31 +106,39 @@ public class DocumentoDao {
                     String peso   = human(rs.getLong("file_size_bytes"));
                     String creador= nz(rs.getString("creador"));
                     String codigo = nz(rs.getString("codigo"));
+
                     String documento = String.format(
-                        "%s — %s • %s • %s • %s", nombre, desc, peso, creador, codigo
+                            "%s — %s • %s • %s • %s",
+                            nombre, desc, peso, creador, codigo
                     );
+
                     String categoria = nz(rs.getString("categoria"));
                     String fecha = nz(rs.getString("creado_en"));
-                    if (fecha.length() > 16) fecha = fecha.substring(0,16);
+                    if (fecha.length() > 16) fecha = fecha.substring(0, 16);
+
                     String dep  = nz(rs.getString("departamento"));
                     String mun  = nz(rs.getString("municipio"));
                     String creadoUbic = String.format("%s — %s, %s", fecha, dep, mun);
                     String estado = nz(rs.getString("tipo_acceso"));
-                    
-                    Documento documentoTemporal = new Documento();
-                    documentoTemporal.setTipoAcceso(estado);
-                    documentoTemporal.setMunicipio(mun);
-                    
-                    if (usuario.getRol().tieneAccesoVer(documentoTemporal, usuario.getMunicipio())){
+
+                    Documento docTemp = new Documento();
+                    docTemp.setTipoAcceso(estado);
+                    docTemp.setMunicipio(mun);
+
+                    if (usuario.getRol().tieneAccesoVer(docTemp, usuario.getMunicipio())) {
                         m.addRow(new Object[]{ idDocumento, tipo, documento, categoria, creadoUbic, estado });
                     }
                 }
             }
+
         } catch (SQLException e) {
             System.err.println("[DocumentoDao] " + e.getMessage());
         }
-        tabla.setModel(m); 
+
+        tabla.setModel(m);
     }
+
+
 
   
     

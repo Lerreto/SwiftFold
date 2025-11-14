@@ -1,26 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package ui;
 
+
 import app.SesionSingleton;
+import core.RegistroManager;
 import core.Usuario;
 import core.UtilidadesDeArchivos;
 import static core.UtilidadesDeArchivos.cargarUsuarios;
 import static core.UtilidadesDeArchivos.guardarUsuarios;
-import java.sql.SQLException;
+import core.ValidationResult;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Juan Pablo
- */
+
 public class Gesto_De_Usuarios extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Gesto_De_Usuarios.class.getName());
-    private Usuario usuarioSeleccionado;  
+    private String emailSeleccionado;  
     public Usuario usuario = SesionSingleton.getInstance().getUsuarioLogueado();
 
     /**
@@ -36,16 +31,16 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         JLabelRolCargo.setText( usuario.getStringRol() + " - " + usuario.getCargo() + " - " + usuario.getDependencia());
         
         JButonEliminar.addActionListener(e -> {
-            if (usuarioSeleccionado != null) {
-                eliminarUsuario(usuarioSeleccionado.getEmail());
+            if (emailSeleccionado != null) {
+                eliminarUsuario(emailSeleccionado);
             } else {
                 JOptionPane.showMessageDialog(this, "Selecciona un usuario primero", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         JButonEditar.addActionListener(e -> {
-            if (usuarioSeleccionado != null) {
-                modificarUsuario(usuarioSeleccionado);
+            if (emailSeleccionado != null) {
+                modificarUsuario(emailSeleccionado);
             } else {
                 JOptionPane.showMessageDialog(this, "Selecciona un usuario primero", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -54,36 +49,57 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         
     }
      
-    private Usuario buscarUsuarioPorEmail(String email) {
-        List<Usuario> listaUsuarios = cargarUsuarios();
-        for (Usuario usuario : listaUsuarios) {
-            if (usuario.getEmail().equals(email)) {
-                return usuario;
-            }
-        }
-        return null;
-    }
     
     private void eliminarUsuario(String email) {
-        List<Usuario> listaUsuarios = cargarUsuarios();
+        if (email == null || email.isBlank()) {
+            JOptionPane.showMessageDialog(this,
+                    "No se recibió un email válido para eliminar.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        // Buscar y eliminar al usuario de la lista
-        Usuario usuarioAEliminar = buscarUsuarioPorEmail(email);
-        if (usuarioAEliminar != null) {
-            listaUsuarios.remove(usuarioAEliminar);  // Eliminar de la lista
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que deseas eliminar al usuario con email:\n" + email + "?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
+        );
 
-            // Actualizar el archivo CSV con la lista sin el usuario eliminado
-            guardarUsuarios(listaUsuarios);
+        if (opcion != JOptionPane.YES_OPTION) {
+            return; // canceló
+        }
 
-            JOptionPane.showMessageDialog(this, "Usuario eliminado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        RegistroManager manager = new RegistroManager("usuarios.csv");
+        ValidationResult resultado = manager.eliminarUsuario(email);
+
+        if (resultado.isSuccess()) {
+            JOptionPane.showMessageDialog(this,
+                    "Usuario eliminado con éxito",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            // Recargar la tabla de usuarios
+            new UtilidadesDeArchivos().crearTablaUsuarios(JTablaUsuarios);
+            emailSeleccionado = null; // limpiar selección
+
         } else {
-            JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+            // Puedes mostrar los mensajes de error que trae ValidationResult
+            StringBuilder sb = new StringBuilder();
+            for (String msg : resultado.getMessages()) {
+                sb.append(msg).append("\n");
+            }
+            JOptionPane.showMessageDialog(this,
+                    sb.toString(),
+                    "Error al eliminar usuario",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
+
     
-    private void modificarUsuario(Usuario usuario) {
+    private void modificarUsuario(String email) {
         this.dispose();
-        Ajustes_Usuario_Fuera ventanaModificacion = new Ajustes_Usuario_Fuera(usuario);
+        Ajustes_Usuario_Fuera ventanaModificacion = new Ajustes_Usuario_Fuera(email);
         ventanaModificacion.setLocationRelativeTo(null);
         ventanaModificacion.setVisible(true);
     }
@@ -154,6 +170,7 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         JButonEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         Backgraund.setBackground(new java.awt.Color(255, 251, 248));
         Backgraund.setPreferredSize(new java.awt.Dimension(1400, 700));
@@ -714,18 +731,18 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JPanelCargarDocumentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelCargarDocumentoMouseClicked
-            if (usuario.getRol().tieneAccesoSubir()){
-                
-                this.dispose();
+        if (usuario.getRol().tieneAccesoSubir()){
 
-                // Abrir la ventana de gestor de documentos
-                Cargar_Documento ventanaCargarDocumento= new Cargar_Documento();
-                ventanaCargarDocumento.setLocationRelativeTo(null);
-                ventanaCargarDocumento.setVisible(true);
+            this.dispose();
 
-             } else {
-                JOptionPane.showMessageDialog(this, "No tienes acceso para eliminar este documento.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
-            }
+            // Abrir la ventana de gestor de documentos
+            Cargar_Documento ventanaCargarDocumento= new Cargar_Documento();
+            ventanaCargarDocumento.setLocationRelativeTo(null);
+            ventanaCargarDocumento.setVisible(true);
+
+         } else {
+            JOptionPane.showMessageDialog(this, "No tienes acceso para eliminar este documento.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JPanelCargarDocumentoMouseClicked
 
     private void JPanelUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelUsuariosMouseClicked
@@ -744,7 +761,7 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
 
         // Abrir la ventana de gestor de documentos
         Gestor_De_Documentos ventanaGestorDeDocumentos;
-        ventanaGestorDeDocumentos = new Gestor_De_Documentos("");
+        ventanaGestorDeDocumentos = new Gestor_De_Documentos("", 0L);
         ventanaGestorDeDocumentos.setLocationRelativeTo(null);
         ventanaGestorDeDocumentos.setVisible(true);
     }//GEN-LAST:event_JPanelMisDocumentosMouseClicked
@@ -798,16 +815,10 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
     private void JTablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTablaUsuariosMouseClicked
         int row = JTablaUsuarios.getSelectedRow(); 
         if (row != -1) {
-            String emailSeleccionado = String.valueOf(JTablaUsuarios.getValueAt(row, 1));  
-            usuarioSeleccionado = buscarUsuarioPorEmail(emailSeleccionado); 
-
-            if (usuarioSeleccionado != null) {
-                System.out.println("Usuario seleccionado: " + usuarioSeleccionado.getEmail());
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró el usuario seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            emailSeleccionado = String.valueOf(JTablaUsuarios.getValueAt(row, 1));
+            System.out.println("Email seleccionado: " + emailSeleccionado);
         } else {
-            JOptionPane.showMessageDialog(this, "No se seleccionó ningún usuario", "Error", JOptionPane.ERROR_MESSAGE);
+            emailSeleccionado = null;  // por si acaso
         }
     }//GEN-LAST:event_JTablaUsuariosMouseClicked
 

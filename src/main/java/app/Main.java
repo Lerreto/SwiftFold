@@ -1,21 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package app;
 import com.formdev.flatlaf.FlatLightLaf;
-import core.Rol;
-import core.RolAdministrador;
-import core.RolCiudadano;
-import core.RolSecretario;
-import core.Usuario;
 import javax.swing.UIManager;
 import ui.*;
 
-/**
- *
- * @author Juan Pablo
- */
+
 public class Main {
     
     public static void main(String[] args) {

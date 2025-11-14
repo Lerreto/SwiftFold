@@ -1,16 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package core;
 import java.io.*;
 import java.util.*;
-import java.nio.file.*;
 
-/**
- *
- * @author adria
- */
 
 /**
  * Esta es la clase central que gestiona el registro y login de usuarios.
@@ -21,7 +12,7 @@ import java.nio.file.*;
  *
  * CSV en la raíz del proyecto: usuarios.csv
  * Formato CSV:
- *  nombre;apellido;email;telefono;departamento;municipio;dependencia;cargo;hash_contraseña;rol
+ *  nombre;apellido;email;telefono;departamento;municipio;dependencia;cargo;rol;hash_contraseña
  *
  * Validaciones realizadas:
  *  - nombre/apellido: letras y espacios (se permiten tildes; internalmente se normaliza)
@@ -191,6 +182,164 @@ public class RegistroManager {
             default -> new RolCiudadano();
         };
     }
+    
+    /*
+    Metodo para eliminar los usuarios tanto de las listas, como del archivo.
+    */
+    
+    public ValidationResult eliminarUsuario(String email) {
+    ValidationResult resultado = new ValidationResult();
+
+    if (email == null || email.isBlank()) {
+        resultado.addMessage("El email no puede estar vacío.");
+        return resultado;
+    }
+
+    Usuario usuario = mapaUsuariosPorEmail.get(email);
+    if (usuario == null) {
+        resultado.addMessage("No existe un usuario registrado con ese correo electrónico.");
+        return resultado;
+    }
+
+    // Eliminar de memoria
+    listaUsuarios.remove(usuario);
+    mapaUsuariosPorEmail.remove(email);
+
+    // Persistir cambios
+    guardarUsuariosEnArchivo();
+
+    resultado.setSuccess(true);
+    return resultado;
+    }
+    
+    /*
+    Metodo para modificar todos los campos del usuario (excepto la contraseña).
+    */
+    
+    public ValidationResult modificarUsuario(String email, String nuevoDepartamento, String nuevoMunicipio,
+                                         String nuevaDependencia, String nuevoRol, String nuevoCargo) {
+
+        ValidationResult resultado = new ValidationResult();
+
+        Usuario usuario = mapaUsuariosPorEmail.get(email);
+        if (usuario == null) {
+            resultado.addMessage("No existe un usuario con ese correo electrónico.");
+            return resultado;
+        }
+
+        // Validaciones básicas
+        if (nuevoDepartamento == null || nuevoDepartamento.isBlank()) {
+            resultado.addMessage("El nombre no puede estar vacío.");
+        }
+        if (nuevoMunicipio == null || nuevoMunicipio.isBlank()) {
+            resultado.addMessage("El apellido no puede estar vacío.");
+        }
+        if (nuevaDependencia == null || nuevaDependencia.isBlank()) {
+            resultado.addMessage("La dependencia no puede estar vacía.");
+        }
+        if (nuevoCargo == null || nuevoCargo.isBlank()) {
+            resultado.addMessage("El cargo no puede estar vacío.");
+        }
+
+        // Validación del nuevo rol 
+        if (nuevoRol != null && !nuevoRol.isBlank()) {
+
+            // Si el rol actual es diferente, se intenta cambiar
+            String rolActual = usuario.getRol().getClass().getSimpleName();
+
+            if (!nuevoRol.equalsIgnoreCase(rolActual)) {
+                Rol rolGenerado = crearRolDesdeNombre(nuevoRol);
+
+                if (rolGenerado == null) {
+                    resultado.addMessage("El rol indicado no es válido: " + nuevoRol);
+                } else {
+                    usuario.setRol(rolGenerado);
+                }
+            }
+        }
+
+        if (!resultado.isSuccess()) return resultado;
+
+        // Aplicar cambios
+        usuario.setDepartamento(nuevoDepartamento);
+        usuario.setMunicipio(nuevoMunicipio);
+        usuario.setDependencia(nuevaDependencia);
+        usuario.setCargo(nuevoCargo);
+
+        // Persistir cambios
+        guardarUsuariosEnArchivo();
+
+        resultado.setSuccess(true);
+        return resultado;
+    }
+
+    /*
+    Metodo para modificar los campos del usuario, incluyendo la contraseña. Se reciben dos parametros, uno de nueva contraseña, y otro de confirmarNuevaContraseña.
+    */
+    public ValidationResult modificarUsuario(String email, String nuevoNombre, String nuevoApellido,
+                                         String nuevoNumero, String nuevoCargo,
+                                         String nuevaContrasena, String confirmarNuevaContrasena) {
+
+        ValidationResult resultado = new ValidationResult();
+
+        Usuario usuario = mapaUsuariosPorEmail.get(email);
+        if (usuario == null) {
+            resultado.addMessage("No existe un usuario con ese correo electrónico.");
+            return resultado;
+        }
+
+        // Validaciones de campos normales
+        if (nuevoNombre == null || nuevoNombre.isBlank()) {
+            resultado.addMessage("El nombre no puede estar vacío.");
+        }
+        if (nuevoApellido == null || nuevoApellido.isBlank()) {
+            resultado.addMessage("El apellido no puede estar vacío.");
+        }
+        if (nuevoNumero == null || nuevoNumero.isBlank()) {
+            resultado.addMessage("El número de teléfono no puede estar vacío.");
+        }
+        if (nuevoCargo == null || nuevoCargo.isBlank()) {
+            resultado.addMessage("El cargo no puede estar vacío.");
+        }
+
+        // ---------------------------------------------------
+        // LÓGICA CLAVE: ¿se quiere cambiar la contraseña?
+        // ---------------------------------------------------
+        boolean quiereCambiarClave =
+                (nuevaContrasena != null && !nuevaContrasena.isBlank()) ||
+                (confirmarNuevaContrasena != null && !confirmarNuevaContrasena.isBlank());
+
+        if (quiereCambiarClave) {
+            // Validaciones de contraseña SOLO si quiere cambiarla
+            if (nuevaContrasena == null || nuevaContrasena.isBlank()) {
+                resultado.addMessage("La nueva contraseña no puede estar vacía.");
+            } else if (!nuevaContrasena.equals(confirmarNuevaContrasena)) {
+                resultado.addMessage("La confirmación de la contraseña no coincide.");
+            } else if (!Usuario.validarContrasena(nuevaContrasena)) {
+                resultado.addMessage("La nueva contraseña no cumple los requisitos mínimos.");
+            }
+        }
+
+        if (!resultado.isSuccess()) return resultado;
+
+        // Aplicar cambios básicos
+        usuario.setNombre(nuevoNombre);
+        usuario.setApellido(nuevoApellido);
+        usuario.setTelefono(nuevoNumero);
+        usuario.setCargo(nuevoCargo);
+
+        // Solo cambiamos el hash si realmente quiere cambiar la clave
+        if (quiereCambiarClave) {
+            String hash = HashUtil.generarHash(nuevaContrasena);
+            usuario.setHashContrasena(hash);
+        }
+
+        // Persistir cambios
+        guardarUsuariosEnArchivo();
+
+        resultado.setSuccess(true);
+        return resultado;
+    }
 
     // Métodos de utilidad
     public LinkedList<Usuario> getListaUsuarios() {
@@ -200,4 +349,7 @@ public class RegistroManager {
     public HashMap<String, Usuario> getMapaUsuarios() {
         return mapaUsuariosPorEmail;
     }
+    
+    
+    
 }

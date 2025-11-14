@@ -8,7 +8,6 @@ C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Ajuste
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Registrarse.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\core\HashUtil.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\app\Main.java
-C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\core\Categoria.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\core\RolCiudadano.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\core\RolSuperAdministrador.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\core\RolFuncionario.java
@@ -20,9 +19,11 @@ C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\core\Regi
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\data\Db.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\app\Pruebas.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Modificar_Documento.java
+C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\core\EnviadorCorreos.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\data\Metadatos.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\core\Rol.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Login.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\core\RolSecretario.java
+C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Ver_Documento.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\app\SesionSingleton.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Ajustes_Usuario.java

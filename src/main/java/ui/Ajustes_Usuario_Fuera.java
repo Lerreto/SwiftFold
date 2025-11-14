@@ -1,47 +1,58 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package ui;
 
+import core.RegistroManager;
 import core.Usuario;
 import core.UtilidadesDeArchivos;
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Juan Pablo
- */
+
 public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
     
-    private Map<String, String[]> departamentosMunicipios;
-    
+    private Map<String, String[]> departamentosMunicipios;  
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Ajustes_Usuario_Fuera.class.getName());
+    Usuario usuario = new Usuario();
 
-    /**
-     * Creates new form Ajustes_Usuario
-     */
-    public Ajustes_Usuario_Fuera(Usuario usuario) {
+
+    
+    
+    public Ajustes_Usuario_Fuera(String emailUsuario) {
         initComponents();
         
         configurarComboBoxes();
         initDepartamentosMunicipios();
         setupDepartamentoListener();
         
+        usuario = UtilidadesDeArchivos.buscarUsuarioPorEmail(emailUsuario);
+        
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró el usuario con email: " + emailUsuario,
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            // Volver al gestor y cerrar esta ventana
+            this.dispose();
+            Gesto_De_Usuarios ventanaGestor = new Gesto_De_Usuarios();
+            ventanaGestor.setLocationRelativeTo(null);
+            ventanaGestor.setVisible(true);
+            return;
+        }
+        
         TextNombre.setText(usuario.getNombre());
         TextApellido.setText(usuario.getApellido());
         TextEmail.setText(usuario.getEmail());
         TextNumero.setText(usuario.getTelefono());
         TextCargo.setText(usuario.getCargo());
+        TextoCambiable.setText(usuario.getNombre() + " " + usuario.getApellido());
 
         SelectDepart.setSelectedItem(usuario.getDepartamento());
         SelectMunicipio.setSelectedItem(usuario.getMunicipio());
         SelectDependencia.setSelectedItem(usuario.getDependencia());
         SelectRol.setSelectedItem(usuario.getRol().getClass().getSimpleName());
     }
+    
+    
     
     private void configurarComboBoxes() {
         // Configurar el JComboBox de departamentos
@@ -74,6 +85,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         }));
     }
 
+    
     private void initDepartamentosMunicipios() {
         departamentosMunicipios = new HashMap<>();
 
@@ -93,9 +105,10 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         departamentosMunicipios.put("ValledelCauca", new String[]{
             "Cali", "Palmira", "Yumbo", "Jamundí", "Buga"
         });
-
     }
 
+    
+    
     private void setupDepartamentoListener() {
         SelectDepart.addActionListener(evt -> updateMunicipios());
     }
@@ -127,7 +140,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         TextVisualizacion = new javax.swing.JLabel();
-        TextAcuerdo = new javax.swing.JLabel();
+        TextoCambiable = new javax.swing.JLabel();
         TextCargo = new javax.swing.JTextField();
         SelectMunicipio = new javax.swing.JComboBox<>();
         SelectDependencia = new javax.swing.JComboBox<>();
@@ -158,6 +171,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         TextNumero = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 251, 248));
         jPanel1.setForeground(new java.awt.Color(255, 251, 248));
@@ -167,10 +181,10 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         TextVisualizacion.setText("Ajustes de Usuario");
         jPanel1.add(TextVisualizacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
-        TextAcuerdo.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
-        TextAcuerdo.setForeground(new java.awt.Color(53, 91, 62));
-        TextAcuerdo.setText("dasdsadas");
-        jPanel1.add(TextAcuerdo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
+        TextoCambiable.setFont(new java.awt.Font("Inter", 1, 30)); // NOI18N
+        TextoCambiable.setForeground(new java.awt.Color(53, 91, 62));
+        TextoCambiable.setText("dasdsadas");
+        jPanel1.add(TextoCambiable, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
 
         TextCargo.setFont(new java.awt.Font("Roboto SemiCondensed", 0, 14)); // NOI18N
         TextCargo.setForeground(new java.awt.Color(102, 102, 102));
@@ -423,6 +437,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_SelectDepartActionPerformed
 
+    
     private void JBotonSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JBotonSalirMouseClicked
         this.dispose();
 
@@ -431,6 +446,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         ventanaGestorDeUsuario.setVisible(true);
     }//GEN-LAST:event_JBotonSalirMouseClicked
 
+    
     private void JBotonGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JBotonGuardarMouseClicked
         // Obtener los datos de los campos del formulario
         String email = TextEmail.getText().trim();
@@ -440,17 +456,51 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         String nuevoCargo = TextCargo.getText().trim();
         String nuevoRol = SelectRol.getSelectedItem().toString();
 
-        // Validar que todos los campos sean correctos (esto puede ajustarse según tus requerimientos)
-        if (email.isEmpty() || nuevoDepartamento.isEmpty() || nuevoMunicipio.isEmpty() || nuevaDependencia.isEmpty() || nuevoCargo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+        // Validación básica
+        if (email.isEmpty() || nuevoDepartamento.isEmpty() || nuevoMunicipio.isEmpty()
+                || nuevaDependencia.isEmpty() || nuevoCargo.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, complete todos los campos",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Llamar al método modificarUsuario con los datos del formulario
-        new UtilidadesDeArchivos().modificarUsuario(email, nuevoDepartamento, nuevoMunicipio, nuevaDependencia, nuevoCargo, nuevoRol);
+        RegistroManager manager = new RegistroManager("usuarios.csv");
 
-        // Mensaje de éxito
-        JOptionPane.showMessageDialog(this, "Usuario modificado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        // OJO: orden correcto de parámetros
+        core.ValidationResult resultado = manager.modificarUsuario(
+                email,
+                nuevoDepartamento,
+                nuevoMunicipio,
+                nuevaDependencia,
+                nuevoRol,   // ← ahora sí va en su lugar
+                nuevoCargo  // ← y este también
+        );
+
+        if (resultado.isSuccess()) {
+            JOptionPane.showMessageDialog(this,
+                    "Usuario modificado correctamente",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            // Opcional: volver al gestor de usuarios
+            this.dispose();
+            Gesto_De_Usuarios ventanaGestor = new Gesto_De_Usuarios();
+            ventanaGestor.setLocationRelativeTo(null);
+            ventanaGestor.setVisible(true);
+
+        } else {
+            // Mostrar los errores devueltos por ValidationResult
+            StringBuilder sb = new StringBuilder();
+            for (String msg : resultado.getMessages()) {
+                sb.append(msg).append("\n");
+            }
+            JOptionPane.showMessageDialog(this,
+                    sb.toString(),
+                    "Error al modificar usuario",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_JBotonGuardarMouseClicked
 
     /**
@@ -476,7 +526,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         Usuario usuario = null;
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Ajustes_Usuario_Fuera(usuario).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Ajustes_Usuario_Fuera("").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -497,7 +547,6 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> SelectDependencia;
     private javax.swing.JComboBox<String> SelectMunicipio;
     private javax.swing.JComboBox<String> SelectRol;
-    private javax.swing.JLabel TextAcuerdo;
     private javax.swing.JLabel TextApellido;
     private javax.swing.JTextField TextCargo;
     private javax.swing.JLabel TextContrase;
@@ -505,6 +554,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
     private javax.swing.JLabel TextNombre;
     private javax.swing.JLabel TextNumero;
     private javax.swing.JLabel TextVisualizacion;
+    private javax.swing.JLabel TextoCambiable;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

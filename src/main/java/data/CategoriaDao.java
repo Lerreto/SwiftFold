@@ -2,8 +2,14 @@ package data;
 
 import java.sql.*;
 import java.util.*;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class CategoriaDao {
+    
+    private static final String[] COLS = {
+       "ID", "Nombre"
+    };
 
     // ======= ENLISTAMIENTO DE TODAS LAS CATEGORIAS ======= //
     
@@ -47,5 +53,39 @@ public class CategoriaDao {
             }
         }
     }
+    
+    public void listarCategorias(JTable tabla) {      
+
+        DefaultTableModel m = new DefaultTableModel(null, COLS) {
+            @Override public boolean isCellEditable(int r, int c) { return false; }
+        };
+
+        String sql = "SELECT id_categoria, nombre FROM categorias ORDER BY nombre ASC";
+
+        try (Connection cn = new Db().establecerConexion();
+             PreparedStatement st = (cn != null ? cn.prepareStatement(sql) : null)) {
+
+            if (st == null) {
+                tabla.setModel(m);
+                return;
+            }
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    long id   = rs.getLong("id_categoria");
+                    String nombre = rs.getString("nombre");
+
+                    m.addRow(new Object[]{ id, nombre });
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("[CategoriaDao] " + e.getMessage());
+        }
+
+        tabla.setModel(m);
+    }
+
+
     
 }
