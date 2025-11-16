@@ -1,8 +1,8 @@
 package ui;
 
-import core.Documento;
-import data.CategoriaDao;
-import data.DocumentoDao;
+import persistencia.Documento;
+import logica.CategoriaDao;
+import logica.DocumentoDao;
 import java.sql.SQLException;
 
 

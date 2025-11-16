@@ -1,15 +1,13 @@
 package ui;
 
 
-import app.SesionSingleton;
-import core.RegistroManager;
-import core.Usuario;
-import core.UtilidadesDeArchivos;
-import static core.UtilidadesDeArchivos.cargarUsuarios;
-import static core.UtilidadesDeArchivos.guardarUsuarios;
-import core.ValidationResult;
-import java.util.List;
+import persistencia.SesionSingleton;
+import logica.RegistroManager;
+import persistencia.Usuario;
+import logica.UtilidadesDeArchivos;
+import logica.ValidationResult;
 import javax.swing.JOptionPane;
+import logica.DocumentoDao;
 
 
 public class Gesto_De_Usuarios extends javax.swing.JFrame {
@@ -49,6 +47,26 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         
     }
      
+     
+        // Metodos extras para simplificar acciones
+     
+    public void establecerEstadisticas() {
+        try {
+            int totalDocumentos = new DocumentoDao().obtenerNumeroDocumentos();
+            int documentosPorUsuario = new DocumentoDao().obtenerNumeroDocumentosPorUsuario();
+            int usuariosTotales = new UtilidadesDeArchivos().contarUsuarios();
+
+            System.out.println("Total de documentos: " + totalDocumentos);
+            System.out.println("Documentos por usuario: " + documentosPorUsuario);
+            System.out.println("Usuarios totales: " + usuariosTotales);
+
+            TextIntDocumentos.setText(Integer.toString(totalDocumentos));
+            TextDocumentosUsuario.setText(Integer.toString(documentosPorUsuario));
+            TextContadorUsuarios.setText(Integer.toString(usuariosTotales));
+        } catch (Exception e) {
+            System.out.println("Error en la carga: " + e.getMessage());
+        }
+    } 
     
     private void eliminarUsuario(String email) {
         if (email == null || email.isBlank()) {
@@ -133,17 +151,17 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        TextIntDocumentos = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
+        TextDocumentosUsuario = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        TextContadorUsuarios = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -312,21 +330,21 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(204, 255, 204));
 
-        jLabel3.setBackground(new java.awt.Color(73, 213, 89));
-        jLabel3.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(51, 102, 0));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("48");
+        TextIntDocumentos.setBackground(new java.awt.Color(73, 213, 89));
+        TextIntDocumentos.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
+        TextIntDocumentos.setForeground(new java.awt.Color(51, 102, 0));
+        TextIntDocumentos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TextIntDocumentos.setText("48");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+            .addComponent(TextIntDocumentos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+            .addComponent(TextIntDocumentos, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
         );
 
         jLabel7.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
@@ -367,21 +385,21 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
 
         jPanel7.setBackground(new java.awt.Color(204, 255, 204));
 
-        jLabel5.setBackground(new java.awt.Color(73, 213, 89));
-        jLabel5.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(51, 102, 0));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("48");
+        TextDocumentosUsuario.setBackground(new java.awt.Color(73, 213, 89));
+        TextDocumentosUsuario.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
+        TextDocumentosUsuario.setForeground(new java.awt.Color(51, 102, 0));
+        TextDocumentosUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TextDocumentosUsuario.setText("48");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+            .addComponent(TextDocumentosUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+            .addComponent(TextDocumentosUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
         );
 
         jLabel10.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
@@ -419,21 +437,21 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
 
         jPanel8.setBackground(new java.awt.Color(204, 255, 204));
 
-        jLabel6.setBackground(new java.awt.Color(73, 213, 89));
-        jLabel6.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(51, 102, 0));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("48");
+        TextContadorUsuarios.setBackground(new java.awt.Color(73, 213, 89));
+        TextContadorUsuarios.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
+        TextContadorUsuarios.setForeground(new java.awt.Color(51, 102, 0));
+        TextContadorUsuarios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TextContadorUsuarios.setText("48");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+            .addComponent(TextContadorUsuarios, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+            .addComponent(TextContadorUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
         );
 
         jLabel11.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
@@ -874,7 +892,10 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
     private javax.swing.JPanel PanelEstadisticas;
     private javax.swing.JLabel TextAjustes;
     private javax.swing.JLabel TextCargar;
+    private javax.swing.JLabel TextContadorUsuarios;
     private javax.swing.JLabel TextDocumentos;
+    private javax.swing.JLabel TextDocumentosUsuario;
+    private javax.swing.JLabel TextIntDocumentos;
     private javax.swing.JLabel TextSwiftFold;
     private javax.swing.JLabel TextUsuarios;
     private javax.swing.JLabel TituloGrande;
@@ -882,10 +903,7 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

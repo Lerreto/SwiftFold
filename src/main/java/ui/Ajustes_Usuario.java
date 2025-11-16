@@ -1,9 +1,9 @@
 package ui;
 
-import app.SesionSingleton;
-import core.RegistroManager;
-import core.Usuario;
-import core.ValidationResult;
+import persistencia.SesionSingleton;
+import logica.RegistroManager;
+import persistencia.Usuario;
+import logica.ValidationResult;
 import javax.swing.JOptionPane;
 
   

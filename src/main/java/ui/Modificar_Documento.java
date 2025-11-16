@@ -1,8 +1,8 @@
 package ui;
 
-import core.Documento;
-import data.CategoriaDao;
-import data.DocumentoDao;
+import persistencia.Documento;
+import logica.CategoriaDao;
+import logica.DocumentoDao;
 import javax.swing.JOptionPane;
 
 
@@ -11,10 +11,6 @@ public class Modificar_Documento extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Modificar_Documento.class.getName());
     private String idDocumento;
     
-    
-    /**
-     * Creates new form Modificar_Documento
-     */
     public Modificar_Documento(String idDocumento) {
         this.idDocumento = idDocumento;
         initComponents();
@@ -78,7 +74,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
                 long idCatDoc = documento.getIdCategoria();
                 for (int i = 1; i < JComboCategorias.getItemCount(); i++) { // desde 1 para saltar el placeholder
                     String nombreCat = (String) JComboCategorias.getItemAt(i);
-                    long idCat = new data.CategoriaDao().idPorNombre(nombreCat);
+                    long idCat = new logica.CategoriaDao().idPorNombre(nombreCat);
                     if (idCat == idCatDoc) {
                         JComboCategorias.setSelectedIndex(i);
                         break;
@@ -486,7 +482,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
             }
 
             // Construir el Documento con los campos editables
-            core.Documento d = new core.Documento();
+            persistencia.Documento d = new persistencia.Documento();
             d.setIdDocumento(Long.parseLong(this.idDocumento)); // viene del constructor
             d.setNombre(JTextNombreDocumento.getText().trim());
             d.setCodigo(JTextCodigo.getText().trim());
@@ -496,13 +492,13 @@ public class Modificar_Documento extends javax.swing.JFrame {
 
             // ID de categoría a partir del nombre seleccionado
             String nombreCategoria = (String) JComboCategorias.getSelectedItem();
-            long idCategoria = new data.CategoriaDao().idPorNombre(nombreCategoria);
+            long idCategoria = new logica.CategoriaDao().idPorNombre(nombreCategoria);
             d.setIdCategoria(idCategoria);
 
             // Mantener el nombre de archivo que se muestra (si no se cambia en esta pantalla)
             d.setFileName(JLabelNombreOriginal.getText().trim());
 
-            boolean ok = new data.DocumentoDao().actualizarDocumento(d);
+            boolean ok = new logica.DocumentoDao().actualizarDocumento(d);
 
             if (ok) {
                 JOptionPane.showMessageDialog(this, "Documento actualizado correctamente.");

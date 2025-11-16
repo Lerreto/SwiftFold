@@ -1,8 +1,8 @@
 package ui;
 
-import core.RegistroManager;
-import core.Usuario;
-import core.UtilidadesDeArchivos;
+import logica.RegistroManager;
+import persistencia.Usuario;
+import logica.UtilidadesDeArchivos;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -13,8 +13,6 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
     private Map<String, String[]> departamentosMunicipios;  
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Ajustes_Usuario_Fuera.class.getName());
     Usuario usuario = new Usuario();
-
-
     
     
     public Ajustes_Usuario_Fuera(String emailUsuario) {
@@ -26,11 +24,14 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         
         usuario = UtilidadesDeArchivos.buscarUsuarioPorEmail(emailUsuario);
         
+        TextoCambiable.setText(usuario.getNombre() + " " + usuario.getApellido());
+        
         if (usuario == null) {
             JOptionPane.showMessageDialog(this,
                     "No se encontró el usuario con email: " + emailUsuario,
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
+            
             // Volver al gestor y cerrar esta ventana
             this.dispose();
             Gesto_De_Usuarios ventanaGestor = new Gesto_De_Usuarios();
@@ -468,14 +469,13 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
 
         RegistroManager manager = new RegistroManager("usuarios.csv");
 
-        // OJO: orden correcto de parámetros
-        core.ValidationResult resultado = manager.modificarUsuario(
+        logica.ValidationResult resultado = manager.modificarUsuario(
                 email,
                 nuevoDepartamento,
                 nuevoMunicipio,
                 nuevaDependencia,
-                nuevoRol,   // ← ahora sí va en su lugar
-                nuevoCargo  // ← y este también
+                nuevoRol,   
+                nuevoCargo  
         );
 
         if (resultado.isSuccess()) {
@@ -484,7 +484,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            // Opcional: volver al gestor de usuarios
+            // volver al gestor de usuarios
             this.dispose();
             Gesto_De_Usuarios ventanaGestor = new Gesto_De_Usuarios();
             ventanaGestor.setLocationRelativeTo(null);

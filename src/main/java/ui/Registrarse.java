@@ -2,9 +2,9 @@ package ui;
 
 import java.awt.Color;
 import com.formdev.flatlaf.FlatLightLaf;
-import core.RegistroManager;
-import core.Usuario;
-import core.ValidationResult;
+import logica.RegistroManager;
+import persistencia.Usuario;
+import logica.ValidationResult;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.UIManager;

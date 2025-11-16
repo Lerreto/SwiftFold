@@ -3,7 +3,7 @@ package ui;
 // LIBRERIAS UTILIZADAS
 
 
-import data.CategoriaDao;
+import logica.CategoriaDao;
 import java.awt.Color;
 import java.nio.file.Path;
 import javax.swing.JFileChooser;
@@ -18,7 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class Cargar_Documento extends javax.swing.JFrame {
     
     private Path rutaSeleccionada;
-    private data.Metadatos.Info metaSeleccionada; 
+    private logica.Metadatos.Info metaSeleccionada; 
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cargar_Documento.class.getName());
 
@@ -42,7 +42,6 @@ public class Cargar_Documento extends javax.swing.JFrame {
     }
     
     
-  
     
     // ======= PARA VALIDACIONES DE CAMPO DE TEXTO =======
     
@@ -375,7 +374,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
 
         try {
             // <<< GUARDAMOS los metadatos para usarlos en Guardar >>>
-            metaSeleccionada = data.Metadatos.leer(rutaSeleccionada);
+            metaSeleccionada = logica.Metadatos.leer(rutaSeleccionada);
         } catch (RuntimeException ex) {
             javax.swing.JOptionPane.showMessageDialog(
                 this,
@@ -446,11 +445,11 @@ public class Cargar_Documento extends javax.swing.JFrame {
             }
 
             // Si los campos son válidos, proceder a guardar los datos
-            core.Documento d = new core.Documento();
+            persistencia.Documento d = new persistencia.Documento();
             d.setNombre(JTextTituloDocumento1.getText().trim());
             d.setCodigo(JTextCodigo.getText().trim());
             d.setDescripcion(JTextDescripcion.getText().trim());
-            d.setIdCategoria(new data.CategoriaDao().idPorNombre((String) JComboBoxCategorias.getSelectedItem()));
+            d.setIdCategoria(new logica.CategoriaDao().idPorNombre((String) JComboBoxCategorias.getSelectedItem()));
             d.setTipoAcceso((String) JComboBoxTipoAcceso.getSelectedItem());
             d.setDisposicionFinal((String) JFechaDisposicionFinal.getSelectedItem());
 
@@ -466,7 +465,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
             d.setMunicipio("Bucaramanga");
 
             // Guardar documento
-            long id = new data.DocumentoDao().guardarDocumento(d, rutaSeleccionada);
+            long id = new logica.DocumentoDao().guardarDocumento(d, rutaSeleccionada);
             javax.swing.JOptionPane.showMessageDialog(this, "Guardado. ID: " + id);
 
             // Cerrar la ventana de carga de documento

@@ -4,7 +4,7 @@
  */
 package app;
 
-import data.Db;
+import logica.Db;
 
 /**
  *

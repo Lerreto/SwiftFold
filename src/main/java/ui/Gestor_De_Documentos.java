@@ -1,12 +1,13 @@
 package ui;
 
 
-import app.SesionSingleton;
-import core.Usuario;
-import data.CategoriaDao;
-import data.DocumentoDao;
+import persistencia.SesionSingleton;
+import persistencia.Usuario;
+import logica.CategoriaDao;
+import logica.DocumentoDao;
 import java.awt.Color;
 import javax.swing.JOptionPane;
+import logica.UtilidadesDeArchivos;
 
 
 public class Gestor_De_Documentos extends javax.swing.JFrame {
@@ -33,7 +34,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         
         JLabelNombreUsuario.setText(usuario.getNombre() + " " + usuario.getApellido());
         JLabelRolCargo.setText( usuario.getStringRol() + " - " + usuario.getCargo() + " - " + usuario.getDependencia());
-
+        
+        // Acciones de los botones, esto es para evitar algunos bugs
+        
         JButtomEditar.addActionListener(e -> {
             if (usuario.getRol().tieneAccesoEditar()){
                 if (idSeleccionado == null) {
@@ -82,19 +85,21 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         
     }
     
- 
-     
+    // Metodos extras para simplificar acciones
      
     public void establecerEstadisticas() {
         try {
             int totalDocumentos = new DocumentoDao().obtenerNumeroDocumentos();
             int documentosPorUsuario = new DocumentoDao().obtenerNumeroDocumentosPorUsuario();
+            int usuariosTotales = new UtilidadesDeArchivos().contarUsuarios();
 
             System.out.println("Total de documentos: " + totalDocumentos);
             System.out.println("Documentos por usuario: " + documentosPorUsuario);
+            System.out.println("Usuarios totales: " + usuariosTotales);
 
             TextIntDocumentos.setText(Integer.toString(totalDocumentos));
             TextDocumentosUsuario.setText(Integer.toString(documentosPorUsuario));
+            TextContadorUsuarios.setText(Integer.toString(usuariosTotales));
         } catch (Exception e) {
             System.out.println("Error en la carga: " + e.getMessage());
         }
@@ -115,7 +120,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private void eliminarDocumento(String idDocumento) {
         try {
 
-            boolean eliminado = new data.DocumentoDao().eliminarDocumento(idDocumento);
+            boolean eliminado = new logica.DocumentoDao().eliminarDocumento(idDocumento);
 
             if (eliminado) {
                 JOptionPane.showMessageDialog(this, "Documento eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -184,7 +189,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        TextContadorUsuarios = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -205,6 +210,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JPanelUsuarios = new javax.swing.JPanel();
         TextUsuarios = new javax.swing.JLabel();
         ImgUsuarios = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -574,21 +580,21 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         jPanel8.setBackground(new java.awt.Color(204, 255, 204));
 
-        jLabel6.setBackground(new java.awt.Color(73, 213, 89));
-        jLabel6.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(51, 102, 0));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("48");
+        TextContadorUsuarios.setBackground(new java.awt.Color(73, 213, 89));
+        TextContadorUsuarios.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
+        TextContadorUsuarios.setForeground(new java.awt.Color(51, 102, 0));
+        TextContadorUsuarios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        TextContadorUsuarios.setText("48");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+            .addComponent(TextContadorUsuarios, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+            .addComponent(TextContadorUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
         );
 
         jLabel11.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
@@ -706,7 +712,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         Backgraund.add(LineaHorizontal02, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 220, 2));
 
         TItuloDependencia.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
-        TItuloDependencia.setText("POR DEPENDENCIA");
+        TItuloDependencia.setText("POR CATEGORIAS");
         Backgraund.add(TItuloDependencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
         TablaCategorias.setModel(new javax.swing.table.DefaultTableModel(
@@ -727,7 +733,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         });
         JScrollDependencias.setViewportView(TablaCategorias);
 
-        Backgraund.add(JScrollDependencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 220, 340));
+        Backgraund.add(JScrollDependencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 210, 350));
 
         JPanelAjustes.setBackground(new java.awt.Color(255, 251, 248));
         JPanelAjustes.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -828,6 +834,16 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JPanelUsuarios.add(ImgUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 40));
 
         Backgraund.add(JPanelUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 200, 40));
+
+        jLabel1.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("+");
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+        Backgraund.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 30, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1008,6 +1024,13 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_TablaCategoriasMouseClicked
 
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        this.dispose();
+        Nueva_Categoria nuevaCategoria = new Nueva_Categoria();
+        nuevaCategoria.setLocationRelativeTo(null);
+        nuevaCategoria.setVisible(true);
+    }//GEN-LAST:event_jLabel1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1066,18 +1089,19 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private javax.swing.JTable TablaDocumentos;
     private javax.swing.JLabel TextAjustes;
     private javax.swing.JLabel TextCargar;
+    private javax.swing.JLabel TextContadorUsuarios;
     private javax.swing.JLabel TextDocumentos;
     private javax.swing.JLabel TextDocumentosUsuario;
     private javax.swing.JLabel TextIntDocumentos;
     private javax.swing.JLabel TextSwiftFold;
     private javax.swing.JLabel TextUsuarios;
     private javax.swing.JLabel TituloGrande;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
