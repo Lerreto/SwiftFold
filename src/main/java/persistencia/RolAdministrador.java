@@ -33,5 +33,10 @@ public class RolAdministrador extends Rol{
     public boolean tieneAccesoSubir() {
         return true;
     }
+    
+    @Override
+    public boolean tieneAccesoCategoria() {
+        return true;
+    }
 
 }

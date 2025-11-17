@@ -34,4 +34,9 @@ public class RolSecretario extends Rol{
     public boolean tieneAccesoSubir() {
         return true;
     }
+    
+    @Override
+    public boolean tieneAccesoCategoria() {
+        return false;
+    }
 }

@@ -82,6 +82,9 @@ public class Usuario {
     public void setHashContrasena(String hashContrasena) { this.hashContrasena = hashContrasena; }
     
     public String getStringRol() { return rol.getClass().getSimpleName(); }
+    
+    public String getNombreCompleto() { return this.nombre + " " + this.apellido; }
+
 
     // Métodos auxiliares
     private String normalizarTexto(String texto) {

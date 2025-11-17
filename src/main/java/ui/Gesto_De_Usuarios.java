@@ -8,6 +8,7 @@ import logica.UtilidadesDeArchivos;
 import logica.ValidationResult;
 import javax.swing.JOptionPane;
 import logica.DocumentoDao;
+import logica.EnviadorCorreos;
 
 
 public class Gesto_De_Usuarios extends javax.swing.JFrame {
@@ -15,6 +16,8 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Gesto_De_Usuarios.class.getName());
     private String emailSeleccionado;  
     public Usuario usuario = SesionSingleton.getInstance().getUsuarioLogueado();
+    private EnviadorCorreos enviarCorreo = new EnviadorCorreos();
+
 
     /**
      * Creates new form Gestor_De_Documentos
@@ -22,10 +25,11 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
     
      public Gesto_De_Usuarios() {         
         initComponents();
+        establecerEstadisticas();
         
         new UtilidadesDeArchivos().crearTablaUsuarios(JTablaUsuarios);
         
-        JLabelNombreUsuario.setText(usuario.getNombre() + " " + usuario.getApellido());
+        JLabelNombreUsuario.setText(usuario.getNombreCompleto());
         JLabelRolCargo.setText( usuario.getStringRol() + " - " + usuario.getCargo() + " - " + usuario.getDependencia());
         
         JButonEliminar.addActionListener(e -> {
@@ -96,6 +100,37 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
                     "Usuario eliminado con éxito",
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
+            
+            
+        // ====== CORREO DE NOTIFICACIÓN ======
+        new Thread(() -> {
+            try {
+                String asunto = "SwiftFold: usuario eliminado del sistema";
+
+                String nombreEjecutor =
+                        (usuario != null ? usuario.getNombreCompleto() : "Usuario del sistema");
+                String correoEjecutor =
+                        (usuario != null ? usuario.getEmail() : "N/D");
+
+                String mensaje =
+                        "Estimado usuario,\n\n" +
+                        "Se ha eliminado un usuario del sistema de gestión documental SwiftFold.\n\n" +
+                        "Detalles de la acción:\n" +
+                        "• Usuario eliminado: " + email + "\n" +
+                        "• Acción realizada por: " + nombreEjecutor + " (" + correoEjecutor + ")\n\n" +
+                        "Si esta acción no fue autorizada, revise la administración de usuarios en SwiftFold.\n\n" +
+                        "Atentamente,\n" +
+                        "SwiftFold – Sistema de Gestión Documental";
+
+                // Ajusta este llamado al nombre real de tu clase/método de correo
+                enviarCorreo.nuevoUsuarioEliminarModificar(mensaje, asunto);
+
+            } catch (Exception exCorreo) {
+                System.err.println("No se pudo enviar el correo de notificación: " + exCorreo.getMessage());
+            }
+        }).start();
+        // ================================
+            
 
             // Recargar la tabla de usuarios
             new UtilidadesDeArchivos().crearTablaUsuarios(JTablaUsuarios);

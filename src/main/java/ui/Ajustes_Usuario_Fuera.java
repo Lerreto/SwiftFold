@@ -6,6 +6,7 @@ import logica.UtilidadesDeArchivos;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import logica.EnviadorCorreos;
 
 
 public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
@@ -13,6 +14,8 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
     private Map<String, String[]> departamentosMunicipios;  
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Ajustes_Usuario_Fuera.class.getName());
     Usuario usuario = new Usuario();
+    private EnviadorCorreos enviarCorreo = new EnviadorCorreos();
+
     
     
     public Ajustes_Usuario_Fuera(String emailUsuario) {
@@ -483,6 +486,47 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
                     "Usuario modificado correctamente",
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
+            
+        // ====== CORREO DE NOTIFICACIÓN ======
+        new Thread(() -> {
+            try {
+                // Actor que realiza la acción (admin / funcionario logueado)
+                Usuario actor = persistencia.SesionSingleton.getInstance().getUsuarioLogueado();
+
+                String nombreActor   = (actor != null) ? actor.getNombreCompleto() : "Usuario del sistema";
+                String correoActor   = (actor != null) ? actor.getEmail() : "N/D";
+
+                // Usuario afectado (el que estamos editando en esta ventana)
+                String nombreAfectado = usuario.getNombreCompleto();
+                String correoAfectado = usuario.getEmail();
+
+                String asunto = "SwiftFold: modificación de datos de usuario";
+
+                String mensaje =
+                        "Hola,\n\n" +
+                        "Se han modificado los datos de un usuario en el sistema de gestión documental SwiftFold.\n\n" +
+                        "Usuario modificado:\n" +
+                        "• Nombre: " + nombreAfectado + "\n" +
+                        "• Correo: " + correoAfectado + "\n\n" +
+                        "Nuevos datos registrados:\n" +
+                        "• Departamento: " + nuevoDepartamento + "\n" +
+                        "• Municipio: " + nuevoMunicipio + "\n" +
+                        "• Dependencia: " + nuevaDependencia + "\n" +
+                        "• Cargo: " + nuevoCargo + "\n" +
+                        "• Rol: " + nuevoRol + "\n\n" +
+                        "Acción realizada por:\n" +
+                        "• " + nombreActor + " (" + correoActor + ")\n\n" +
+                        "Si no reconoces esta acción, revisa la administración de usuarios en SwiftFold.\n\n" +
+                        "Atentamente,\n" +
+                        "SwiftFold – Sistema de Gestión Documental";
+
+                enviarCorreo.nuevoUsuarioEliminarModificar(mensaje, asunto);
+
+            } catch (Exception exCorreo) {
+                System.err.println("No se pudo enviar el correo de notificación: " + exCorreo.getMessage());
+            }
+        }).start();
+        // =====================================
 
             // volver al gestor de usuarios
             this.dispose();

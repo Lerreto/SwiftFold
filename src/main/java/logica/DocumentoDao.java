@@ -160,6 +160,18 @@ public class DocumentoDao {
 
         long id;
 
+        // ====== ASEGURAR CATEGORÍA ======
+        long idCategoria = d.getIdCategoria();
+        if (idCategoria <= 0) {
+            // Si no viene categoría, usar "Sin categoría"
+            CategoriaDao catDao = new CategoriaDao();
+            try {
+                idCategoria = catDao.obtenerIdCategoriaPorDefecto();
+            } catch (SQLException e) {
+                throw new Exception("No se encontró la categoría por defecto 'Sin categoría'.", e);
+            }
+        }
+
         try (Connection cn = new Db().establecerConexion();
              PreparedStatement ps = cn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -167,10 +179,10 @@ public class DocumentoDao {
             ps.setString(i++, d.getNombre());
             ps.setString(i++, d.getCodigo());
             ps.setString(i++, d.getDescripcion());
-            ps.setLong  (i++, d.getIdCategoria());
+            ps.setLong  (i++, idCategoria);          // <<< aquí va la categoría resuelta
             ps.setString(i++, d.getTipoAcceso());
             ps.setString(i++, d.getDisposicionFinal());
-            ps.setString(i++, d.getFileName());      
+            ps.setString(i++, d.getFileName());
             ps.setString(i++, d.getFileType());
             ps.setLong  (i++, d.getFileSizeBytes());
             ps.setString(i++, d.getCorreo_demo());
@@ -190,11 +202,11 @@ public class DocumentoDao {
         Files.createDirectories(dirDestino);
 
         Path destino = dirDestino.resolve(d.getFileName());
-
         Files.copy(rutaOrigen, destino, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 
         return id;
     }
+
 
     
     

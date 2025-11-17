@@ -11,6 +11,7 @@ import javax.swing.JFileChooser;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import logica.EnviadorCorreos;
 
 
 // CLASE PRINCIPAL
@@ -19,6 +20,8 @@ public class Cargar_Documento extends javax.swing.JFrame {
     
     private Path rutaSeleccionada;
     private logica.Metadatos.Info metaSeleccionada; 
+    private EnviadorCorreos enviarCorreo = new EnviadorCorreos();
+
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cargar_Documento.class.getName());
 
@@ -468,6 +471,39 @@ public class Cargar_Documento extends javax.swing.JFrame {
             long id = new logica.DocumentoDao().guardarDocumento(d, rutaSeleccionada);
             javax.swing.JOptionPane.showMessageDialog(this, "Guardado. ID: " + id);
 
+            
+            // =================== CORREO DE NOTIFICACIÓN ===================
+            
+            new Thread(() -> {
+                try {
+                    String asunto = "SwiftFold: nuevo documento cargado";
+
+                    String mensaje =
+                        "Estimado usuario,\n\n" +
+                        "Se ha cargado un nuevo documento en el sistema de gestión documental SwiftFold.\n\n" +
+                        "Resumen del documento:\n" +
+                        "• Nombre: " + d.getNombre() + "\n" +
+                        "• Código: " + (d.getCodigo().isBlank() ? "Sin código" : d.getCodigo()) + "\n" +
+                        "• Categoría: " + new CategoriaDao().nombrePorId(d.getIdCategoria()) + "\n" +
+                        "• Tipo de acceso: " + d.getTipoAcceso() + "\n" +
+                        "• Disposición final: " + d.getDisposicionFinal() + "\n" +
+                        "• Archivo: " + d.getFileName() + " (" + d.getFileType() + ")\n" +
+                        "• Tamaño: " + d.getFileSizeBytes() + " bytes\n\n" +
+                        "Si requiere revisar el contenido o gestionar este documento, puede hacerlo desde el módulo de documentos de SwiftFold.\n\n" +
+                        "Atentamente,\n" +
+                        "SwiftFold – Sistema de Gestión Documental";
+
+                    // Aquí llamas a tu clase de envío de correos
+                    enviarCorreo.enviarCorreosAUsuariosConRoles(mensaje, d);
+                }catch (Exception exCorreo) {
+                    System.err.println(
+                        "No se pudo enviar el aviso de nuevo registro al administrador: " + exCorreo.getMessage()
+                    );
+                }
+            }).start();
+
+            // =============================================================
+            
             // Cerrar la ventana de carga de documento
             this.dispose();
 

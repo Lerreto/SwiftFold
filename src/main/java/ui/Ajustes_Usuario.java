@@ -5,12 +5,15 @@ import logica.RegistroManager;
 import persistencia.Usuario;
 import logica.ValidationResult;
 import javax.swing.JOptionPane;
+import logica.EnviadorCorreos;
 
   
 public class Ajustes_Usuario extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Ajustes_Usuario.class.getName());
     public Usuario usuario = SesionSingleton.getInstance().getUsuarioLogueado();
+    private EnviadorCorreos enviarCorreo = new EnviadorCorreos();
+
 
     /**
      * Creates new form Ajustes_Usuario
@@ -433,6 +436,42 @@ public class Ajustes_Usuario extends javax.swing.JFrame {
                     "Datos actualizados correctamente.",
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
+            
+            // ====== CORREO DE NOTIFICACIÓN AL PROPIO USUARIO ======
+            new Thread(() -> {
+                try {
+                    String asunto = "SwiftFold: actualización de datos de tu cuenta";
+
+                    StringBuilder cuerpo = new StringBuilder();
+                    cuerpo.append("Hola ").append(usuario.getNombreCompleto()).append(",\n\n")
+                          .append("Te informamos que se realizó una actualización de los datos\n")
+                          .append("en el sistema de gestión documental SwiftFold.\n\n")
+                          .append("Datos actuales registrados:\n")
+                          .append("• Nombre completo: ").append(nuevoNombre).append(" ").append(nuevoApellido).append("\n")
+                          .append("• Correo electrónico: ").append(usuario.getEmail()).append("\n")
+                          .append("• Número de contacto: ").append(nuevoNumero).append("\n")
+                          .append("• Cargo: ").append(nuevoCargo).append("\n")
+                          .append("• Dependencia: ").append(usuario.getDependencia()).append("\n")
+                          .append("• Municipio / Departamento: ")
+                             .append(usuario.getMunicipio()).append(" - ").append(usuario.getDepartamento()).append("\n\n");
+
+                    // Mencionar si se cambió la contraseña (campo no vacío)
+                    if (!nuevaContrasena.isEmpty()) {
+                        cuerpo.append("Además, se registró un cambio de contraseña asociado a tu cuenta.\n\n");
+                    }
+
+                    cuerpo.append("Si no reconoces esta acción, comunícate con el administrador del sistema.\n\n")
+                          .append("Atentamente,\n")
+                          .append("SwiftFold – Sistema de Gestión Documental");
+
+                    enviarCorreo.nuevoUsuarioEliminarModificar(cuerpo.toString(), asunto);
+
+                } catch (Exception exCorreo) {
+                    System.err.println("No se pudo enviar el correo de notificación: " + exCorreo.getMessage());
+                }
+            }).start();
+            // ======================================================
+            
             
             this.dispose();
             Gestor_De_Documentos gestorDocumentos = new Gestor_De_Documentos("", 0L);

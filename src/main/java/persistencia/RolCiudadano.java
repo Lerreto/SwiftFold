@@ -33,4 +33,9 @@ public class RolCiudadano extends Rol {
         return false;
     }
     
+    @Override
+    public boolean tieneAccesoCategoria() {
+        return false;
+    }
+    
 }

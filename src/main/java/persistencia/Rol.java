@@ -26,4 +26,5 @@ public abstract class Rol {
     public abstract boolean tieneAccesoEditar();
     public abstract boolean tieneAccesoEliminar();
     public abstract boolean tieneAccesoSubir();
+    public abstract boolean tieneAccesoCategoria();
 }

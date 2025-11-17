@@ -41,7 +41,7 @@ public class EnviadorCorreos {
     
 
     // --- Método público para enviar un correo ---
-    public static void enviarCorreo(String destinatario, String asunto, String mensaje) {
+    public static boolean enviarCorreo(String destinatario, String asunto, String mensaje) {
         try {
             Session session = crearSesionSMTP();
 
@@ -56,12 +56,21 @@ public class EnviadorCorreos {
             Transport.send(message);
 
             System.out.println("Correo enviado correctamente a: " + destinatario);
+            return true;
 
         } catch (MessagingException e) {
-            System.err.println("Error al enviar correo a " + destinatario);
+            System.err.println("Error al enviar correo a " + destinatario + ": " + e.getMessage());
             e.printStackTrace();
+            return false;
+
+        } catch (Throwable t) {
+            // Cubre cosas como NoClassDefFoundError, etc., para que NO tumben la app
+            System.err.println("Fallo inesperado al enviar correo a " + destinatario);
+            t.printStackTrace();
+            return false;
         }
     }
+
 
     
     
@@ -138,7 +147,5 @@ public class EnviadorCorreos {
             }
         }
     }
-    
-    
-    
+       
 }

@@ -4,12 +4,15 @@ import persistencia.Documento;
 import logica.CategoriaDao;
 import logica.DocumentoDao;
 import javax.swing.JOptionPane;
+import logica.EnviadorCorreos;
 
 
 public class Modificar_Documento extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Modificar_Documento.class.getName());
     private String idDocumento;
+    private EnviadorCorreos enviarCorreo = new EnviadorCorreos();
+
     
     public Modificar_Documento(String idDocumento) {
         this.idDocumento = idDocumento;
@@ -190,6 +193,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 1000, -1));
 
+        JBotonSalir.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JBotonSalir.setText("Salir");
         JBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -198,6 +202,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
         });
         jPanel1.add(JBotonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 640, 120, 40));
 
+        JBotonModificar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JBotonModificar.setText("Modificar");
         JBotonModificar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -502,6 +507,29 @@ public class Modificar_Documento extends javax.swing.JFrame {
 
             if (ok) {
                 JOptionPane.showMessageDialog(this, "Documento actualizado correctamente.");
+                
+                new Thread(() -> {
+                    // ---- Notificación por correo ----
+                    String asunto = "SwiftFold: documento actualizado";
+
+                    String mensaje =
+                        "Estimado usuario,\n\n" +
+                        "Se ha actualizado un documento en el sistema SwiftFold.\n\n" +
+                        "Resumen del documento:\n" +
+                        "• Nombre: " + d.getNombre() + "\n" +
+                        "• Código: " + (d.getCodigo().isBlank() ? "Sin código" : d.getCodigo()) + "\n" +
+                        "• Categoría: " + nombreCategoria + "\n" +
+                        "• Tipo de acceso: " + d.getTipoAcceso() + "\n" +
+                        "• Disposición final: " + d.getDisposicionFinal() + "\n\n" +
+                        "Si necesita revisar el detalle, por favor ingrese al módulo de documentos en SwiftFold.\n\n" +
+                        "Atentamente,\n" +
+                        "SwiftFold – Sistema de Gestión Documental";
+
+                    // Envías con tu clase de correo
+                    enviarCorreo.eliminarModificar(mensaje, asunto);
+                    // -------------------------------
+                }).start();
+                
                 this.dispose();
                 Gestor_De_Documentos g = new Gestor_De_Documentos("", 0L);
                 g.setLocationRelativeTo(null);

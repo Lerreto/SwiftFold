@@ -1,17 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package ui;
 
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import logica.CategoriaDao;
 
-/**
- *
- * @author Juan Pablo
- */
 public class Nueva_Categoria extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Nueva_Categoria.class.getName());
@@ -228,9 +220,9 @@ public class Nueva_Categoria extends javax.swing.JFrame {
 
             // Cerrar esta ventana y volver al gestor (si así lo quieres)
             this.dispose();
-            Gesto_De_Usuarios ventanaGestorDeUsuario = new Gesto_De_Usuarios();
-            ventanaGestorDeUsuario.setLocationRelativeTo(null);
-            ventanaGestorDeUsuario.setVisible(true);
+            Gestor_De_Documentos ventanaGestorDocumentos = new Gestor_De_Documentos("", 0L);
+            ventanaGestorDocumentos.setLocationRelativeTo(null);
+            ventanaGestorDocumentos.setVisible(true);
 
         } else {
             JOptionPane.showMessageDialog(
