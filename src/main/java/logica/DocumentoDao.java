@@ -13,6 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -147,16 +150,16 @@ public class DocumentoDao {
     // ======= ACCION DE GUARDAR DOCUMENTO EN LA BASE DE DATOS ======= //
     
     public long guardarDocumento(Documento d, Path rutaOrigen) throws Exception {
-        final String SQL = """
-            INSERT INTO documentos
-            (nombre, codigo, descripcion,
-             id_categoria, tipo_acceso, disposicion_final,
-             file_name, file_type, file_size_bytes,
-             creador_email, creador_nombre,
-             departamento, municipio,
-             creado_en, actualizado_en)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?, datetime('now'), datetime('now'))
-            """;
+    final String SQL = """
+        INSERT INTO documentos
+        (nombre, codigo, descripcion,
+         id_categoria, tipo_acceso, disposicion_final,
+         file_name, file_type, file_size_bytes,
+         creador_email, creador_nombre,
+         departamento, municipio,
+         creado_en, actualizado_en)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?, ?, ?)
+        """;
 
         long id;
 
@@ -179,7 +182,7 @@ public class DocumentoDao {
             ps.setString(i++, d.getNombre());
             ps.setString(i++, d.getCodigo());
             ps.setString(i++, d.getDescripcion());
-            ps.setLong  (i++, idCategoria);          // <<< aquí va la categoría resuelta
+            ps.setLong  (i++, idCategoria);
             ps.setString(i++, d.getTipoAcceso());
             ps.setString(i++, d.getDisposicionFinal());
             ps.setString(i++, d.getFileName());
@@ -189,6 +192,10 @@ public class DocumentoDao {
             ps.setString(i++, d.getUsuario_Demo());
             ps.setString(i++, d.getDepartamento());
             ps.setString(i++, d.getMunicipio());
+
+            // Si tus columnas son DATETIME/TIMESTAMP:
+            ps.setString(i++, TimeUtils.ahoraBogota()); // creado_en
+            ps.setString(i++, TimeUtils.ahoraBogota()); // actualizado_en
 
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -222,7 +229,7 @@ public class DocumentoDao {
                    tipo_acceso = ?,
                    disposicion_final = ?,
                    file_name = ?,
-                   actualizado_en = datetime('now')
+                   actualizado_en = ?
              WHERE id_documento = ?
         """;
 
@@ -235,8 +242,12 @@ public class DocumentoDao {
             ps.setLong(4, documento.getIdCategoria());
             ps.setString(5, documento.getTipoAcceso());
             ps.setString(6, documento.getDisposicionFinal());
-            ps.setString(7, documento.getFileName());    // conservas el nombre original mostrado
-            ps.setLong(8, documento.getIdDocumento());
+            ps.setString(7, documento.getFileName());
+
+            ps.setString(8, TimeUtils.ahoraBogota()); // creado_en
+//            ps.setString(9, documento.getFechaCreacion()); // creado_en
+
+            ps.setLong(9, documento.getIdDocumento());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
@@ -369,17 +380,31 @@ public class DocumentoDao {
     // ======= OBTENER EL NUMERO DE DOCUMENTOS SUBIDO POR EL USUARIO ======= //
     
     public int obtenerNumeroDocumentosPorUsuario() throws SQLException {
-        String correoUsuario = SesionSingleton.getInstance().getUsuarioLogueado().getEmail(); 
-        String sql = "SELECT COUNT(*) FROM documentos WHERE creador_email = ?";
+        String correoUsuario = SesionSingleton.getInstance()
+                .getUsuarioLogueado()
+                .getEmail();
+
+        // Por si acaso, limpiamos desde Java también
+        if (correoUsuario != null) {
+            correoUsuario = correoUsuario.trim().toLowerCase();
+        }
+
+        String sql = """
+            SELECT COUNT(*) 
+            FROM documentos 
+            WHERE LOWER(TRIM(creador_email)) = ?
+        """;
 
         try (Connection cn = new Db().establecerConexion();
              PreparedStatement ps = cn.prepareStatement(sql)) {
 
-            ps.setString(1, correoUsuario.toLowerCase()); 
+            ps.setString(1, correoUsuario);   // ya va limpio y en minúsculas
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt(1);  
+                    int count = rs.getInt(1);
+                    System.out.println("Documentos del usuario [" + correoUsuario + "] = " + count);
+                    return count;
                 }
             }
         } catch (SQLException e) {
@@ -407,4 +432,17 @@ public class DocumentoDao {
         double gb = mb / 1024.0;
         return String.format("%.2f GB", gb);
     }
+    
+    public class TimeUtils {
+
+        private static final DateTimeFormatter FORMATO =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        public static String ahoraBogota() {
+            return LocalDateTime
+                    .now(ZoneId.of("America/Bogota"))
+                    .format(FORMATO);
+        }
+    }
+
 }

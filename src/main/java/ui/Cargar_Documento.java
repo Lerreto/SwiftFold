@@ -12,6 +12,8 @@ import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import logica.EnviadorCorreos;
+import persistencia.SesionSingleton;
+import persistencia.Usuario;
 
 
 // CLASE PRINCIPAL
@@ -21,6 +23,8 @@ public class Cargar_Documento extends javax.swing.JFrame {
     private Path rutaSeleccionada;
     private logica.Metadatos.Info metaSeleccionada; 
     private EnviadorCorreos enviarCorreo = new EnviadorCorreos();
+    public Usuario usuario = SesionSingleton.getInstance().getUsuarioLogueado();
+
 
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cargar_Documento.class.getName());
@@ -461,11 +465,11 @@ public class Cargar_Documento extends javax.swing.JFrame {
             d.setFileType(metaSeleccionada.tipo());
             d.setFileSizeBytes(metaSeleccionada.sizeBytes());
 
-            // Datos adicionales fijos por el momento (pueden ser obtenidos de usuario más tarde)
-            d.setUsuario_Demo("Usuario Demo");
-            d.setCorreo_demo("usuario.demo@correo.com");
-            d.setDepartamento("Santander");
-            d.setMunicipio("Bucaramanga");
+            // Casi se me olvida cambiar esto
+            d.setUsuario_Demo(usuario.getNombreCompleto());
+            d.setCorreo_demo(usuario.getEmail());
+            d.setDepartamento(usuario.getDepartamento());
+            d.setMunicipio(usuario.getMunicipio());
 
             // Guardar documento
             long id = new logica.DocumentoDao().guardarDocumento(d, rutaSeleccionada);

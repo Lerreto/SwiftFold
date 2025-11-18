@@ -1,12 +1,19 @@
 package ui;
 
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import persistencia.SesionSingleton;
 import logica.RegistroManager;
 import persistencia.Usuario;
 import logica.UtilidadesDeArchivos;
 import logica.ValidationResult;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import logica.DocumentoDao;
 import logica.EnviadorCorreos;
 
@@ -23,11 +30,15 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
      * Creates new form Gestor_De_Documentos
      */
     
-     public Gesto_De_Usuarios() {         
+     public Gesto_De_Usuarios(String parametro) {         
         initComponents();
         establecerEstadisticas();
         
-        new UtilidadesDeArchivos().crearTablaUsuarios(JTablaUsuarios);
+        configurarPlaceholderBuscador();
+        
+        new UtilidadesDeArchivos().crearTablaUsuarios(JTablaUsuarios, parametro);
+        
+        personalizarTablaUsuarios();
         
         JLabelNombreUsuario.setText(usuario.getNombreCompleto());
         JLabelRolCargo.setText( usuario.getStringRol() + " - " + usuario.getCargo() + " - " + usuario.getDependencia());
@@ -52,7 +63,116 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
     }
      
      
-        // Metodos extras para simplificar acciones
+   // Metodos extras para simplificar acciones
+     
+     
+   private void personalizarTablaUsuarios() {
+        // Por si todavía no tiene modelo válido
+        if (JTablaUsuarios.getColumnModel().getColumnCount() == 0) {
+            return;
+        }
+
+        // ====== ENCABEZADO ======
+        JTableHeader header = JTablaUsuarios.getTableHeader();
+        header.setFont(new Font("Inter", Font.BOLD, 13));
+        header.setOpaque(false);
+        header.setBackground(new Color(39, 84, 61));  // verde oscuro SwiftFold
+        header.setForeground(Color.WHITE);
+        header.setReorderingAllowed(false);
+
+        // ====== TABLA GENERAL ======
+        JTablaUsuarios.setRowHeight(28);
+        JTablaUsuarios.setShowHorizontalLines(false);
+        JTablaUsuarios.setShowVerticalLines(false);
+        JTablaUsuarios.setFillsViewportHeight(true);
+        JTablaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JTablaUsuarios.setSelectionBackground(new Color(204, 232, 207)); // verde muy suave
+        JTablaUsuarios.setSelectionForeground(new Color(20, 61, 36));    // verde texto
+        JTablaUsuarios.setGridColor(new Color(230, 230, 230));
+
+        // ====== ANCHOS SUGERIDOS DE COLUMNAS ======
+        // 0: Nombre y Apellido
+        JTablaUsuarios.getColumnModel().getColumn(0).setPreferredWidth(200);
+        // 1: Email
+        JTablaUsuarios.getColumnModel().getColumn(1).setPreferredWidth(220);
+        // 2: Departamento
+        JTablaUsuarios.getColumnModel().getColumn(2).setPreferredWidth(120);
+        // 3: Municipio
+        JTablaUsuarios.getColumnModel().getColumn(3).setPreferredWidth(120);
+        // 4: Rol
+        JTablaUsuarios.getColumnModel().getColumn(4).setPreferredWidth(90);
+
+        // ====== RENDERER PARA FILAS ZEBRA + ROL CENTRADO ======
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(
+                    javax.swing.JTable table,
+                    Object value,
+                    boolean isSelected,
+                    boolean hasFocus,
+                    int row,
+                    int column) {
+
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                // Zebra (filas alternas) si NO está seleccionada
+                if (!isSelected) {
+                    if (row % 2 == 0) {
+                        c.setBackground(Color.WHITE);
+                    } else {
+                        c.setBackground(new Color(247, 250, 247)); // verde casi blanco
+                    }
+                    c.setForeground(new Color(40, 40, 40));
+                } else {
+                    c.setBackground(new Color(204, 232, 207)); // selección verde suave
+                    c.setForeground(new Color(20, 61, 36));
+                }
+
+                // Fuente general
+                c.setFont(new Font("Inter", Font.PLAIN, 13));
+
+                // Alineaciones por columna
+                if (column == 4) { // Rol
+                    setHorizontalAlignment(SwingConstants.CENTER);
+                    setFont(getFont().deriveFont(Font.BOLD));
+                } else if (column == 1) { // Email
+                    setHorizontalAlignment(SwingConstants.LEFT);
+                    setFont(getFont().deriveFont(Font.PLAIN));
+                } else {
+                    setHorizontalAlignment(SwingConstants.LEFT);
+                }
+
+                return c;
+            }
+        };
+
+        for (int i = 0; i < JTablaUsuarios.getColumnModel().getColumnCount(); i++) {
+            JTablaUsuarios.getColumnModel().getColumn(i).setCellRenderer(renderer);
+        }
+    }
+  
+     
+    private void configurarPlaceholderBuscador() {
+            JTextBuscador.setText("Buscar usuario por nombre, apellido o email");
+            JTextBuscador.setForeground(new Color(150, 150, 150));
+        }
+
+        private void ejecutarBusquedaUsuarios() {
+        String textoBusqueda = JTextBuscador.getText().trim();
+
+        // Si está el placeholder, lo tratamos como vacío
+        if (textoBusqueda.equals("Buscar usuario por nombre, apellido o email")) {
+            textoBusqueda = "";
+        }
+
+        // Cerrar esta ventana y abrir otra con el filtro aplicado
+        this.dispose();
+
+        Gesto_De_Usuarios ventana = new Gesto_De_Usuarios(textoBusqueda);
+        ventana.setLocationRelativeTo(null);
+        ventana.setVisible(true);
+    }
+
      
     public void establecerEstadisticas() {
         try {
@@ -133,7 +253,7 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
             
 
             // Recargar la tabla de usuarios
-            new UtilidadesDeArchivos().crearTablaUsuarios(JTablaUsuarios);
+            new UtilidadesDeArchivos().crearTablaUsuarios(JTablaUsuarios, "");
             emailSeleccionado = null; // limpiar selección
 
         } else {
@@ -217,7 +337,7 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         JTablaUsuarios = new javax.swing.JTable();
         JPanelBarraDeAcciones = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        JTextBuscador = new javax.swing.JTextField();
         JButonBuscar = new javax.swing.JButton();
         JButonEditar = new javax.swing.JButton();
         JButonEliminar = new javax.swing.JButton();
@@ -723,15 +843,48 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
 
         Backgraund.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 250, 740, 440));
 
-        jTextField1.setText("jTextField1");
+        JTextBuscador.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
+        JTextBuscador.setText("jTextField1");
+        JTextBuscador.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                JTextBuscadorFocusLost(evt);
+            }
+        });
+        JTextBuscador.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                JTextBuscadorMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                JTextBuscadorMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                JTextBuscadorMousePressed(evt);
+            }
+        });
+        JTextBuscador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JTextBuscadorActionPerformed(evt);
+            }
+        });
 
+        JButonBuscar.setBackground(new java.awt.Color(204, 204, 255));
         JButonBuscar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JButonBuscar.setForeground(new java.awt.Color(0, 0, 153));
         JButonBuscar.setText("Buscar");
+        JButonBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JButonBuscarMouseClicked(evt);
+            }
+        });
 
+        JButonEditar.setBackground(new java.awt.Color(255, 255, 204));
         JButonEditar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JButonEditar.setForeground(new java.awt.Color(102, 51, 0));
         JButonEditar.setText("Editar");
 
+        JButonEliminar.setBackground(new java.awt.Color(255, 204, 204));
         JButonEliminar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JButonEliminar.setForeground(new java.awt.Color(204, 0, 51));
         JButonEliminar.setText("Eliminar");
 
         javax.swing.GroupLayout JPanelBarraDeAccionesLayout = new javax.swing.GroupLayout(JPanelBarraDeAcciones);
@@ -739,15 +892,15 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         JPanelBarraDeAccionesLayout.setHorizontalGroup(
             JPanelBarraDeAccionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPanelBarraDeAccionesLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(20, 20, 20)
+                .addComponent(JTextBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
                 .addComponent(JButonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
                 .addComponent(JButonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(20, 20, 20)
                 .addComponent(JButonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addGap(20, 20, 20))
         );
         JPanelBarraDeAccionesLayout.setVerticalGroup(
             JPanelBarraDeAccionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -755,7 +908,7 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
                 .addGap(9, 9, 9)
                 .addGroup(JPanelBarraDeAccionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(JButonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                    .addComponent(jTextField1)
+                    .addComponent(JTextBuscador)
                     .addComponent(JButonEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(JButonEliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(9, 9, 9))
@@ -875,6 +1028,36 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_JTablaUsuariosMouseClicked
 
+    private void JButonBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JButonBuscarMouseClicked
+        ejecutarBusquedaUsuarios();
+    }//GEN-LAST:event_JButonBuscarMouseClicked
+
+    private void JTextBuscadorMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTextBuscadorMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JTextBuscadorMouseEntered
+
+    private void JTextBuscadorMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTextBuscadorMousePressed
+        if (JTextBuscador.getText().equals("Buscar usuario por nombre, apellido o email")) {
+            JTextBuscador.setText("");
+            JTextBuscador.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_JTextBuscadorMousePressed
+
+    private void JTextBuscadorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_JTextBuscadorFocusLost
+        if (JTextBuscador.getText().trim().isEmpty()) {
+            JTextBuscador.setText("Buscar usuario por nombre, apellido o email");
+            JTextBuscador.setForeground(new Color(150, 150, 150));
+        }
+    }//GEN-LAST:event_JTextBuscadorFocusLost
+
+    private void JTextBuscadorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTextBuscadorMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JTextBuscadorMouseExited
+
+    private void JTextBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JTextBuscadorActionPerformed
+        ejecutarBusquedaUsuarios();
+    }//GEN-LAST:event_JTextBuscadorActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -897,7 +1080,7 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Gesto_De_Usuarios().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Gesto_De_Usuarios("").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -922,6 +1105,7 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
     private javax.swing.JPanel JPanelMisDocumentos;
     private javax.swing.JPanel JPanelUsuarios;
     private javax.swing.JTable JTablaUsuarios;
+    private javax.swing.JTextField JTextBuscador;
     private javax.swing.JPanel LineaHorizontal01;
     private javax.swing.JPanel LineaHorizontal02;
     private javax.swing.JPanel PanelEstadisticas;
@@ -951,6 +1135,5 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

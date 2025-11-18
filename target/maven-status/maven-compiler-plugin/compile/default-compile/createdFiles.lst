@@ -9,6 +9,7 @@ ui\Cargar_Documento$9.class
 ui\Gestor_De_Documentos$3.class
 ui\Nueva_Categoria$2.class
 ui\Registrarse$18.class
+ui\Gesto_De_Usuarios$7.class
 logica\EnviadorCorreos.class
 logica\DocumentoDao$1.class
 ui\Gesto_De_Usuarios$4.class
@@ -36,6 +37,7 @@ logica\HashUtil.class
 ui\Gestor_De_Documentos$6.class
 ui\Ver_Documento.class
 ui\Ajustes_Usuario$5.class
+ui\Gestor_De_Documentos$19.class
 ui\Registrarse$8.class
 ui\Cargar_Documento$7.class
 ui\Ajustes_Usuario_Fuera$4.class
@@ -47,6 +49,7 @@ ui\Login$7.class
 persistencia\SesionSingleton.class
 ui\Gestor_De_Documentos$8.class
 ui\Registrarse$23.class
+logica\DocumentoDao$TimeUtils.class
 persistencia\RolSuperAdministrador.class
 ui\Modificar_Documento$2.class
 ui\Ajustes_Usuario$9.class
@@ -103,12 +106,15 @@ ui\Login$8.class
 ui\Gestor_De_Documentos$12.class
 ui\Registrarse$24.class
 ui\Gestor_De_Documentos$2.class
+ui\Gesto_De_Usuarios$8.class
 ui\Registrarse$19.class
 persistencia\RolSecretario.class
+logica\UtilidadesDeArchivos$1.class
 logica\DocumentoDao.class
 ui\Ajustes_Usuario$8.class
 ui\Ajustes_Usuario_Fuera$7.class
 ui\Gesto_De_Usuarios$5.class
+ui\Gesto_De_Usuarios$10.class
 persistencia\Rol.class
 ui\Gestor_De_Documentos$13.class
 ui\Gesto_De_Usuarios$2.class
@@ -121,12 +127,15 @@ ui\Registrarse$7.class
 ui\Nueva_Categoria$1.class
 ui\Gesto_De_Usuarios.class
 ui\Eliminar_Categoria.class
+ui\Gesto_De_Usuarios$9.class
 ui\Gestor_De_Documentos$5.class
 ui\Login$3.class
+ui\Gestor_De_Documentos$20.class
 ui\Cargar_Documento$3.class
 persistencia\Usuario.class
 logica\EnviadorCorreos$1.class
 ui\Registrarse$14.class
+ui\Gesto_De_Usuarios$11.class
 ui\Gesto_De_Usuarios$3.class
 ui\Login.class
 logica\CategoriaDao$1.class

@@ -39,4 +39,9 @@ public class RolSuperAdministrador extends Rol{
         return true;
     }
     
+    @Override
+    public boolean tieneAccesoUsuario() {
+        return true;
+    }
+    
 }

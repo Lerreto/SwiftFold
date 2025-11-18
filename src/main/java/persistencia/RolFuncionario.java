@@ -37,4 +37,9 @@ public class RolFuncionario extends Rol{
     public boolean tieneAccesoCategoria() {
         return false;
     }
+    
+    @Override
+    public boolean tieneAccesoUsuario() {
+        return false;
+    }
 }

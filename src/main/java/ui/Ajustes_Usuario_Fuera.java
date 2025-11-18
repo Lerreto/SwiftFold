@@ -37,7 +37,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
             
             // Volver al gestor y cerrar esta ventana
             this.dispose();
-            Gesto_De_Usuarios ventanaGestor = new Gesto_De_Usuarios();
+            Gesto_De_Usuarios ventanaGestor = new Gesto_De_Usuarios("");
             ventanaGestor.setLocationRelativeTo(null);
             ventanaGestor.setVisible(true);
             return;
@@ -49,6 +49,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
         TextNumero.setText(usuario.getTelefono());
         TextCargo.setText(usuario.getCargo());
         TextoCambiable.setText(usuario.getNombre() + " " + usuario.getApellido());
+        TextContrase.setText(usuario.getHashContrasena());
 
         SelectDepart.setSelectedItem(usuario.getDepartamento());
         SelectMunicipio.setSelectedItem(usuario.getMunicipio());
@@ -445,7 +446,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
     private void JBotonSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JBotonSalirMouseClicked
         this.dispose();
 
-        Gesto_De_Usuarios ventanaGestorDeUsuario = new Gesto_De_Usuarios();
+        Gesto_De_Usuarios ventanaGestorDeUsuario = new Gesto_De_Usuarios("");
         ventanaGestorDeUsuario.setLocationRelativeTo(null);
         ventanaGestorDeUsuario.setVisible(true);
     }//GEN-LAST:event_JBotonSalirMouseClicked
@@ -530,7 +531,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
 
             // volver al gestor de usuarios
             this.dispose();
-            Gesto_De_Usuarios ventanaGestor = new Gesto_De_Usuarios();
+            Gesto_De_Usuarios ventanaGestor = new Gesto_De_Usuarios("");
             ventanaGestor.setLocationRelativeTo(null);
             ventanaGestor.setVisible(true);
 

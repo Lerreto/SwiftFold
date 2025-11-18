@@ -19,6 +19,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     public Usuario usuario = SesionSingleton.getInstance().getUsuarioLogueado();
     private Long categoriaSelect;
     private EnviadorCorreos enviarCorreo = new EnviadorCorreos();
+    private static final String PLACEHOLDER_BUSQUEDA = "Buscar nombre del documento";
     
 
     /**
@@ -30,9 +31,14 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         initComponents();
         establecerEstadisticas();
         
+        JTextBusquedad.setText(PLACEHOLDER_BUSQUEDA);
+        JTextBusquedad.setForeground(Color.GRAY);
         
         new DocumentoDao().listar5Cols(this.TablaDocumentos, nombre, Idcategoria);
         new CategoriaDao().listarCategorias(this.TablaCategorias);
+        
+        estilizarTablaDocumentos();
+        estilizarTablaCategorias();
         
         JLabelNombreUsuario.setText(usuario.getNombreCompleto());
         JLabelRolCargo.setText( usuario.getStringRol() + " - " + usuario.getCargo() + " - " + usuario.getDependencia());
@@ -165,6 +171,144 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Hubo un error al abrir la ventana de modificación: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    
+    private void estilizarTablaDocumentos() {
+        // Si aún no hay columnas, no hacemos nada
+        if (TablaDocumentos.getColumnModel().getColumnCount() == 0) {
+            return;
+        }
+
+        // 🎨 Paleta consistente con Gestor de Usuarios
+        Color verdeEncabezado = new Color(39, 84, 61);    // verde oscuro SwiftFold
+        Color verdeZebra      = new Color(247, 250, 247); // verde casi blanco
+        Color verdeSeleccion  = new Color(204, 232, 207); // verde pastel suave
+        Color grisGrid        = new Color(230, 230, 230);
+
+        // ====== CONFIGURACIÓN GENERAL DE LA TABLA ======
+        TablaDocumentos.setRowHeight(28);
+        TablaDocumentos.setShowHorizontalLines(false);
+        TablaDocumentos.setShowVerticalLines(false);
+        TablaDocumentos.setFillsViewportHeight(true);
+        TablaDocumentos.setGridColor(grisGrid);
+        TablaDocumentos.setSelectionBackground(verdeSeleccion);
+        TablaDocumentos.setSelectionForeground(new Color(20, 61, 36)); // texto selección
+
+        // ====== ENCABEZADO ======
+        java.awt.Font headerFont = new java.awt.Font("Inter", java.awt.Font.BOLD, 13);
+        javax.swing.table.JTableHeader header = TablaDocumentos.getTableHeader();
+        header.setFont(headerFont);
+        header.setOpaque(false);
+        header.setBackground(verdeEncabezado);
+        header.setForeground(Color.WHITE);
+        header.setReorderingAllowed(false);
+
+        // ====== ANCHOS SUGERIDOS (según tus columnas: ID, Tipo, Documento, Categoría, Creado/Ubicación, Estado) ======
+        try {
+            TablaDocumentos.getColumnModel().getColumn(0).setPreferredWidth(40);   // ID
+            TablaDocumentos.getColumnModel().getColumn(1).setPreferredWidth(60);   // Tipo
+            TablaDocumentos.getColumnModel().getColumn(2).setPreferredWidth(280);  // Documento
+            TablaDocumentos.getColumnModel().getColumn(3).setPreferredWidth(110);  // Categoría
+            TablaDocumentos.getColumnModel().getColumn(4).setPreferredWidth(170);  // Creado / Ubicación
+            TablaDocumentos.getColumnModel().getColumn(5).setPreferredWidth(80);   // Estado
+        } catch (Exception e) {
+            // por si cambia el número de columnas en algún momento
+        }
+
+        // ====== RENDERER FILAS ZEBRA + ALINEACIONES ======
+        javax.swing.table.DefaultTableCellRenderer renderer = new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(
+                    javax.swing.JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+
+                java.awt.Component c = super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+
+                // Colores de fondo y texto
+                if (isSelected) {
+                    c.setBackground(verdeSeleccion);
+                    c.setForeground(new Color(20, 61, 36));
+                } else {
+                    if (row % 2 == 0) {
+                        c.setBackground(verdeZebra); // fila par
+                    } else {
+                        c.setBackground(Color.WHITE); // fila impar
+                    }
+                    c.setForeground(new Color(40, 40, 40));
+                }
+
+                // Fuente general
+                c.setFont(new java.awt.Font("Inter", java.awt.Font.PLAIN, 13));
+
+                // Alineaciones por columna
+                if (column == 0) { // ID
+                    setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                    setFont(getFont().deriveFont(java.awt.Font.BOLD));
+                } else if (column == 1) { // Tipo (PDF, DOCX, etc.)
+                    setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                } else if (column == 5) { // Estado (tipo_acceso)
+                    setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                    setFont(getFont().deriveFont(java.awt.Font.BOLD));
+                } else {
+                    // Documento, Categoría, Creado / Ubicación
+                    setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                }
+
+                return c;
+            }
+        };
+
+        for (int i = 0; i < TablaDocumentos.getColumnModel().getColumnCount(); i++) {
+            TablaDocumentos.getColumnModel().getColumn(i).setCellRenderer(renderer);
+        }
+    }
+    
+    
+    private void estilizarTablaCategorias() {
+        TablaCategorias.setRowHeight(24);
+
+        TablaCategorias.setShowHorizontalLines(true);
+        TablaCategorias.setShowVerticalLines(false);
+        TablaCategorias.setIntercellSpacing(new java.awt.Dimension(0, 1));
+        TablaCategorias.setGridColor(new Color(220, 220, 220));
+
+        // Encabezado gris elegante
+        java.awt.Font headerFont = new java.awt.Font("Inter", java.awt.Font.BOLD, 12);
+        TablaCategorias.getTableHeader().setFont(headerFont);
+        TablaCategorias.getTableHeader().setOpaque(true);
+        TablaCategorias.getTableHeader().setBackground(new Color(100, 100, 100)); // gris oscuro
+        TablaCategorias.getTableHeader().setForeground(Color.WHITE);
+        TablaCategorias.getTableHeader().setReorderingAllowed(false);
+
+        TablaCategorias.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(
+                    javax.swing.JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+
+                java.awt.Component c = super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+
+                if (isSelected) {
+                    c.setBackground(new Color(210, 220, 240)); // azul/gris suave
+                    c.setForeground(Color.BLACK);
+                } else {
+                    if (row % 2 == 0) {
+                        c.setBackground(new Color(245, 245, 245)); // gris claro
+                    } else {
+                        c.setBackground(Color.WHITE);
+                    }
+                    c.setForeground(Color.BLACK);
+                }
+
+                return c;
+            }
+        });
+    }
+
+
+
     
     
 
@@ -359,6 +503,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         Backgraund.add(BarraVertical02, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 80, -1, -1));
 
+        TablaDocumentos.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         TablaDocumentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -377,7 +522,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         });
         JScrollDocumentos.setViewportView(TablaDocumentos);
 
-        Backgraund.add(JScrollDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 250, 740, 440));
+        Backgraund.add(JScrollDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, 740, 430));
 
         TituloGrande.setFont(new java.awt.Font("Inter", 1, 36)); // NOI18N
         TituloGrande.setForeground(new java.awt.Color(13, 6, 45));
@@ -390,6 +535,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         PanelOpcionesDocumentos.setBackground(new java.awt.Color(245, 245, 245));
 
+        JTextBusquedad.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
         JTextBusquedad.setText("Buscar nombre del documento");
         JTextBusquedad.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -410,7 +556,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             }
         });
 
+        JButtonBuscar.setBackground(new java.awt.Color(204, 204, 255));
         JButtonBuscar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JButtonBuscar.setForeground(new java.awt.Color(0, 0, 153));
         JButtonBuscar.setText("Buscar");
         JButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -418,7 +566,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             }
         });
 
+        JButtomEditar.setBackground(new java.awt.Color(255, 255, 204));
         JButtomEditar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JButtomEditar.setForeground(new java.awt.Color(102, 51, 0));
         JButtomEditar.setText("Editar");
         JButtomEditar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -431,7 +581,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             }
         });
 
+        JButtonEliminar.setBackground(new java.awt.Color(255, 204, 204));
         JButtonEliminar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JButtonEliminar.setForeground(new java.awt.Color(204, 0, 51));
         JButtonEliminar.setText("Eliminar");
         JButtonEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -444,7 +596,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
             }
         });
 
+        JButtonVer.setBackground(new java.awt.Color(204, 255, 204));
         JButtonVer.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JButtonVer.setForeground(new java.awt.Color(0, 51, 51));
         JButtonVer.setText("Ver");
         JButtonVer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -457,34 +611,33 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         PanelOpcionesDocumentosLayout.setHorizontalGroup(
             PanelOpcionesDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelOpcionesDocumentosLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addGap(20, 20, 20)
                 .addComponent(JTextBusquedad, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(20, 20, 20)
                 .addComponent(JButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addComponent(JButtomEditar)
-                .addGap(12, 12, 12)
+                .addGap(20, 20, 20)
                 .addComponent(JButtonEliminar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(20, 20, 20)
                 .addComponent(JButtonVer)
-                .addGap(28, 28, 28))
+                .addGap(20, 20, 20))
         );
         PanelOpcionesDocumentosLayout.setVerticalGroup(
             PanelOpcionesDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesDocumentosLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(PanelOpcionesDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(PanelOpcionesDocumentosLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(JButtonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
-                    .addComponent(JTextBusquedad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelOpcionesDocumentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(JTextBusquedad, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(JButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(JButtonVer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                     .addComponent(JButtonEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(JButtomEditar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14))
         );
 
-        Backgraund.add(PanelOpcionesDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 740, 70));
+        Backgraund.add(PanelOpcionesDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, 740, 70));
 
         PanelEstadisticas.setBackground(new java.awt.Color(245, 245, 245));
 
@@ -739,6 +892,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         TItuloDependencia.setText("POR CATEGORIAS");
         Backgraund.add(TItuloDependencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
+        TablaCategorias.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         TablaCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -757,7 +911,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         });
         JScrollDependencias.setViewportView(TablaCategorias);
 
-        Backgraund.add(JScrollDependencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 210, 280));
+        Backgraund.add(JScrollDependencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 200, 280));
 
         JPanelAjustes.setBackground(new java.awt.Color(255, 251, 248));
         JPanelAjustes.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -879,6 +1033,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         TextAjustesCategorias.setBackground(new java.awt.Color(0, 0, 0));
         TextAjustesCategorias.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         TextAjustesCategorias.setForeground(new java.awt.Color(0, 0, 0));
+        TextAjustesCategorias.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         TextAjustesCategorias.setText("Ajustes Categorias");
 
         javax.swing.GroupLayout JPanelAjustesCategoriasLayout = new javax.swing.GroupLayout(JPanelAjustesCategorias);
@@ -886,9 +1041,8 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JPanelAjustesCategoriasLayout.setHorizontalGroup(
             JPanelAjustesCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPanelAjustesCategoriasLayout.createSequentialGroup()
-                .addContainerGap(30, Short.MAX_VALUE)
-                .addComponent(TextAjustesCategorias)
-                .addGap(28, 28, 28))
+                .addComponent(TextAjustesCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                .addContainerGap())
         );
         JPanelAjustesCategoriasLayout.setVerticalGroup(
             JPanelAjustesCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -920,7 +1074,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private void JButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtonBuscarActionPerformed
         String textoBusqueda = JTextBusquedad.getText().trim();
 
-        if (textoBusqueda.equals("Buscar nombre del documento")) {
+        if (textoBusqueda.equals(PLACEHOLDER_BUSQUEDA)) {
             textoBusqueda = "";  
         }
 
@@ -955,11 +1109,18 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     }//GEN-LAST:event_JPanelCargarDocumentoMouseClicked
 
     private void JPanelUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelUsuariosMouseClicked
-        this.dispose();
+        if (usuario.getRol().tieneAccesoUsuario()){
 
-        Gesto_De_Usuarios ventanaGestorDeUsuario = new Gesto_De_Usuarios();
-        ventanaGestorDeUsuario.setLocationRelativeTo(null);
-        ventanaGestorDeUsuario.setVisible(true);
+            this.dispose();
+
+            Gesto_De_Usuarios ventanaGestorDeUsuario = new Gesto_De_Usuarios("");
+            ventanaGestorDeUsuario.setLocationRelativeTo(null);
+            ventanaGestorDeUsuario.setVisible(true);
+
+         } else {
+            JOptionPane.showMessageDialog(this, "No tienes acceso para los usuarios.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }//GEN-LAST:event_JPanelUsuariosMouseClicked
 
     private void JPanelMisDocumentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPanelMisDocumentosMouseClicked
@@ -1026,9 +1187,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     }//GEN-LAST:event_JTextBusquedadActionPerformed
 
     private void JTextBusquedadMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTextBusquedadMousePressed
-        if (JTextBusquedad.getText().equals("Busque por nombre de Documento")) {
-            JTextBusquedad.setText("");  // Limpiar el texto base
-            JTextBusquedad.setForeground(Color.black);  // Cambiar el color del texto a negro
+        if (JTextBusquedad.getText().equals(PLACEHOLDER_BUSQUEDA)) {
+            JTextBusquedad.setText("");              // Limpiar el texto base
+            JTextBusquedad.setForeground(Color.BLACK);  // Cambiar el color del texto a negro
         }
     }//GEN-LAST:event_JTextBusquedadMousePressed
 
@@ -1037,9 +1198,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     }//GEN-LAST:event_JTextBusquedadMouseExited
 
     private void JTextBusquedadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_JTextBusquedadFocusLost
-        if (JTextBusquedad.getText().isEmpty()) {
-            JTextBusquedad.setText("Busque por nombre de Documento");  // Colocar el texto base
-            JTextBusquedad.setForeground(Color.GRAY);  // Cambiar el color a gris
+        if (JTextBusquedad.getText().trim().isEmpty()) {
+            JTextBusquedad.setText(PLACEHOLDER_BUSQUEDA); // Colocar el texto base
+            JTextBusquedad.setForeground(Color.GRAY);      // Cambiar el color a gris
         }
     }//GEN-LAST:event_JTextBusquedadFocusLost
 

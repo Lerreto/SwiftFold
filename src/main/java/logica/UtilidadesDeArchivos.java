@@ -159,37 +159,66 @@ public class UtilidadesDeArchivos {
      */
 
     
-    public void crearTablaUsuarios(JTable jTableUsuarios) {
-        List<Usuario> listaUsuarios = cargarUsuarios(); 
+    public void crearTablaUsuarios(JTable jTableUsuarios, String filtroTexto) {
+        List<Usuario> listaUsuarios = cargarUsuarios();
 
         String[] columnas = {"Nombre y Apellido", "Email", "Departamento", "Municipio", "Rol"};
 
-        // Inicializar la lista de datos con un tamaño máximo
         List<Object[]> datosList = new ArrayList<>();
 
-        // Iterar sobre los usuarios y llenar los datos
+        // Normalizar filtro
+        String filtro = (filtroTexto == null) ? "" : filtroTexto.trim().toLowerCase();
+
+        Usuario usuarioLogueado = SesionSingleton.getInstance().getUsuarioLogueado();
+        String emailLogueado = (usuarioLogueado != null ? usuarioLogueado.getEmail() : null);
+
         for (Usuario usuario : listaUsuarios) {
-            // Verificar si el usuario no es el mismo que el usuario logueado
-            if (!usuario.getEmail().equals(SesionSingleton.getInstance().getUsuarioLogueado().getEmail())) {
-                Object[] datos = new Object[5];
-                datos[0] = usuario.getNombre() + " " + usuario.getApellido();
-                datos[1] = usuario.getEmail(); 
-                datos[2] = usuario.getDepartamento(); 
-                datos[3] = usuario.getMunicipio(); 
-                datos[4] = usuario.getRol().getClass().getSimpleName(); 
-                datosList.add(datos);
+
+            // No mostrar al mismo usuario logueado
+            if (emailLogueado != null && emailLogueado.equalsIgnoreCase(usuario.getEmail())) {
+                continue;
             }
+
+            String nombre = usuario.getNombre() != null ? usuario.getNombre() : "";
+            String apellido = usuario.getApellido() != null ? usuario.getApellido() : "";
+            String nombreCompleto = (nombre + " " + apellido).trim();
+            String email = usuario.getEmail() != null ? usuario.getEmail() : "";
+            String departamento = usuario.getDepartamento() != null ? usuario.getDepartamento() : "";
+            String municipio = usuario.getMunicipio() != null ? usuario.getMunicipio() : "";
+            String rol = (usuario.getRol() != null
+                    ? usuario.getRol().getClass().getSimpleName()
+                    : "N/D");
+
+            // ---- FILTRO LIKE (nombre, apellido, nombre completo o email) ----
+            if (!filtro.isEmpty()) {
+                String campoBusqueda = (nombreCompleto + " " + email).toLowerCase();
+                if (!campoBusqueda.contains(filtro)) {
+                    continue; // no coincide → no se agrega
+                }
+            }
+
+            datosList.add(new Object[]{
+                    nombreCompleto,
+                    email,
+                    departamento,
+                    municipio,
+                    rol
+            });
         }
 
-        // Convertir la lista a un arreglo de objetos
         Object[][] datos = datosList.toArray(new Object[0][0]);
 
-        // Crear el modelo de la tabla con los datos y las columnas
-        DefaultTableModel model = new DefaultTableModel(datos, columnas);
+        DefaultTableModel model = new DefaultTableModel(datos, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
-        // Asignar el modelo de la tabla al JTable
         jTableUsuarios.setModel(model);
     }
+
+
     
     
      /**
