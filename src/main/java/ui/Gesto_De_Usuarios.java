@@ -941,6 +941,7 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         JButonBuscar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButonBuscar.setForeground(new java.awt.Color(0, 0, 153));
         JButonBuscar.setText("Buscar");
+        JButonBuscar.setBorderPainted(false);
         JButonBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JButonBuscarMouseClicked(evt);
@@ -951,11 +952,13 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         JButonEditar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButonEditar.setForeground(new java.awt.Color(102, 51, 0));
         JButonEditar.setText("Editar");
+        JButonEditar.setBorderPainted(false);
 
         JButonEliminar.setBackground(new java.awt.Color(255, 204, 204));
         JButonEliminar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButonEliminar.setForeground(new java.awt.Color(204, 0, 51));
         JButonEliminar.setText("Eliminar");
+        JButonEliminar.setBorderPainted(false);
 
         javax.swing.GroupLayout JPanelBarraDeAccionesLayout = new javax.swing.GroupLayout(JPanelBarraDeAcciones);
         JPanelBarraDeAcciones.setLayout(JPanelBarraDeAccionesLayout);

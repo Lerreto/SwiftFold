@@ -211,6 +211,7 @@ public class Ajustes_Usuario extends javax.swing.JFrame {
         JBotonSalir.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JBotonSalir.setForeground(new java.awt.Color(204, 0, 51));
         JBotonSalir.setText("Salir");
+        JBotonSalir.setBorderPainted(false);
         JBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JBotonSalirMouseClicked(evt);
@@ -223,6 +224,7 @@ public class Ajustes_Usuario extends javax.swing.JFrame {
         BotonGuardar.setForeground(new java.awt.Color(0, 0, 153));
         BotonGuardar.setText("Guardar");
         BotonGuardar.setActionCommand("GUARDAR");
+        BotonGuardar.setBorderPainted(false);
         BotonGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BotonGuardarMouseClicked(evt);

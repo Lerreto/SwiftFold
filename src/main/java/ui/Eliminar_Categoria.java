@@ -99,6 +99,7 @@ public class Eliminar_Categoria extends javax.swing.JFrame {
         JBotonSalir.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JBotonSalir.setForeground(new java.awt.Color(0, 51, 51));
         JBotonSalir.setText("Salir");
+        JBotonSalir.setBorderPainted(false);
         JBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JBotonSalirMouseClicked(evt);
@@ -116,6 +117,7 @@ public class Eliminar_Categoria extends javax.swing.JFrame {
         JBotonGuardar.setForeground(new java.awt.Color(0, 0, 153));
         JBotonGuardar.setText("Guardar");
         JBotonGuardar.setActionCommand("GUARDAR");
+        JBotonGuardar.setBorderPainted(false);
         JBotonGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JBotonGuardarMouseClicked(evt);
@@ -157,6 +159,7 @@ public class Eliminar_Categoria extends javax.swing.JFrame {
         JBotonEliminar1.setForeground(new java.awt.Color(204, 0, 51));
         JBotonEliminar1.setText("Eliminar");
         JBotonEliminar1.setActionCommand("GUARDAR");
+        JBotonEliminar1.setBorderPainted(false);
         JBotonEliminar1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JBotonEliminar1MouseClicked(evt);

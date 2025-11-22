@@ -247,6 +247,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         JBotonLimpiar.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
         JBotonLimpiar.setForeground(new java.awt.Color(0, 51, 51));
         JBotonLimpiar.setText("Limpiar Documento");
+        JBotonLimpiar.setBorderPainted(false);
         JBotonLimpiar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JBotonLimpiarMouseClicked(evt);
@@ -263,6 +264,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         JBottomCancelar.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
         JBottomCancelar.setForeground(new java.awt.Color(204, 0, 51));
         JBottomCancelar.setText("Cancelar");
+        JBottomCancelar.setBorderPainted(false);
         JBottomCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JBottomCancelarMouseClicked(evt);
@@ -279,6 +281,7 @@ public class Cargar_Documento extends javax.swing.JFrame {
         JBotonGuardar.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
         JBotonGuardar.setForeground(new java.awt.Color(0, 0, 153));
         JBotonGuardar.setText("Guardar Documento");
+        JBotonGuardar.setBorderPainted(false);
         JBotonGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JBotonGuardarMouseClicked(evt);
