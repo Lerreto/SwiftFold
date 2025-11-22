@@ -207,7 +207,9 @@ public class Ajustes_Usuario extends javax.swing.JFrame {
         Contraseña.setText("Nuevo Contraseña");
         jPanel1.add(Contraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, -1, 30));
 
+        JBotonSalir.setBackground(new java.awt.Color(255, 204, 204));
         JBotonSalir.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonSalir.setForeground(new java.awt.Color(204, 0, 51));
         JBotonSalir.setText("Salir");
         JBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -216,7 +218,9 @@ public class Ajustes_Usuario extends javax.swing.JFrame {
         });
         jPanel1.add(JBotonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 560, 110, 50));
 
+        BotonGuardar.setBackground(new java.awt.Color(204, 204, 255));
         BotonGuardar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        BotonGuardar.setForeground(new java.awt.Color(0, 0, 153));
         BotonGuardar.setText("Guardar");
         BotonGuardar.setActionCommand("GUARDAR");
         BotonGuardar.addMouseListener(new java.awt.event.MouseAdapter() {

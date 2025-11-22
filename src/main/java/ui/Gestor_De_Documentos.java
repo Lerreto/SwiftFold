@@ -637,6 +637,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JButtonBuscar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButtonBuscar.setForeground(new java.awt.Color(0, 0, 153));
         JButtonBuscar.setText("Buscar");
+        JButtonBuscar.setBorderPainted(false);
         JButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JButtonBuscarActionPerformed(evt);
@@ -647,6 +648,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JButtomEditar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButtomEditar.setForeground(new java.awt.Color(102, 51, 0));
         JButtomEditar.setText("Editar");
+        JButtomEditar.setBorderPainted(false);
         JButtomEditar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JButtomEditarMouseClicked(evt);
@@ -662,6 +664,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JButtonEliminar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButtonEliminar.setForeground(new java.awt.Color(204, 0, 51));
         JButtonEliminar.setText("Eliminar");
+        JButtonEliminar.setBorderPainted(false);
         JButtonEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JButtonEliminarMouseClicked(evt);
@@ -677,6 +680,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JButtonVer.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         JButtonVer.setForeground(new java.awt.Color(0, 51, 51));
         JButtonVer.setText("Ver");
+        JButtonVer.setBorderPainted(false);
         JButtonVer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JButtonVerActionPerformed(evt);

@@ -138,7 +138,9 @@ public class Ver_Documento extends javax.swing.JFrame {
 
         jPanel1.add(BarraHorizontal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 1000, 4));
 
+        JBotonSalir.setBackground(new java.awt.Color(255, 204, 204));
         JBotonSalir.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonSalir.setForeground(new java.awt.Color(204, 0, 51));
         JBotonSalir.setText("Salir");
         JBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

@@ -243,7 +243,9 @@ public class Cargar_Documento extends javax.swing.JFrame {
         jLabel11.setText("Disposicion Final:");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 290, -1, -1));
 
+        JBotonLimpiar.setBackground(new java.awt.Color(204, 255, 204));
         JBotonLimpiar.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
+        JBotonLimpiar.setForeground(new java.awt.Color(0, 51, 51));
         JBotonLimpiar.setText("Limpiar Documento");
         JBotonLimpiar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -257,7 +259,9 @@ public class Cargar_Documento extends javax.swing.JFrame {
         });
         jPanel1.add(JBotonLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 500, -1, 40));
 
+        JBottomCancelar.setBackground(new java.awt.Color(255, 204, 204));
         JBottomCancelar.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
+        JBottomCancelar.setForeground(new java.awt.Color(204, 0, 51));
         JBottomCancelar.setText("Cancelar");
         JBottomCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -271,7 +275,9 @@ public class Cargar_Documento extends javax.swing.JFrame {
         });
         jPanel1.add(JBottomCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 500, -1, 40));
 
+        JBotonGuardar.setBackground(new java.awt.Color(204, 204, 255));
         JBotonGuardar.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
+        JBotonGuardar.setForeground(new java.awt.Color(0, 0, 153));
         JBotonGuardar.setText("Guardar Documento");
         JBotonGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -338,9 +344,8 @@ public class Cargar_Documento extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 861, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 861, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -200,7 +200,9 @@ public class Modificar_Documento extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 1000, -1));
 
+        JBotonSalir.setBackground(new java.awt.Color(255, 204, 204));
         JBotonSalir.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonSalir.setForeground(new java.awt.Color(204, 0, 51));
         JBotonSalir.setText("Salir");
         JBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -209,7 +211,9 @@ public class Modificar_Documento extends javax.swing.JFrame {
         });
         jPanel1.add(JBotonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 640, 120, 40));
 
+        JBotonModificar.setBackground(new java.awt.Color(204, 204, 255));
         JBotonModificar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonModificar.setForeground(new java.awt.Color(0, 0, 153));
         JBotonModificar.setText("Modificar");
         JBotonModificar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

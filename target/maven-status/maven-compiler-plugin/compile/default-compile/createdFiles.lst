@@ -1,4 +1,3 @@
-persistencia\Documento.class
 ui\Registrarse$15.class
 logica\CategoriaDao.class
 ui\Login$9.class
@@ -10,7 +9,6 @@ ui\Gestor_De_Documentos$3.class
 ui\Nueva_Categoria$2.class
 ui\Registrarse$18.class
 ui\Gesto_De_Usuarios$7.class
-logica\EnviadorCorreos.class
 logica\DocumentoDao$1.class
 ui\Gesto_De_Usuarios$4.class
 ui\Ajustes_Usuario.class
@@ -18,13 +16,11 @@ ui\Ajustes_Usuario_Fuera$3.class
 ui\Eliminar_Categoria$1.class
 ui\Gesto_De_Usuarios$1.class
 ui\Nueva_Categoria$5.class
-logica\ValidationResult.class
 ui\Cargar_Documento$6.class
 ui\Login$6.class
 ui\Registrarse$5.class
 ui\Ajustes_Usuario$12.class
 ui\Eliminar_Categoria$4.class
-ui\Modificar_Documento$3.class
 app\Pruebas.class
 ui\Ajustes_Usuario_Fuera$1.class
 ui\Ajustes_Usuario$2.class
@@ -41,7 +37,6 @@ ui\Gestor_De_Documentos$19.class
 ui\Registrarse$8.class
 ui\Cargar_Documento$7.class
 ui\Ajustes_Usuario_Fuera$4.class
-ui\Modificar_Documento.class
 ui\Nueva_Categoria$4.class
 ui\Eliminar_Categoria$3.class
 ui\Registrarse$4.class
@@ -52,7 +47,6 @@ persistencia\PlantillasCorreo$Asunto.class
 ui\Registrarse$23.class
 logica\DocumentoDao$TimeUtils.class
 persistencia\RolSuperAdministrador.class
-ui\Modificar_Documento$2.class
 ui\Ajustes_Usuario$9.class
 persistencia\RolAdministrador.class
 ui\Registrarse$16.class
@@ -68,7 +62,6 @@ ui\Ajustes_Usuario_Fuera$5.class
 ui\Ajustes_Usuario$4.class
 ui\Gesto_De_Usuarios$6.class
 ui\Nueva_Categoria$3.class
-logica\RegistroManager.class
 ui\Login$1.class
 ui\Gestor_De_Documentos$17.class
 ui\Cargar_Documento.class
@@ -79,7 +72,6 @@ ui\Gestor_De_Documentos$11.class
 ui\Registrarse$22.class
 ui\Eliminar_Categoria$2.class
 ui\Ajustes_Usuario$14.class
-ui\Modificar_Documento$1.class
 ui\Registrarse$3.class
 ui\Cargar_Documento$10.class
 ui\Registrarse.class
@@ -118,7 +110,6 @@ ui\Ajustes_Usuario$8.class
 ui\Ajustes_Usuario_Fuera$7.class
 ui\Gesto_De_Usuarios$5.class
 ui\Gesto_De_Usuarios$10.class
-persistencia\Rol.class
 ui\Gestor_De_Documentos$13.class
 ui\Gesto_De_Usuarios$2.class
 logica\GeneradorDashboardPDF$DashboardPageEvent.class
@@ -136,8 +127,6 @@ ui\Gestor_De_Documentos$5.class
 ui\Login$3.class
 ui\Gestor_De_Documentos$20.class
 ui\Cargar_Documento$3.class
-persistencia\Usuario.class
-logica\EnviadorCorreos$1.class
 ui\Registrarse$14.class
 ui\Gesto_De_Usuarios$11.class
 ui\Gesto_De_Usuarios$3.class
@@ -149,7 +138,6 @@ ui\Ajustes_Usuario$7.class
 logica\UtilidadesDeArchivos.class
 ui\Login$4.class
 ui\Ajustes_Usuario_Fuera$2.class
-ui\Modificar_Documento$4.class
 ui\Gestor_De_Documentos$14.class
 ui\Eliminar_Categoria$5.class
 ui\Registrarse$25.class

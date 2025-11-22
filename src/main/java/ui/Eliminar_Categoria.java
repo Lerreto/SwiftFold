@@ -95,7 +95,9 @@ public class Eliminar_Categoria extends javax.swing.JFrame {
 
         jPanel1.add(BarraHorizontal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 480, 4));
 
+        JBotonSalir.setBackground(new java.awt.Color(204, 255, 204));
         JBotonSalir.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonSalir.setForeground(new java.awt.Color(0, 51, 51));
         JBotonSalir.setText("Salir");
         JBotonSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -109,7 +111,9 @@ public class Eliminar_Categoria extends javax.swing.JFrame {
         });
         jPanel1.add(JBotonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 400, 110, 50));
 
+        JBotonGuardar.setBackground(new java.awt.Color(204, 204, 255));
         JBotonGuardar.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonGuardar.setForeground(new java.awt.Color(0, 0, 153));
         JBotonGuardar.setText("Guardar");
         JBotonGuardar.setActionCommand("GUARDAR");
         JBotonGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -124,6 +128,7 @@ public class Eliminar_Categoria extends javax.swing.JFrame {
         });
         jPanel1.add(JBotonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 400, 110, 50));
 
+        JComboBoxCategorias.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         JComboBoxCategorias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         JComboBoxCategorias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,12 +146,15 @@ public class Eliminar_Categoria extends javax.swing.JFrame {
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, -1));
 
         JTextDescripcion.setColumns(20);
+        JTextDescripcion.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         JTextDescripcion.setRows(5);
         jScrollPane1.setViewportView(JTextDescripcion);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 480, -1));
 
+        JBotonEliminar1.setBackground(new java.awt.Color(255, 204, 204));
         JBotonEliminar1.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        JBotonEliminar1.setForeground(new java.awt.Color(204, 0, 51));
         JBotonEliminar1.setText("Eliminar");
         JBotonEliminar1.setActionCommand("GUARDAR");
         JBotonEliminar1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -169,7 +177,7 @@ public class Eliminar_Categoria extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
         );
 
         pack();

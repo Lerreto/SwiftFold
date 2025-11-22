@@ -416,6 +416,7 @@
                   <Color blue="99" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Buscar"/>
+                <Property name="borderPainted" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JButtonBuscarActionPerformed"/>
@@ -433,6 +434,7 @@
                   <Color blue="0" green="33" red="66" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Editar"/>
+                <Property name="borderPainted" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JButtomEditarMouseClicked"/>
@@ -451,6 +453,7 @@
                   <Color blue="33" green="0" red="cc" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Eliminar"/>
+                <Property name="borderPainted" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JButtonEliminarMouseClicked"/>
@@ -469,6 +472,7 @@
                   <Color blue="33" green="33" red="0" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ver"/>
+                <Property name="borderPainted" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JButtonVerActionPerformed"/>
