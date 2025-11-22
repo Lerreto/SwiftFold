@@ -15,7 +15,7 @@ public class RolCiudadano extends Rol {
     @Override
     public boolean tieneAccesoVer(Documento documento, String municipio) {
         String accesoLimpio = limpiarTexto(documento.getTipoAcceso());
-        return (mismaDependencia(documento, municipio) && listaVacia.contains(accesoLimpio));
+        return ((mismaDependencia(documento, municipio) && listaVacia.contains(accesoLimpio)) || ("publico".equals(accesoLimpio)));
     }
 
     @Override
@@ -40,6 +40,16 @@ public class RolCiudadano extends Rol {
     
     @Override
     public boolean tieneAccesoUsuario() {
+        return false;
+    }
+    
+    @Override
+    public boolean tieneAccesoEliminarUsuario() {
+        return false;
+    }
+    
+    @Override
+    public boolean tieneAccesoPDF() {
         return false;
     }
     

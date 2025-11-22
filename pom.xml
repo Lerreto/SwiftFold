@@ -73,6 +73,31 @@
             <version>2.1.2</version>
         </dependency>
         
+        <!-- iText para PDF -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.3</version>
+        </dependency>
+
+        <!-- JFreeChart para gráficos -->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>aero.m-click</groupId>
+            <artifactId>mcpdf</artifactId>
+            <version>0.2.10</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.guicedee.services</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.2.2.1-jre17</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     
 </project>

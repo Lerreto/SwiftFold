@@ -48,6 +48,7 @@ ui\Registrarse$4.class
 ui\Login$7.class
 persistencia\SesionSingleton.class
 ui\Gestor_De_Documentos$8.class
+persistencia\PlantillasCorreo$Asunto.class
 ui\Registrarse$23.class
 logica\DocumentoDao$TimeUtils.class
 persistencia\RolSuperAdministrador.class
@@ -73,6 +74,7 @@ ui\Gestor_De_Documentos$17.class
 ui\Cargar_Documento.class
 ui\Registrarse$17.class
 ui\Registrarse$10.class
+logica\GeneradorDashboardPDF.class
 ui\Gestor_De_Documentos$11.class
 ui\Registrarse$22.class
 ui\Eliminar_Categoria$2.class
@@ -101,6 +103,7 @@ ui\Ajustes_Usuario$6.class
 ui\Cargar_Documento$8.class
 ui\Gestor_De_Documentos$15.class
 ui\Gestor_De_Documentos.class
+persistencia\PlantillasCorreo.class
 ui\Registrarse$21.class
 ui\Login$8.class
 ui\Gestor_De_Documentos$12.class
@@ -118,6 +121,7 @@ ui\Gesto_De_Usuarios$10.class
 persistencia\Rol.class
 ui\Gestor_De_Documentos$13.class
 ui\Gesto_De_Usuarios$2.class
+logica\GeneradorDashboardPDF$DashboardPageEvent.class
 ui\Registrarse$13.class
 ui\Ajustes_Usuario$11.class
 ui\Ajustes_Usuario$1.class

@@ -1,6 +1,5 @@
 package logica;
 
-import logica.UtilidadesDeArchivos;
 import persistencia.SesionSingleton;
 import persistencia.Documento;
 import persistencia.RolAdministrador;
@@ -12,6 +11,7 @@ import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import java.util.List;
 import java.util.Properties;
+import persistencia.PlantillasCorreo;
 
 public class EnviadorCorreos {
 
@@ -19,6 +19,17 @@ public class EnviadorCorreos {
     private static final String REMITENTE = "swiftfold.proyecto@gmail.com";
     private static final String CLAVE_APP = "gbpq avtt icju csih"; // clave de aplicación, no tu contraseña normal
     
+    
+    private String obtenerNombreCategoriaSeguro(Documento d) {
+        if (d == null) return "N/D";
+        try {
+            CategoriaDao categoriaDao = new CategoriaDao();
+            return categoriaDao.nombrePorId(d.getIdCategoria());
+        } catch (Exception e) {
+            return "N/D"; // por si la categoría no existe o falla la BD
+        }
+    }
+
     
 
     // --- Crea la sesión SMTP con autenticación ---
@@ -83,69 +94,147 @@ public class EnviadorCorreos {
     
     
     
-    public void enviarCorreosAUsuariosConRoles(String mensaje, Documento d) {
+    // ============================================================
+    // ENVIOS DE CORREOS DEPENDIENDO DE LAS ACCIONES CON CONDICIONES
+    // ============================================================
+    
+    
+    public void enviarCorreosAUsuariosConRoles(String asunto, String mensaje, Documento d) {
         List<Usuario> listaUsuarios = new UtilidadesDeArchivos().cargarUsuarios(); 
 
         boolean esPublico = d.esPublico();
-        String asunto = "Se subió un nuevo archivo";
 
         for (Usuario usuario : listaUsuarios) {
             if (esPublico) {
+                // Documento público: secretarios, administradores y superadmins, sin importar municipio
                 if (usuario.getRol() instanceof RolSecretario || 
                     usuario.getRol() instanceof RolAdministrador || 
                     usuario.getRol() instanceof RolSuperAdministrador) {
 
                     String destinatario = usuario.getEmail();
-
-                    enviarCorreo(destinatario, asunto, mensaje); // Enviar el correo
+                    enviarCorreo(destinatario, asunto, mensaje);
                 }
             } else {
-                // Si el documento NO es público, aplicar restricciones de municipio y rol
-                if ((usuario.getRol() instanceof RolSecretario && usuario.getMunicipio().equals(SesionSingleton.getInstance().getUsuarioLogueado().getMunicipio())) || 
-                    (usuario.getRol() instanceof RolAdministrador && usuario.getMunicipio().equals(SesionSingleton.getInstance().getUsuarioLogueado().getMunicipio())) || 
-                    (usuario.getRol() instanceof RolFuncionario && usuario.getMunicipio().equals(SesionSingleton.getInstance().getUsuarioLogueado().getMunicipio())) ||
-                    usuario.getRol() instanceof RolSuperAdministrador) {
+                // Documento NO público: filtrar por municipio + rol, excepto superadmin (siempre recibe)
+                boolean mismoMunicipio = usuario.getMunicipio()
+                        .equals(SesionSingleton.getInstance().getUsuarioLogueado().getMunicipio());
+
+                if ((usuario.getRol() instanceof RolSecretario && mismoMunicipio) || 
+                    (usuario.getRol() instanceof RolAdministrador && mismoMunicipio) || 
+                    (usuario.getRol() instanceof RolFuncionario && mismoMunicipio) ||
+                     usuario.getRol() instanceof RolSuperAdministrador) {
 
                     String destinatario = usuario.getEmail();
-                    enviarCorreo(destinatario, asunto, mensaje); // Enviar el correo
+                    enviarCorreo(destinatario, asunto, mensaje);
                 }
             }
         }
     }
-
-
     
-    // --- Método de notificaciones cuando ocurra la accion de eliminar o modificar documento ---
-    public void eliminarModificar (String mensaje, String asunto) {
+    // --- Notificaciones cuando se elimina o modifica un DOCUMENTO ---
+    public void eliminarModificar(String mensaje, String asunto) {
         List<Usuario> listaUsuarios = new UtilidadesDeArchivos().cargarUsuarios(); 
 
         for (Usuario usuario : listaUsuarios) {
-            if ((usuario.getRol() instanceof RolSecretario && usuario.getMunicipio().equals(SesionSingleton.getInstance().getUsuarioLogueado().getMunicipio())) || 
-                (usuario.getRol() instanceof RolAdministrador && usuario.getMunicipio().equals(SesionSingleton.getInstance().getUsuarioLogueado().getMunicipio())) || 
-                (usuario.getRol() instanceof RolFuncionario && usuario.getMunicipio().equals(SesionSingleton.getInstance().getUsuarioLogueado().getMunicipio())) ||
-                usuario.getRol() instanceof RolSuperAdministrador) {
+            boolean mismoMunicipio = usuario.getMunicipio()
+                    .equals(SesionSingleton.getInstance().getUsuarioLogueado().getMunicipio());
+
+            if ((usuario.getRol() instanceof RolSecretario && mismoMunicipio) || 
+                (usuario.getRol() instanceof RolAdministrador && mismoMunicipio) || 
+                (usuario.getRol() instanceof RolFuncionario && mismoMunicipio) ||
+                 usuario.getRol() instanceof RolSuperAdministrador) {
 
                 String destinatario = usuario.getEmail(); 
-
                 enviarCorreo(destinatario, asunto, mensaje);
             }
         }
     }
     
     
-    
-    // --- Metodo de notificaciones cuando se elimine o modifique un usuario ---
-    public void nuevoUsuarioEliminarModificar (String mensaje, String asunto) {
+    // --- Notificaciones cuando se elimina / modifica / registra un USUARIO ---
+    public void nuevoUsuarioEliminarModificar(String mensaje, String asunto) {
         List<Usuario> listaUsuarios = new UtilidadesDeArchivos().cargarUsuarios(); 
 
         for (Usuario usuario : listaUsuarios) {
             if (usuario.getRol() instanceof RolSuperAdministrador) {
-
                 String destinatario = usuario.getEmail(); 
-
                 enviarCorreo(destinatario, asunto, mensaje);
             }
         }
     }
+    
+    
+    
+    // ============================================================
+    // ENVIAR NOTIFICACIONES DEPENDIENDO DE LAS ACCIONES
+    // ============================================================
+    
+    
+    public void notificarDocumentoEliminado(Documento d) {
+        Usuario actor = SesionSingleton.getInstance().getUsuarioLogueado();
+        String nombreCategoria = obtenerNombreCategoriaSeguro(d);
+
+        String asunto = PlantillasCorreo.Asunto.DOCUMENTO_ELIMINADO;
+        String cuerpo = PlantillasCorreo.cuerpoDocumentoEliminado(actor, d, nombreCategoria);
+
+        // Va a los mismos destinatarios que una modificación o eliminación de documento
+        eliminarModificar(cuerpo, asunto);
+    }
+
+    
+    public void notificarNuevoDocumento(Documento d) {
+        Usuario actor = SesionSingleton.getInstance().getUsuarioLogueado();
+        String nombreCategoria = obtenerNombreCategoriaSeguro(d);
+
+        String asunto = PlantillasCorreo.Asunto.NUEVO_DOCUMENTO_CARGADO;
+        String cuerpo = PlantillasCorreo.cuerpoNuevoDocumento(d, actor, nombreCategoria);
+
+        // Aquí usamos la versión nueva con asunto + mensaje
+        enviarCorreosAUsuariosConRoles(asunto, cuerpo, d);
+    }
+
+    
+    public void notificarDocumentoActualizado(Documento antes, Documento despues) {
+        Usuario actor = SesionSingleton.getInstance().getUsuarioLogueado();
+        String categoriaAntes   = obtenerNombreCategoriaSeguro(antes);
+        String categoriaDespues = obtenerNombreCategoriaSeguro(despues);
+
+        String asunto = PlantillasCorreo.Asunto.DOCUMENTO_ACTUALIZADO;
+        String cuerpo = PlantillasCorreo.cuerpoDocumentoActualizado(
+                antes, despues, actor, categoriaAntes, categoriaDespues
+        );
+
+        // Reutilizas la lógica de "documento modificado" (roles + municipio)
+        eliminarModificar(cuerpo, asunto);
+    }
+
+    // Nuevo usuario
+    public void notificarNuevoUsuarioRegistrado(Usuario nuevo) {
+        String asunto = PlantillasCorreo.Asunto.NUEVO_USUARIO_REGISTRADO;
+        String cuerpo = PlantillasCorreo.cuerpoNuevoUsuarioRegistradoAdmin(nuevo);
+        nuevoUsuarioEliminarModificar(cuerpo, asunto);
+    }
+
+    // Usuario eliminado
+    public void notificarUsuarioEliminado(String emailEliminado) {
+        Usuario actor = SesionSingleton.getInstance().getUsuarioLogueado();
+
+        String asunto = PlantillasCorreo.Asunto.USUARIO_ELIMINADO;
+        String cuerpo = PlantillasCorreo.cuerpoUsuarioEliminado(actor, emailEliminado);
+
+        nuevoUsuarioEliminarModificar(cuerpo, asunto);
+    }
+
+    // Cambio de rol
+    public void notificarCambioRolUsuario(Usuario afectado, String rolAnterior, String rolNuevo) {
+        Usuario actor = SesionSingleton.getInstance().getUsuarioLogueado();
+
+        String asunto = PlantillasCorreo.Asunto.CAMBIO_ROL_USUARIO;
+        String cuerpo = PlantillasCorreo.cuerpoCambioRolUsuario(actor, afectado, rolAnterior, rolNuevo);
+
+        nuevoUsuarioEliminarModificar(cuerpo, asunto);
+    }
+
+
        
 }

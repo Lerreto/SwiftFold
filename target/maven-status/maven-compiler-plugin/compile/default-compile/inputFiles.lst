@@ -11,6 +11,7 @@ C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\app\Main.
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\persistencia\RolSuperAdministrador.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\persistencia\RolFuncionario.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Gestor_De_Documentos.java
+C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\logica\GeneradorDashboardPDF.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\persistencia\Documento.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Eliminar_Categoria.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\persistencia\Usuario.java
@@ -28,4 +29,5 @@ C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\persisten
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\logica\HashUtil.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Ver_Documento.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\persistencia\RolCiudadano.java
+C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\persistencia\PlantillasCorreo.java
 C:\Users\Juan Pablo\Documents\NetBeansProjects\SwiftFold\src\main\java\ui\Ajustes_Usuario.java

@@ -43,5 +43,15 @@ public class RolAdministrador extends Rol{
     public boolean tieneAccesoUsuario() {
         return true;
     }
+    
+    @Override
+    public boolean tieneAccesoEliminarUsuario() {
+        return false;
+    }
+    
+    @Override
+    public boolean tieneAccesoPDF() {
+        return true;
+    }
 
 }

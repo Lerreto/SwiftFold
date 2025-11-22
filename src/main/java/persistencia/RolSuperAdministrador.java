@@ -44,4 +44,14 @@ public class RolSuperAdministrador extends Rol{
         return true;
     }
     
+    @Override
+    public boolean tieneAccesoEliminarUsuario() {
+        return true;
+    }
+    
+    @Override
+    public boolean tieneAccesoPDF() {
+        return true;
+    }
+    
 }

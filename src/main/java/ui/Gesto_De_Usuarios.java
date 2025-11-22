@@ -4,6 +4,7 @@ package ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.util.Objects;
 import persistencia.SesionSingleton;
 import logica.RegistroManager;
 import persistencia.Usuario;
@@ -16,6 +17,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import logica.DocumentoDao;
 import logica.EnviadorCorreos;
+import persistencia.RolAdministrador;
+import persistencia.RolCiudadano;
+import persistencia.RolFuncionario;
+import persistencia.RolSecretario;
+import persistencia.RolSuperAdministrador;
 
 
 public class Gesto_De_Usuarios extends javax.swing.JFrame {
@@ -45,18 +51,96 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
         
         JButonEliminar.addActionListener(e -> {
             if (emailSeleccionado != null) {
-                eliminarUsuario(emailSeleccionado);
+                if (usuario.getRol().tieneAccesoPDF()){
+                    eliminarUsuario(emailSeleccionado);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No tienes acceso para eliminar usuarios", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Selecciona un usuario primero", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         JButonEditar.addActionListener(e -> {
-            if (emailSeleccionado != null) {
-                modificarUsuario(emailSeleccionado);
-            } else {
-                JOptionPane.showMessageDialog(this, "Selecciona un usuario primero", "Error", JOptionPane.ERROR_MESSAGE);
+            if (emailSeleccionado == null) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Selecciona un usuario primero.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
             }
+
+            // Usuario logueado
+            Usuario usuarioActual = SesionSingleton.getInstance().getUsuarioLogueado();
+            if (usuarioActual == null) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "No hay un usuario autenticado en la sesión.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            // Usuario seleccionado (por el emailSeleccionado)
+            // Ajusta esta parte según cómo lo obtienes tú
+            Usuario usuarioSeleccionado = UtilidadesDeArchivos.buscarUsuarioPorEmail(emailSeleccionado);
+                if (usuarioSeleccionado == null) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "No se encontró la información del usuario seleccionado.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            // --- LÓGICA DE PERMISOS ---
+
+            // 1) SUPERADMIN: puede editar a cualquiera
+            if (usuarioActual.getRol() instanceof RolSuperAdministrador) {
+                modificarUsuario(emailSeleccionado);
+                return;
+            }
+
+            // 2) ADMINISTRADOR: sólo puede editar
+            //    - Ciudadano / Secretario / Funcionario
+            //    - de la MISMA dependencia
+            if (usuarioActual.getRol() instanceof RolAdministrador) {
+
+                boolean mismaDependencia = Objects.equals(
+                        usuarioActual.getDependencia(),
+                        usuarioSeleccionado.getDependencia()
+                );
+
+                boolean rolPermitido =
+                        (usuarioSeleccionado.getRol() instanceof RolCiudadano)  ||
+                        (usuarioSeleccionado.getRol() instanceof RolSecretario) ||
+                        (usuarioSeleccionado.getRol() instanceof RolFuncionario);
+
+                if (mismaDependencia && rolPermitido) {
+                    modificarUsuario(emailSeleccionado);
+                } else {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Solo puedes modificar usuarios de tu misma dependencia " +
+                            "con rol Ciudadano, Secretario o Funcionario.",
+                            "Permiso denegado",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                }
+                return;
+            }
+
+            // 3) Cualquier otro rol: sin permisos para editar usuarios
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No tienes permisos para modificar usuarios.",
+                    "Permiso denegado",
+                    JOptionPane.WARNING_MESSAGE
+            );
         });
 
         
@@ -222,39 +306,25 @@ public class Gesto_De_Usuarios extends javax.swing.JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
             
             
-        // ====== CORREO DE NOTIFICACIÓN ======
-        new Thread(() -> {
-            try {
-                String asunto = "SwiftFold: usuario eliminado del sistema";
-
-                String nombreEjecutor =
-                        (usuario != null ? usuario.getNombreCompleto() : "Usuario del sistema");
-                String correoEjecutor =
-                        (usuario != null ? usuario.getEmail() : "N/D");
-
-                String mensaje =
-                        "Estimado usuario,\n\n" +
-                        "Se ha eliminado un usuario del sistema de gestión documental SwiftFold.\n\n" +
-                        "Detalles de la acción:\n" +
-                        "• Usuario eliminado: " + email + "\n" +
-                        "• Acción realizada por: " + nombreEjecutor + " (" + correoEjecutor + ")\n\n" +
-                        "Si esta acción no fue autorizada, revise la administración de usuarios en SwiftFold.\n\n" +
-                        "Atentamente,\n" +
-                        "SwiftFold – Sistema de Gestión Documental";
-
-                // Ajusta este llamado al nombre real de tu clase/método de correo
-                enviarCorreo.nuevoUsuarioEliminarModificar(mensaje, asunto);
-
-            } catch (Exception exCorreo) {
-                System.err.println("No se pudo enviar el correo de notificación: " + exCorreo.getMessage());
-            }
-        }).start();
-        // ================================
+            // ====== CORREO DE NOTIFICACIÓN CENTRALIZADO ======
             
+            new Thread(() -> {
+                try {
+                    // Usamos la plantilla ya definida en EnviadorCorreos
+                    enviarCorreo.notificarUsuarioEliminado(email);
+                } catch (Exception exCorreo) {
+                    System.err.println("No se pudo enviar el correo de notificación de eliminación: "
+                                       + exCorreo.getMessage());
+                    exCorreo.printStackTrace();
+                }
+            }).start();
+            
+            // ================================================
 
             // Recargar la tabla de usuarios
             new UtilidadesDeArchivos().crearTablaUsuarios(JTablaUsuarios, "");
             emailSeleccionado = null; // limpiar selección
+            personalizarTablaUsuarios();
 
         } else {
             // Puedes mostrar los mensajes de error que trae ValidationResult

@@ -12,6 +12,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Modificar_Documento.class.getName());
     private String idDocumento;
     private EnviadorCorreos enviarCorreo = new EnviadorCorreos();
+    private Documento documentoAntes;
 
     
     public Modificar_Documento(String idDocumento) {
@@ -56,6 +57,12 @@ public class Modificar_Documento extends javax.swing.JFrame {
         try {
             Documento documento = new DocumentoDao().obtenerDocumentoPorId(idDocumento);
             if (documento != null) {
+                
+                this.documentoAntes = documento;
+                
+                long sizeBytes = documento.getFileSizeBytes();
+                double sizeMB = sizeBytes / 1_000_000.0; 
+                
                 // No editables (solo muestra)
                 JLabelMunicipio.setText(documento.getMunicipio());
                 JLabelDepartamento.setText(documento.getDepartamento());
@@ -64,7 +71,7 @@ public class Modificar_Documento extends javax.swing.JFrame {
                 JLabelFechaActualizacion.setText(documento.getFechaActualizacion());
                 TextNombreCreador.setText(documento.getUsuario_Demo()); // mapea a creador_nombre en la SQL
                 TextCorreo.setText(documento.getCorreo_demo());         // mapea a creador_email en la SQL
-                TextSize.setText(String.valueOf(documento.getFileSizeBytes()));
+                TextSize.setText(String.format("%.2f MB", sizeMB));
 
                 // Editables
                 JTextCodigo.setText(documento.getCodigo());
@@ -509,25 +516,21 @@ public class Modificar_Documento extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Documento actualizado correctamente.");
                 
                 new Thread(() -> {
-                    // ---- Notificación por correo ----
-                    String asunto = "SwiftFold: documento actualizado";
+                    try {
+                        // "antes" lo guardamos cuando se cargó la ventana
+                        Documento antes = this.documentoAntes;
 
-                    String mensaje =
-                        "Estimado usuario,\n\n" +
-                        "Se ha actualizado un documento en el sistema SwiftFold.\n\n" +
-                        "Resumen del documento:\n" +
-                        "• Nombre: " + d.getNombre() + "\n" +
-                        "• Código: " + (d.getCodigo().isBlank() ? "Sin código" : d.getCodigo()) + "\n" +
-                        "• Categoría: " + nombreCategoria + "\n" +
-                        "• Tipo de acceso: " + d.getTipoAcceso() + "\n" +
-                        "• Disposición final: " + d.getDisposicionFinal() + "\n\n" +
-                        "Si necesita revisar el detalle, por favor ingrese al módulo de documentos en SwiftFold.\n\n" +
-                        "Atentamente,\n" +
-                        "SwiftFold – Sistema de Gestión Documental";
+                        // "después" lo volvemos a leer de la BD (ya actualizado)
+                        Documento despues = new DocumentoDao().obtenerDocumentoPorId(this.idDocumento);
 
-                    // Envías con tu clase de correo
-                    enviarCorreo.eliminarModificar(mensaje, asunto);
-                    // -------------------------------
+                        // Usa el método centralizado que ya tienes en EnviadorCorreos
+                        enviarCorreo.notificarDocumentoActualizado(antes, despues);
+
+                    } catch (Exception exCorreo) {
+                        System.err.println("No se pudo enviar la notificación de documento actualizado: "
+                                           + exCorreo.getMessage());
+                        exCorreo.printStackTrace();
+                    }
                 }).start();
                 
                 this.dispose();

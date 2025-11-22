@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import logica.EnviadorCorreos;
+import persistencia.RolSuperAdministrador;
+import persistencia.SesionSingleton;
 
 
 public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
@@ -15,6 +17,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Ajustes_Usuario_Fuera.class.getName());
     Usuario usuario = new Usuario();
     private EnviadorCorreos enviarCorreo = new EnviadorCorreos();
+    Usuario usuarioLoUsuario = SesionSingleton.getInstance().getUsuarioLogueado();
 
     
     
@@ -84,10 +87,27 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
             "Gestión del Riesgo", "Inspección de Policía", "Comisaría de Familia", "Personería"
         }));
 
-        // Configurar el JComboBox de roles
-        SelectRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { 
-            "RolCiudadano", "RolFuncionario", "RolAdministrador", "RolSecretario", "RolSuperAdministrador"
-        }));
+
+        if (usuarioLoUsuario != null && usuarioLoUsuario.getRol() instanceof RolSuperAdministrador) {
+
+            // Si es superadministrador → Solo puede asignar estos roles
+            SelectRol.setModel(new javax.swing.DefaultComboBoxModel<>(
+                new String[] { "RolAdministrador", "RolSuperAdministrador" }
+            ));
+
+        } else {
+
+            // Si NO es superadmin → mostrar todos los roles
+            SelectRol.setModel(new javax.swing.DefaultComboBoxModel<>(
+                new String[] {
+                    "RolCiudadano",
+                    "RolFuncionario",
+                    "RolSecretario",
+                    "RolAdministrador",
+                    "RolSuperAdministrador"
+                }
+            ));
+        }
     }
 
     
@@ -470,6 +490,11 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        // Guardamos el rol anterior ANTES de modificar
+        String rolAnterior = (usuario.getRol() != null)
+                ? usuario.getRol().getClass().getSimpleName()
+                : "N/D";
 
         RegistroManager manager = new RegistroManager("usuarios.csv");
 
@@ -488,46 +513,19 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
             
-        // ====== CORREO DE NOTIFICACIÓN ======
+        // ====== CORREO DE NOTIFICACIÓN DE CAMBIO DE ROL ======
+        // Solo si el rol realmente cambió
         new Thread(() -> {
             try {
-                // Actor que realiza la acción (admin / funcionario logueado)
-                Usuario actor = persistencia.SesionSingleton.getInstance().getUsuarioLogueado();
-
-                String nombreActor   = (actor != null) ? actor.getNombreCompleto() : "Usuario del sistema";
-                String correoActor   = (actor != null) ? actor.getEmail() : "N/D";
-
-                // Usuario afectado (el que estamos editando en esta ventana)
-                String nombreAfectado = usuario.getNombreCompleto();
-                String correoAfectado = usuario.getEmail();
-
-                String asunto = "SwiftFold: modificación de datos de usuario";
-
-                String mensaje =
-                        "Hola,\n\n" +
-                        "Se han modificado los datos de un usuario en el sistema de gestión documental SwiftFold.\n\n" +
-                        "Usuario modificado:\n" +
-                        "• Nombre: " + nombreAfectado + "\n" +
-                        "• Correo: " + correoAfectado + "\n\n" +
-                        "Nuevos datos registrados:\n" +
-                        "• Departamento: " + nuevoDepartamento + "\n" +
-                        "• Municipio: " + nuevoMunicipio + "\n" +
-                        "• Dependencia: " + nuevaDependencia + "\n" +
-                        "• Cargo: " + nuevoCargo + "\n" +
-                        "• Rol: " + nuevoRol + "\n\n" +
-                        "Acción realizada por:\n" +
-                        "• " + nombreActor + " (" + correoActor + ")\n\n" +
-                        "Si no reconoces esta acción, revisa la administración de usuarios en SwiftFold.\n\n" +
-                        "Atentamente,\n" +
-                        "SwiftFold – Sistema de Gestión Documental";
-
-                enviarCorreo.nuevoUsuarioEliminarModificar(mensaje, asunto);
-
+                if (!rolAnterior.equals(nuevoRol)) {
+                    enviarCorreo.notificarCambioRolUsuario(usuario, rolAnterior, nuevoRol);
+                }
             } catch (Exception exCorreo) {
-                System.err.println("No se pudo enviar el correo de notificación: " + exCorreo.getMessage());
+                System.err.println("No se pudo enviar la notificación de cambio de rol: "
+                        + exCorreo.getMessage());
             }
         }).start();
-        // =====================================
+        // =====================================================
 
             // volver al gestor de usuarios
             this.dispose();

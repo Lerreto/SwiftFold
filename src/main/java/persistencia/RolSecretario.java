@@ -44,4 +44,14 @@ public class RolSecretario extends Rol{
     public boolean tieneAccesoUsuario() {
         return false;
     }
+    
+    @Override
+    public boolean tieneAccesoEliminarUsuario() {
+        return false;
+    }
+    
+    @Override
+    public boolean tieneAccesoPDF() {
+        return false;
+    }
 }

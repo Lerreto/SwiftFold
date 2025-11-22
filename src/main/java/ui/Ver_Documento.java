@@ -24,6 +24,9 @@ public class Ver_Documento extends javax.swing.JFrame {
         Documento documento = new Documento();
         documento = new DocumentoDao().obtenerDocumentoPorId(idDocumento);
         
+        long sizeBytes = documento.getFileSizeBytes();
+        double sizeMB = sizeBytes / 1_000_000.0; 
+        
         JLabelNombre.setText(documento.getNombre());
         JLabelCategoria.setText(new CategoriaDao().nombrePorId(documento.getIdCategoria()));
         JLabelCodigo.setText(documento.getCodigo());
@@ -37,7 +40,7 @@ public class Ver_Documento extends javax.swing.JFrame {
         JLabelDisposicion.setText(documento.getDisposicionFinal());
         JLabelNombreCreador.setText(documento.getUsuario_Demo());
         JLabelCorreoCreador.setText(documento.getCorreo_demo());
-        JLabelSize.setText(Long.toString(documento.getFileSizeBytes()));
+        JLabelSize.setText(String.format("%.2f MB", sizeMB));
         
         TextCambiable.setText(documento.getNombre());
         

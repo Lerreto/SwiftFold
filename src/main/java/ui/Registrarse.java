@@ -828,30 +828,18 @@ public class Registrarse extends javax.swing.JFrame {
             ventanaLogin.setVisible(true);
             
             // ====== AVISO AL ADMINISTRADOR: NUEVO USUARIO REGISTRADO ======
+            
             new Thread(() -> {
                 try {
-                    String asunto = "SwiftFold: nuevo usuario registrado";
-
-                    StringBuilder cuerpo = new StringBuilder();
-                    cuerpo.append("Se ha registrado un NUEVO USUARIO en el sistema SwiftFold.\n\n")
-                          .append("Datos del usuario registrado:\n")
-                          .append("• Nombre completo: ").append(nuevo.getNombreCompleto()).append("\n")
-                          .append("• Correo electrónico: ").append(nuevo.getEmail()).append("\n")
-                          .append("• Número de contacto: ").append(nuevo.getTelefono()).append("\n")
-                          .append("• Cargo: ").append(nuevo.getCargo()).append("\n")
-                          .append("• Dependencia: ").append(nuevo.getDependencia()).append("\n")
-                          .append("• Municipio / Departamento: ")
-                             .append(nuevo.getMunicipio()).append(" - ").append(nuevo.getDepartamento()).append("\n\n")
-                          .append("Origen del registro: formulario público de registro.\n\n")
-                          .append("Este mensaje es únicamente informativo para el administrador del sistema.");
-
-                    // Envía el correo al/los administradores (direcciones están dentro de EnviadorCorreos)
-                    enviarCorreo.nuevoUsuarioEliminarModificar(cuerpo.toString(), asunto);
-
+                    enviarCorreo.notificarNuevoUsuarioRegistrado(nuevo);
                 } catch (Exception exCorreo) {
-                    System.err.println("No se pudo enviar el aviso de nuevo registro al administrador: " + exCorreo.getMessage());
+                    System.err.println(
+                        "No se pudo enviar el aviso de nuevo registro al administrador: "
+                        + exCorreo.getMessage()
+                    );
                 }
             }).start();
+            
             // =======================================================
 
         } else {

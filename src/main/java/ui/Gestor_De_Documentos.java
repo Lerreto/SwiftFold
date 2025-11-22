@@ -6,9 +6,13 @@ import persistencia.Usuario;
 import logica.CategoriaDao;
 import logica.DocumentoDao;
 import java.awt.Color;
+import java.io.File;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import logica.EnviadorCorreos;
+import logica.GeneradorDashboardPDF;
 import logica.UtilidadesDeArchivos;
+import persistencia.Documento;
 
 
 public class Gestor_De_Documentos extends javax.swing.JFrame {
@@ -91,9 +95,74 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         });
         
+        BtnDashboardPDF.addActionListener(e -> {
+            
+            if (usuario.getRol().tieneAccesoPDF()){
+                generarReportePDF();
+            } else {
+                JOptionPane.showMessageDialog(this, "No tienes acceso para generar el reporte PDF.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        });
+
+        
     }
     
     // Metodos extras para simplificar acciones
+     
+    private void generarReportePDF() {
+        try {
+            // Sugerir un nombre de archivo
+            String nombreSugerido = "SwiftFold_Dashboard_" + 
+                    java.time.LocalDateTime.now()
+                        .format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmm")) 
+                    + ".pdf";
+
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("Guardar reporte de estadísticas en PDF");
+            chooser.setSelectedFile(new File(nombreSugerido));
+
+            int opcion = chooser.showSaveDialog(this);
+            if (opcion != JFileChooser.APPROVE_OPTION) {
+                return; // Usuario canceló
+            }
+
+            File archivo = chooser.getSelectedFile();
+            // Asegurar extensión .pdf
+            if (!archivo.getName().toLowerCase().endsWith(".pdf")) {
+                archivo = new File(archivo.getParentFile(), archivo.getName() + ".pdf");
+            }
+
+            GeneradorDashboardPDF generador = new GeneradorDashboardPDF();
+            boolean ok = generador.generarDashboardCompleto(archivo.getAbsolutePath());
+
+            if (ok) {
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Reporte generado correctamente:\n" + archivo.getAbsolutePath(),
+                        "PDF generado",
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Ocurrió un error al generar el reporte.",
+                        "Error",
+                        javax.swing.JOptionPane.ERROR_MESSAGE
+                );
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Error inesperado: " + ex.getMessage(),
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
      
     public void establecerEstadisticas() {
         try {
@@ -134,24 +203,19 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Documento eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 new DocumentoDao().listar5Cols(this.TablaDocumentos, "", 0L);
                 
+                
+                // =================== CORREO DE NOTIFICACIÓN ===================
                 new Thread(() -> {
-                
-                    String asunto = "Notificación: Documento eliminado";
-
-                    String mensaje =
-                        "Estimado usuario,\n\n" +
-                        "Le informamos que el documento identificado con ID: " + idDocumento + " ha sido eliminado del sistema SwiftFold.\n\n" +
-                        "Detalles de la acción:\n" +
-                        "• Acción: Eliminación de documento\n" +
-                        "• Realizado por: " + usuario.getNombreCompleto() + "\n" +
-                        "• Fecha y hora: " + java.time.LocalDateTime.now().toString().replace('T', ' ') + "\n\n" +
-                        "Si usted no autorizó esta acción o considera que puede tratarse de un error, por favor comuníquese con el administrador del sistema.\n\n" +
-                        "Atentamente,\n" +
-                        "SwiftFold – Sistema de Gestión Documental";
-
-                    enviarCorreo.eliminarModificar(mensaje, asunto);
-                
+                    try {
+                        Documento d = new DocumentoDao().obtenerDocumentoPorId(idDocumento);
+                        enviarCorreo.notificarDocumentoEliminado(d);
+                    } catch (Exception exCorreo) {
+                        System.err.println("No se pudo enviar la notificación de documento eliminado: " + exCorreo.getMessage());
+                    }
                 }).start();
+                // =============================================================
+            
+                estilizarTablaDocumentos();
                 
             } else {
                 JOptionPane.showMessageDialog(this, "Error al eliminar el documento.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -329,6 +393,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JLabelNombreUsuario = new javax.swing.JLabel();
         JLabelRolCargo = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        BtnDashboardPDF = new javax.swing.JButton();
         BarraVertical01 = new javax.swing.JPanel();
         BarraVertical02 = new javax.swing.JPanel();
         JScrollDocumentos = new javax.swing.JScrollPane();
@@ -430,6 +495,11 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Logo_pequeño.png"))); // NOI18N
 
+        BtnDashboardPDF.setBackground(new java.awt.Color(255, 251, 248));
+        BtnDashboardPDF.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        BtnDashboardPDF.setForeground(new java.awt.Color(0, 0, 0));
+        BtnDashboardPDF.setText("Generar Informe");
+
         javax.swing.GroupLayout BarraSuperiorLayout = new javax.swing.GroupLayout(BarraSuperior);
         BarraSuperior.setLayout(BarraSuperiorLayout);
         BarraSuperiorLayout.setHorizontalGroup(
@@ -441,7 +511,9 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
                 .addComponent(TextSwiftFold, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 540, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(BtnDashboardPDF, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 322, Short.MAX_VALUE)
                 .addGroup(BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JLabelRolCargo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JLabelNombreUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -462,10 +534,15 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
                     .addComponent(Icono, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(BarraSuperiorLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addGroup(BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(JLabelRolCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(BarraSuperiorLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(BtnDashboardPDF, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, BarraSuperiorLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(BarraSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(JLabelRolCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -954,7 +1031,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
 
         TextDocumentos.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
         TextDocumentos.setForeground(new java.awt.Color(120, 116, 134));
-        TextDocumentos.setText("Ver Documentos");
+        TextDocumentos.setText("Panel Principal");
         JPanelMisDocumentos.add(TextDocumentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 130, 40));
 
         ImgMisDocumentos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1040,16 +1117,14 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
         JPanelAjustesCategorias.setLayout(JPanelAjustesCategoriasLayout);
         JPanelAjustesCategoriasLayout.setHorizontalGroup(
             JPanelAjustesCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPanelAjustesCategoriasLayout.createSequentialGroup()
-                .addComponent(TextAjustesCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(TextAjustesCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
         );
         JPanelAjustesCategoriasLayout.setVerticalGroup(
             JPanelAjustesCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(TextAjustesCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
-        Backgraund.add(JPanelAjustesCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 640, 190, 40));
+        Backgraund.add(JPanelAjustesCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 640, 195, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1289,6 +1364,7 @@ public class Gestor_De_Documentos extends javax.swing.JFrame {
     private javax.swing.JPanel BarraSuperior;
     private javax.swing.JPanel BarraVertical01;
     private javax.swing.JPanel BarraVertical02;
+    private javax.swing.JButton BtnDashboardPDF;
     private javax.swing.JLabel DescripcionMain;
     private javax.swing.JLabel Icono;
     private javax.swing.JLabel ImgAjustes;
