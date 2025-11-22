@@ -92,7 +92,7 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
 
             // Si es superadministrador → Solo puede asignar estos roles
             SelectRol.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "RolAdministrador", "RolSuperAdministrador" }
+                new String[] { "RolAdministrador", "RolSuperAdministrador", "RolCiudadano", "RolFuncionario", "RolSecretario", }
             ));
 
         } else {
@@ -103,8 +103,6 @@ public class Ajustes_Usuario_Fuera extends javax.swing.JFrame {
                     "RolCiudadano",
                     "RolFuncionario",
                     "RolSecretario",
-                    "RolAdministrador",
-                    "RolSuperAdministrador"
                 }
             ));
         }
