@@ -439,7 +439,7 @@ public class GeneradorDashboardPDF {
     // ============================================================
 
     private void agregarConclusiones(Document document) throws DocumentException {
-        agregarTituloSeccion(document, "5. ✅ Conclusiones generales", COLOR_HEADER);
+        agregarTituloSeccion(document, "4. ✅ Conclusiones generales", COLOR_HEADER);
 
         int totalDocs = obtenerTotalDocumentos();
 
